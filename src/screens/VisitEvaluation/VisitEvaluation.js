@@ -244,7 +244,7 @@ let styles = StyleSheet.create({
   imageContainer: {
     width: '80%',
     height: '80%',
-    borderRadius: '45%',
+    borderRadius: 10,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',

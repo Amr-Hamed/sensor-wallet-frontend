@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   tableHeader: {
     backgroundColor: '#45b3b5',
     marginLeft: 0,
-    flexDireaction: 'row',
+    flexDirection: 'row',
   },
   tableLeftHeader: {
     marginHorizontal: 8,

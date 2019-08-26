@@ -90,7 +90,7 @@ export default class AssetExample extends React.Component {
                   />
                 </View>
                 <View style={styles.submitButtonContainer}>
-                  <TouchableOpacity style={styles.submitButton}>
+                  <TouchableOpacity style={styles.submitButton} onPress={()=> this.props.navigation.navigate('Drawer')}>
                     <Text style={styles.submitButtonText}>SIGN IN</Text>
                   </TouchableOpacity>
                 </View>
@@ -308,7 +308,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     fontWeight: 'bold',
-    textAlign: 'cetner',
   },
   forgotPasswordContainer: {
     marginTop: 20,

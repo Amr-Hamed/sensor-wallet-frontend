@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   questionBody: {
-    magin: WIDTH*0.03,
+    margin: WIDTH*0.03,
     padding: WIDTH*0.03,
     fontSize: WIDTH*0.05,
   },

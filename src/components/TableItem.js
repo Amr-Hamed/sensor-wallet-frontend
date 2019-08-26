@@ -18,9 +18,9 @@ export default class TableItem extends Component {
             style={{
               color: 'grey',
               alignSelf: 'center',
-              marginHorizontal: 0.05 * WIDTH,
+              marginHorizontal: 0.05 * WIDTH, 
             }}>
-            {this.props.midel}
+            {this.props.midel} 
           </Text>
         </View>
         <View style={styles.tableItemRight}>
@@ -42,7 +42,7 @@ export default class TableItem extends Component {
 const styles = StyleSheet.create({
   tableItem: {
     marginLeft: 0,
-    flexDireaction: 'row',
+    flexDirection: 'row',
     position: 'relative',
   },
   tableItemLeft: {
