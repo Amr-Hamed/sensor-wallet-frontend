@@ -32,6 +32,10 @@ import TableItem from '../../components/TableItem';
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
 export default class SideLogoCard extends Component {
+
+  back = ()=> {
+    this.props.navigation.goBack() ; 
+  }
   render() {
     return (
       <Container>
@@ -48,16 +52,16 @@ export default class SideLogoCard extends Component {
             <View style={styles.details}>
               <Text style={styles.sideTitle}>SURVICE DETAILS</Text>
               <Right>
-                <Button transparent>
+                <Button transparent onPress={this.back}>
                   <Text style={{ color: '#45b3b5', fontSize: 15 }}>
                     {' '}
-                    Back To Service{' '}
+                    Back to Services{' '}
                   </Text>
                 </Button>
               </Right> 
             </View>
             <Content padder>
-              <Text style={styles.serviceTitle}> Full Ecommerse App </Text>
+              <Text style={styles.serviceTitle}> UI / UX </Text>
               <Text style={styles.serviceDetails}>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry. Lorem Ipsum has been the industry's standard dummy
@@ -75,9 +79,7 @@ export default class SideLogoCard extends Component {
               <TableItem left="NesCafe" midel="5:10 day" right="$150"/>
               <TableItem left="Cafe Mix" midel="3:7 day" right="$130"/>
               <TableItem left="NesCafe" midel="5:10 day" right="$150"/>
-
- 
-            </View>
+           </View>
           </Content>
         </ScrollView>
       </Container>

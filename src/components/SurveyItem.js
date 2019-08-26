@@ -53,7 +53,8 @@ export default class SurveyItem extends Component {
           <POSButton
             title="GO"
             style={{ borderRadius: 10, width: 0.15 * WIDTH }}
-            height={0.15 * WIDTH}
+            height={0.15 * WIDTH} 
+            pressed = {()=>alert("Comming Soon")}
           />
         </Left>
       </View>

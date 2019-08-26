@@ -30,23 +30,54 @@ import VoucherBtn from '../../components/VoucherBtn';
 import RelatedSurvey from '../../components/RelatedSurvey';
 import Service from '../../components/Service';
 import RoundedBG from '../../components/RoundedBG';
+import SurveySlideItem from '../../components/SurveySlideItem';
+
+const coreApi = "http://demo9744643.mockable.io/"
 
 export default class CompanyProfile extends Component {
+
+
+  constructor(props){
+    super(props);
+
+    this.state = {
+      clientName : '' , 
+      clinetImage : 'https://cdn1.iconfinder.com/data/icons/business-power/32/business_avatar_company_hierarchy_level_position_post-512.png'
+    }
+    // fetching Client Data From API
+    fetch(`https://demo9744643.mockable.io/clients/1`)
+    .then(res => res.json())
+    .then(res=>{
+      this.setState({
+        clientName : res.clientName , 
+        clientImage : res.clientImage
+      })
+    }) 
+
+
+  }
+
+  goToSurvey = (surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration) => {
+    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration })
+  }
+  goToService = () => {
+    this.props.navigation.navigate('ServiceDetails')
+  }
   render() {
     return (
       <Container>
         <ScrollView>
           <RoundedBG />
           <CompanyProfileCard
-            cardTitle="Costa Caffee"
+            cardTitle={this.state.clientName}
             cardNote="Since 1971"
-            coverUrl="http://cierlica.com/wp-content/uploads/2017/03/CostaCoffee_cover.jpg"
-            profilePicUrl="https://upload.wikimedia.org/wikipedia/en/thumb/4/42/CostaLogo.svg/1200px-CostaLogo.svg.png"
+            coverUrl={this.state.clientImage}
+            profilePicUrl={this.state.clientImage}
           />
 
           <Content padder>
             <Text style={styles.title}>BIO</Text>
-            <Text>
+            <Text>UserQRCode
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. orum.
             </Text>
@@ -57,25 +88,42 @@ export default class CompanyProfile extends Component {
 
             <VoucherBtn points="30" value="25" style={{ marginVertical: 10 }} />
 
-            <View>
-              <Text style={styles.sideTitle}>SURVEYS</Text>
-              <RelatedSurvey
-                brandName="Costa Coffee"
-                surveyTitle="New Coffee"
-                points="30"
+            <Content padder>
+            <Text style={styles.sideTitle}>Company Surveys For You : </Text>
+
+            <ScrollView horizontal={true}>
+              <SurveySlideItem
+                cover="https://www.pcclean.io/wp-content/gallery/messi-hd-wallpapers/Messi-HD-78.jpg"
+                brandName="Barcelona"
+                title="Leonel Messi"
+                time="10 min"
+                points="100"
+                pressed={this.goToSurvey}
               />
-              <RelatedSurvey
-                brandName="Costa Coffee"
-                surveyTitle="New Drink "
-                points="50"
+              <SurveySlideItem
+                cover="https://wallpapersite.com/images/wallpapers/cristiano-ronaldo-2560x1440-hd-17168.jpg"
+                brandName="Juventus"
+                title="Ronaldo"
+                time="7 min"
+                points="77"
+                pressed={this.goToSurvey}
               />
-            </View>
+              <SurveySlideItem
+                cover="https://images2.alphacoders.com/961/961964.jpg"
+                brandName="Liverpool"
+                title="Mohamed Salah"
+                time="11 min"
+                points="111"
+                pressed={this.goToSurvey}
+              />
+            </ScrollView>
+          </Content>
 
             <View style={styles.services}>
               <Text style={styles.sideTitle}>Services</Text>
-              <Service serviceName="UI/UX" />
-              <Service serviceName="Development" />
-              <Service serviceName="Coffee" />
+              <Service serviceName="UI/UX" pressed = {this.goToService} />
+              <Service serviceName="Development" pressed = {this.goToService}/>
+              <Service serviceName="Coffee" pressed = {this.goToService} />
             </View>
           </Content>
         </ScrollView>

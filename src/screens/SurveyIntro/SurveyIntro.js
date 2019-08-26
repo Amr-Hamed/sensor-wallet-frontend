@@ -28,22 +28,36 @@ import SideLogoCard from '../../components/SideLogoCard';
 import POSButton from '../../components/POSButton';
 import RelatedSurvey from '../../components/RelatedSurvey';
 import POSHeader from '../../components/POSHeader';
+import SurveySlideItem from '../../components/SurveySlideItem';
 import RoundedBG from '../../components/RoundedBG';
 
 
-export default class CardImageExample extends Component {
+export default class SurveyIntro extends Component {
+
+  takeSurvey = () => {
+    this.props.navigation.navigate('SurveyQuestion')
+  }
+  goToSurvey = (surveyTitle, brandName, brandLogo, brandID, surveyCover, surveyPoints, surveyDuration) => {
+    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration, brandLogo, brandID });
+  }
+  goToCompanyProfile = (brandID) => {
+
+    this.props.navigation.navigate('CompanyProfile', { brandID })
+  }
+
   render() {
     return (
       <Container>
         <ScrollView>
-          <RoundedBG /> 
+          <RoundedBG />
           <SideLogoCard
-            surveyTitle="NIKE Survey"
-            brandName="NIKE"
-            surveyCover="https://images4.alphacoders.com/632/thumb-1920-632661.jpg"
-            brandLogo="https://www.thelogocreative.co.uk/wp-conte nt/uploads/Famous-Logos-Nike-The-Logo-Creative-650x406.jpg"
-            points="50"
-            duration="03 min"
+            surveyTitle={this.props.navigation.getParam('surveyTitle')}
+            brandName={this.props.navigation.getParam('brandName')}
+            surveyCover={this.props.navigation.getParam('surveyCover')}
+            brandLogo={this.props.navigation.getParam('brandLogo')}
+            brandLogoPressed={()=>this.goToCompanyProfile(this.props.navigation.getParam('brandID'))}
+            points={this.props.navigation.getParam('surveyPoints')}
+            duration={this.props.navigation.getParam('surveyDuration')}
           />
 
           <View style={styles.aboutSection}>
@@ -54,21 +68,42 @@ export default class CardImageExample extends Component {
             </Text>
           </View>
 
-          <POSButton title="Take This Survey Now" style={styles.btnLogin} />
-          <Content style={{ flexDirection: 'row' }}>
-            <Text style={styles.sideTitle}>OTHER SURVEY </Text>
-            <RelatedSurvey
-              style={styles.relSurvey}
-              brandName="Nike"
-              surveyTitle="Survey #2"
-              points="70"
-            />
-            <RelatedSurvey
-              style={styles.relSurvey}
-              brandName="Nike"
-              surveyTitle="Survey #3"
-              points="60"
-            />
+          <POSButton title="Take This Survey Now" style={styles.btnLogin} pressed={this.takeSurvey} />
+          <Content padder>
+            <Text style={styles.sideTitle}>Top Surveys For You : </Text>
+
+            <ScrollView horizontal={true}>
+              <SurveySlideItem
+                cover="https://www.pcclean.io/wp-content/gallery/messi-hd-wallpapers/Messi-HD-78.jpg"
+                brandName="Barcelona"
+                brandID="1"
+                title="Leonel Messi"
+                time="10 min"
+                points="100"
+                brandLogo="https://www.pngfind.com/pngs/m/254-2549567_https-i-postimg-cc-xcrcrwh1-barcelona-crest-new.png"
+                pressed={this.goToSurvey}
+              />
+              <SurveySlideItem
+                cover="https://wallpapersite.com/images/wallpapers/cristiano-ronaldo-2560x1440-hd-17168.jpg"
+                brandName="Juventus"
+                brandID="2"
+                title="Ronaldo"
+                time="7 min"
+                points="77"
+                brandLogo="https://abeon-hosting.com/images/escudo-juventus-png-7.png"
+                pressed={this.goToSurvey}
+              />
+              <SurveySlideItem
+                cover="https://images2.alphacoders.com/961/961964.jpg"
+                brandName="Liverpool"
+                brandID="3"
+                title="Mohamed Salah"
+                time="11 min"
+                points="111"
+                brandLogo="https://www.trzcacak.rs/myfile/detail/68-688343_-liverpool-pride-liverpool-logo-liverpool-logo-dream.png"
+                pressed={this.goToSurvey}
+              />
+            </ScrollView>
           </Content>
         </ScrollView>
       </Container>
@@ -99,6 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 20,
     alignSelf: 'center',
+    justifyContent: 'center'
   },
   relSurvey: {
     width: WIDTH - 20,

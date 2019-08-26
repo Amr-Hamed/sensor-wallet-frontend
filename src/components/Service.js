@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, Dimensions, View } from 'react-native';
+import { Image, StyleSheet, Text, Dimensions, View, TouchableOpacity } from 'react-native';
 import { Content } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
 export default class SideLogoCard extends Component {
+
+  handelClick = () => {
+    this.props.pressed()
+  }
+
   render() {
     return (
       <View style={this.props.style}>
-        <LinearGradient
-          colors={['#5ecccf', '#45b3b5']}
-          style={styles.serviceBlock}>
-          <Text style={styles.serviceName}> {this.props.serviceName} </Text>
-        </LinearGradient>
+        <TouchableOpacity onPress={this.handelClick}>
+          <LinearGradient
+            colors={['#5ecccf', '#45b3b5']}
+            style={styles.serviceBlock}>
+            <Text style={styles.serviceName}> {this.props.serviceName} </Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
     );
   }
