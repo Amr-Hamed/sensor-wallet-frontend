@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  AsyncStorage
 } from 'react-native';
 import {
   Container,
@@ -31,9 +32,45 @@ import POSHeader from '../../components/POSHeader';
 import SurveySlideItem from '../../components/SurveySlideItem';
 import RoundedBG from '../../components/RoundedBG';
 
+// Define Some Constants for default Values  
+const baseUrl = "http://demo9744643.mockable.io/";
+const userID = 5;
+const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
+const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg"
+
 
 export default class SurveyIntro extends Component {
 
+  state = {
+    userID: '',
+    loading: true,
+    userClientSurveys: []
+  }
+
+  constructor(props) {
+    super(props);
+    this.fetchSurveyData();
+    // alert()
+    AsyncStorage.getItem('UserID', (err, userID) => {
+
+      this.setState({
+        userID
+      })
+    })
+  }
+
+  fetchSurveyData = () => {
+    fetch(`https://demo9744643.mockable.io/endUser/5/client/1/surveys`)
+      .then(res => res.json())
+      .then(res =>
+        this.setState({
+          userClientSurveys: res.data
+        })
+      )
+      .then(() => this.setState({
+        loading: false
+      }))
+  }
   takeSurvey = () => {
     this.props.navigation.navigate('SurveyQuestion')
   }
@@ -55,13 +92,13 @@ export default class SurveyIntro extends Component {
             brandName={this.props.navigation.getParam('brandName')}
             surveyCover={this.props.navigation.getParam('surveyCover')}
             brandLogo={this.props.navigation.getParam('brandLogo')}
-            brandLogoPressed={()=>this.goToCompanyProfile(this.props.navigation.getParam('brandID'))}
+            brandLogoPressed={() => this.goToCompanyProfile(this.props.navigation.getParam('brandID'))}
             points={this.props.navigation.getParam('surveyPoints')}
             duration={this.props.navigation.getParam('surveyDuration')}
           />
 
           <View style={styles.aboutSection}>
-            <Text style={styles.title}> ABOUT US </Text>
+            <Text style={styles.title}> ABOUT US  </Text>
             <Text style={styles.aboutBody}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. orum.
@@ -73,36 +110,20 @@ export default class SurveyIntro extends Component {
             <Text style={styles.sideTitle}>Top Surveys For You : </Text>
 
             <ScrollView horizontal={true}>
-              <SurveySlideItem
-                cover="https://www.pcclean.io/wp-content/gallery/messi-hd-wallpapers/Messi-HD-78.jpg"
-                brandName="Barcelona"
-                brandID="1"
-                title="Leonel Messi"
-                time="10 min"
-                points="100"
-                brandLogo="https://www.pngfind.com/pngs/m/254-2549567_https-i-postimg-cc-xcrcrwh1-barcelona-crest-new.png"
-                pressed={this.goToSurvey}
-              />
-              <SurveySlideItem
-                cover="https://wallpapersite.com/images/wallpapers/cristiano-ronaldo-2560x1440-hd-17168.jpg"
-                brandName="Juventus"
-                brandID="2"
-                title="Ronaldo"
-                time="7 min"
-                points="77"
-                brandLogo="https://abeon-hosting.com/images/escudo-juventus-png-7.png"
-                pressed={this.goToSurvey}
-              />
-              <SurveySlideItem
-                cover="https://images2.alphacoders.com/961/961964.jpg"
-                brandName="Liverpool"
-                brandID="3"
-                title="Mohamed Salah"
-                time="11 min"
-                points="111"
-                brandLogo="https://www.trzcacak.rs/myfile/detail/68-688343_-liverpool-pride-liverpool-logo-liverpool-logo-dream.png"
-                pressed={this.goToSurvey}
-              />
+              {this.state.userClientSurveys.map((survey) =>
+                <SurveySlideItem
+                  surveyID={survey.surveyID}
+                  cover={survey.surveyImageURL || survey.surveyCreatorImageURL || surveyCover}
+                  brandName={survey.surveyCreatorName}
+                  brandID={survey.surveyCreatorID}
+                  title={survey.surveyTitle}
+                  time={survey.surveyDuration}
+                  points={survey.surveyReward}
+                  brandLogo={survey.surveyCreatorImageURL || clientAvatar}
+                  pressed={this.goToSurvey}
+                  key={survey.surveyID}
+                />
+              )}
             </ScrollView>
           </Content>
         </ScrollView>

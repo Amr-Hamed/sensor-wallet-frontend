@@ -46,6 +46,8 @@ import UserProfile from '../screens/UserProfile/UserProfile';
 import UserSurveyHomePage from '../screens/UserSurveyHomePage/UserSurveyHomePage';
 import UserQRCode from '../screens/UserQRCode/UserQRCode';
 import UserWallet from  '../screens/UserWallet/UserWallet';
+import ScanFriendQR from  '../screens/ScanFriendQR/ScanFriendQR';
+
 import ProfileStack from '../routing/ProfileStack';
 
 class NavigationDrawerStructure extends Component {
@@ -160,6 +162,19 @@ const FirstActivity_StackNavigator = createStackNavigator({
       },
       headerTintColor: '#fff',
     }),
+  
+  },
+  ScanFriendQR: {
+    screen: ScanFriendQR,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Demo Screen 1',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#212121',
+      },
+      headerTintColor: '#fff',
+    }),
+  
   },
 });
 

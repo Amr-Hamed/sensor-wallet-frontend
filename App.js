@@ -45,17 +45,7 @@ export default class App extends React.Component {
   state = {
     loadingComplete: false
   }
-  async componentDidMount() {
-    await Asset.loadAsync([
-      // ...
-    ]),
-      await Font.loadAsync({
-        'Roboto_medium': require('./assets/fonts/Roboto-Medium.ttf'),
-        'Rubik-Regular': require('./assets/fonts/Rubik-Regular.ttf'),
-
-
-      });
-  }
+ 
 
   loadResourcesAsync = async () => {
     await Promise.all([
@@ -67,6 +57,7 @@ export default class App extends React.Component {
         'Roboto_medium': require('./assets/fonts/Roboto-Medium.ttf'),
         'Rubik-Regular': require('./assets/fonts/Rubik-Regular.ttf'),
         Ionicons: require('./assets/fonts/ionicons.ttf'),
+        LexendDeca : require('./assets/fonts/LexendDeca.ttf'),
       })
 
     ])

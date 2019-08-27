@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 
 export default class UserQRCode extends Component {
     state = {
-        data: `{"id" : ${this.props.navigation.getParam('id') || "Dummy ID"} , "username" : "${this.props.navigation.getParam('username') || "Dummy User Name"}   } `
+        data: `{"recieverID" : ${this.props.navigation.getParam('userID') || "Dummy ID"} , "receiverName" : "${this.props.navigation.getParam('userName') || "Dummy User Name"}"  , "walletID" : ${this.props.navigation.getParam('walletID')} } `
     };
     render() {
         return (
@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
     } , 
     quote : {
         fontSize : 16 , 
-        fontFamily : 'Rubik-Regular'
+        fontFamily : 'LexendDeca'
     }
 })

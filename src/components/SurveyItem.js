@@ -11,6 +11,13 @@ const imgPathes = {
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
 export default class SurveyItem extends Component {
+
+  handleClick = () => {
+    // fire navigation method in user profile screen with following props
+    this.props.pressed(this.props.title, this.props.brandName,this.props.brandLogo,this.props.brandID , this.props.cover, this.props.points, this.props.time);
+  }
+
+
   render() {
     return (
       <View
@@ -35,7 +42,7 @@ export default class SurveyItem extends Component {
           <View style={{ flexDirection: 'row' }}>
             <Icon name="time" style={{ color: 'grey' }} />
             <View style={{ flexDirection: 'row', marginTop: 4 }}>
-              <Text note> {this.props.time} |</Text>
+              <Text note> {this.props.time} min |</Text>
               <Thumbnail source={imgPathes.senses} style={styles.sensesLogo} />
               <Text
                 style={{
@@ -54,7 +61,7 @@ export default class SurveyItem extends Component {
             title="GO"
             style={{ borderRadius: 10, width: 0.15 * WIDTH }}
             height={0.15 * WIDTH} 
-            pressed = {()=>alert("Comming Soon")}
+            pressed = {this.handleClick}
           />
         </Left>
       </View>

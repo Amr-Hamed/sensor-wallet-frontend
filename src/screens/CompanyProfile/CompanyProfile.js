@@ -45,7 +45,7 @@ export default class CompanyProfile extends Component {
       clinetImage : 'https://cdn1.iconfinder.com/data/icons/business-power/32/business_avatar_company_hierarchy_level_position_post-512.png'
     }
     // fetching Client Data From API
-    fetch(`https://demo9744643.mockable.io/clients/1`)
+    fetch(`https://demo9744643.mockable.io/clients/${this.props.navigation.getParam('brandID')}`)
     .then(res => res.json())
     .then(res=>{
       this.setState({

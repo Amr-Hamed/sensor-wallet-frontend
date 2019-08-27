@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Dimensions, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Dimensions, View, ScrollView, TouchableOpacity, RefreshControl, AsyncStorage } from 'react-native';
 import {
   Container,
   Header,
@@ -15,146 +15,229 @@ import {
   Right,
 } from 'native-base';
 import Swiper from 'react-native-swiper';
+import Modal from 'react-native-modal';
 
 import POSHeader from '../../components/POSHeader';
 import POSButton from '../../components/POSButton';
 import UserProfileCard from '../../components/UserProfileCard';
 import SurveySlideItem from '../../components/SurveySlideItem';
 import SurveyItem from '../../components/SurveyItem';
-import FeaturedSurveys from '../../components/FeaturedSurveys';
-import { ThemeConsumer } from 'react-native-elements';
+import Loading from '../Loading/Loading';
+import TransactionConfirm from '../../components/TransactionConfirm';
 
 const imgPathes = {
   senses: require('../../../assets/images/sensesLogo.png'),
-  qrCode: require('../../../assets/images/qr-code.png') , 
-  profileAvatar : require('../../../assets/images/user.png')
+  qrCode: require('../../../assets/images/qr-code.png'),
+  profileAvatar: require('../../../assets/images/user.png')
 };
 
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
+// Define Some Constants for default Values  
+const baseUrl = "http://demo9744643.mockable.io/";
+const userID = 5;
+const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
+const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg"
 
-
-export default class CardImageExample extends Component {
+export default class UserProfile extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      baseUrl : "http://demo9744643.mockable.io/" , 
-      userName : '' , 
-      profileAvatar : "https://image.flaticon.com/icons/svg/149/149071.png"
-    }
 
-    fetch(this.state.baseUrl + "users/1")
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        userName : res.userName , 
-        profileAvatar: res.profileImgUrl
+      loading: true,
+      userID,
+      refreshing: false,
+      userName: '',
+      profileAvatar: "https://image.flaticon.com/icons/svg/149/149071.png",
+      userRate: '',
+      numberOfTakenSurveys: '',
+      durationOfTakenSurveys: '',
+      walletID: '',
+      senses: '',
+      latestSurveys: [],
+      recommendedSurveys: [],
+      showTransConfirmDialog: false,
+      transactionInfo: {},
+    }
+    this.props.navigation.addListener('didFocus', async () =>
+
+      await this.fetchData()
+        .then(() =>
+          this.setState({
+            showTransConfirmDialog: this.props.navigation.getParam('showTransConfirmDialog') || false,
+            transactionInfo: this.props.navigation.getParam('transactionInfo') || {},
+          })
+        )
+    )
+  }
+
+  fetchData = async () => {
+    await fetch(baseUrl + `endUser/${userID}`)
+      .then(res => res.json())
+      .then(res => {
+
+        this.setState({
+          userName: res.data.userName,
+          profileAvatar: res.data.imageURL,
+          userRate: res.data.rate,
+          numberOfTakenSurveys: res.data.numberOfTakenSurveys,
+          durationOfTakenSurveys: res.data.durationOfTakenSurveys,
+          walletID: res.data.walletID,
+          senses: res.data.senses,
+          latestSurveys: res.data.latestSurveys,
+          recommendedSurveys: res.data.recommendedSurveys
+        });
+
+        AsyncStorage.setItem('UserID', res.data.userID)
+
       })
-    })
+      .then(() => this.setState({ loading: false }))
+  }
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.fetchData().then(() => {
+      this.setState({ refreshing: false });
+    });
   }
 
 
 
-  goToSurvey = (surveyTitle, brandName,brandLogo,brandID, surveyCover, surveyPoints, surveyDuration) => {
-    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration , brandLogo , brandID}) ; 
-}
+  goToSurvey = (surveyTitle, brandName, brandLogo, brandID, surveyCover, surveyPoints, surveyDuration) => {
+    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration, brandLogo, brandID });
+  }
 
   goToQRCode = () => {
-    this.props.navigation.navigate('UserQRCode');
+    this.props.navigation.navigate('UserQRCode', { userID, userName: this.state.userName, walletID: this.state.walletID });
   }
-  
+
   goToWallet = () => {
     this.props.navigation.navigate('UserWallet');
   }
 
+  goToScanFriendQR = () => {
+    this.props.navigation.navigate('ScanFriendQR', {
+      userID,
+      userName: this.state.userName,
+      senses: this.state.senses
+    });
+  }
+
+  hidePopup = () => {
+    this.setState({
+      showTransConfirmDialog: false
+    })
+  }
+
 
   render() {
-    return (
-      <Container>
-        <FeaturedSurveys />
 
-        <ScrollView>
-          <UserProfileCard
-            id="26654"
-            name= {this.state.userName}
-            rating="4.5"
-            numberOfSurveys="200"
-            hours="20"
-            score="12,886"
-            profileImg={this.state.profileAvatar}
-            walletClcked = {this.goToWallet} 
-          />
-          <Content padder >
-            <View style={{ flexDirection: 'row' }} >
+    if (this.state.loading)
+      return (<Loading />);
+    else
+      return (
+        <Container>
 
-              <Left>
-                <POSButton
-                  title="NEW SCAN"
-                  style={styles.newScanBtn}
-                  height={0.15 * WIDTH}
-                  pressed={()=> alert(" Comming Soon")}
-                />
-              </Left>
-              <Body></Body>
-              <Right>
-                <TouchableOpacity onPress = {this.goToQRCode} ><Image source={imgPathes.qrCode} style={styles.QRCodeBtn} /></TouchableOpacity>
-              </Right>
-            </View>
-          </Content>
-          <Content padder>
-            <Text style={styles.sideTitle}>Top Surveys For You : </Text>
+          <ScrollView
+            // apply Swip Refresh
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            } >
+            {/* Show Basic user Profile Data */}
+            <UserProfileCard
+              id={userID}
+              name={this.state.userName}
+              rating={this.state.userRate}
+              numberOfSurveys={this.state.numberOfTakenSurveys}
+              hours={this.state.durationOfTakenSurveys}
+              score={this.state.senses}
+              profileImg={this.state.profileAvatar}
+              walletClcked={this.goToWallet}
+            />
+            {/* Transactions Sectoin */}
+            <Content padder >
+              <View style={{ flexDirection: 'row' }} >
+                {/* click button to open camera for scan friend QR Code  */}
+                <Left>
+                  <POSButton
+                    title="NEW SCAN"
+                    style={styles.newScanBtn}
+                    height={0.15 * WIDTH}
+                    pressed={this.goToScanFriendQR}
+                  />
+                </Left>
+                <Body></Body>
+                {/* Show User QR Code  */}
+                <Right>
+                  <TouchableOpacity onPress={this.goToQRCode} ><Image source={imgPathes.qrCode} style={styles.QRCodeBtn} /></TouchableOpacity>
+                </Right>
+              </View>
+            </Content>
 
-            <ScrollView horizontal={true}>
-              <SurveySlideItem
-                cover="https://www.pcclean.io/wp-content/gallery/messi-hd-wallpapers/Messi-HD-78.jpg"
-                brandName="Barcelona"
-                brandID = "1"
-                title="Leonel Messi"
-                time="10 min"
-                points="100"
-                brandLogo = "https://www.pngfind.com/pngs/m/254-2549567_https-i-postimg-cc-xcrcrwh1-barcelona-crest-new.png"
+            <Content padder>
+              <Text style={styles.sideTitle}>Latest Surveys :  </Text>
+              {/* Show Latest Recommended survays ... max 5 */}
+              <ScrollView horizontal={true}>
+
+                {this.state.latestSurveys.map((survey) =>
+                  <SurveySlideItem
+                    surveyID={survey.surveyID}
+                    cover={survey.surveyImageURL || survey.surveyCreatorImageURL || surveyCover}
+                    brandName={survey.surveyCreatorName}
+                    brandID={survey.surveyCreatorID}
+                    title={survey.surveyTitle}
+                    time={survey.surveyDuration}
+                    points={survey.surveyReward}
+                    brandLogo={survey.surveyCreatorImageURL || clientAvatar}
+                    pressed={this.goToSurvey}
+                    key={survey.surveyID}
+                  />
+                )}
+
+              </ScrollView>
+            </Content>
+            {/* View All Recommended Surveys */}
+            {this.state.recommendedSurveys.map((survey) =>
+
+              <SurveyItem
+                surveyID={survey.surveyID}
+                brandName={survey.surveyCreatorName}
+                title={survey.surveyTitle}
+                time={survey.surveyDuration}
+                points={survey.surveyReward}
+                brandCover={survey.surveyImageURL || survey.surveyCreatorImageURL || clientAvatar}
+                brandLogo={survey.surveyCreatorImageURL || clientAvatar}
                 pressed={this.goToSurvey}
+                cover={survey.surveyImageURL || survey.surveyCreatorImageURL || surveyCover}
+                brandID={survey.surveyCreatorID}
+                key={survey.surveyID}
               />
-              <SurveySlideItem
-                cover="https://wallpapersite.com/images/wallpapers/cristiano-ronaldo-2560x1440-hd-17168.jpg"
-                brandName="Juventus"
-                brandID = "2"
-                title="Ronaldo"
-                time="7 min"
-                points="77"
-                brandLogo="https://abeon-hosting.com/images/escudo-juventus-png-7.png"
-                pressed={this.goToSurvey}
+            )}
+            <Text>{this.state.showTransConfirmDialog}</Text>
+          </ScrollView>
+          <CardItem style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+
+
+            <Modal
+              isVisible={this.state.showTransConfirmDialog}
+              style={styles.popUpContainer}>
+
+              <TransactionConfirm
+                showModal={this.state.showTransConfirmDialog}
+                hidePopup={this.hidePopup}
+                transactionInfo={this.state.transactionInfo}
               />
-              <SurveySlideItem
-                cover="https://images2.alphacoders.com/961/961964.jpg"
-                brandName="Liverpool"
-                brandID = "3"
-                title="Mohamed Salah"
-                time="11 min"
-                points="111"
-                brandLogo="https://www.trzcacak.rs/myfile/detail/68-688343_-liverpool-pride-liverpool-logo-liverpool-logo-dream.png"
-                pressed={this.goToSurvey}
-              />
-            </ScrollView>
-          </Content>
-          <SurveyItem
-            brandName="Orange"
-            title="Orange Survey"
-            time="00:30 min"
-            points="50"
-            brandCover="https://logoeps.com/wp-content/uploads/2011/06/orange-logo-vector.png"
-          />
-          <SurveyItem
-            brandName="Adidas"
-            title="Adidas Survey"
-            time="00:20 min"
-            points="70"
-            brandCover="https://ak5.picdn.net/shutterstock/videos/32508595/thumb/8.jpg"
-          />
-        </ScrollView>
-      </Container>
-    );
+            </Modal>
+
+          </CardItem>
+        </Container>
+      );
   }
 }
 
@@ -164,9 +247,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
     fontFamily: 'Rubik-Regular'
-   },
+  },
   QRCodeBtn: {
     width: 0.15 * WIDTH,
     height: 0.15 * WIDTH,
-  }
+  },
+  popUpContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
 });

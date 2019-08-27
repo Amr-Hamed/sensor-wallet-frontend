@@ -56,7 +56,7 @@ export default class SurveySlideItem extends Component {
                 <Text style={styles.title}> {this.props.title} </Text>
                 <View style={{ flexDirection: 'row', width: 0.3 * WIDTH }}>
                   <Icon name="time" style={{ color: 'grey', marginRight: 2 }} />
-                  <Text style={styles.time}>{this.props.time} </Text>
+                  <Text style={styles.time}>{this.props.time} min</Text>
                 </View>
               </View>
               <Body>
