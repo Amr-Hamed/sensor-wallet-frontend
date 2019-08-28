@@ -1,5 +1,5 @@
 import React from 'react';
-import { View , Dimensions ,  StyleSheet } from 'react-native';
+import { View , Text , Dimensions ,  StyleSheet } from 'react-native';
 
 import UserTransaction from '../UserTransaction/UserTransaction';
 

@@ -7,15 +7,15 @@ export default class WalletCurrency extends React.Component {
       <View style={styles.main}>
         <Image
           source={{
-            uri: this.props.data.image,
+            uri: this.props.data.imageURL,
           }}
           style={styles.currencyImage}
         />
         <View style={styles.currencyNameContainer}>
           <Text style={styles.currencyAbbreviation}>
-            {this.props.data.abbreviation}
+            {this.props.data.name}
           </Text>
-          <Text style={styles.currencyName}>{this.props.data.name}</Text>
+          <Text style={styles.currencyName}>{this.props.data.description}</Text>
         </View>
         <Text style={styles.currencyAmount}>
           {this.props.data.amount} {this.props.data.currencySymbol}
