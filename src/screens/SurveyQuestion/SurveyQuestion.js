@@ -10,6 +10,10 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import Modal from 'react-native-modal';
+
+import { Icon } from 'native-base';
+
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
 
@@ -17,48 +21,29 @@ import POSHeader from '../../components/POSHeader';
 import SurveyQuestionContainer from '../../components/SurveyQuestionContainer/SurveyQuestionContainer';
 import QuestionAnswer from '../../components/QuestionAnswer/QuestionAnswer';
 
-export default class X extends React.Component {
+export default class SurveyQuestion extends React.Component {
   state = {
-    questions: [
-      {
-        number: 1,
-        questionBody:
-          '1 - Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga\
-          molestiae nesciunt similique, corrupti neque, reiciendis',
-        answers: [
-          '1 - Lorem ipsum dolor, sit amet consectetur',
-          '2 - Lorem ipsum dolor, sit amet consectetur',
-          '3 - Lorem ipsum dolor, sit amet consectetur',
-        ],
-      },
-      {
-        number: 2,
-        questionBody:
-          '2 - Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga\
-          molestiae nesciunt similique, corrupti neque, reiciendis',
-        answers: [
-          '1 - Lorem ipsum dolor, sit amet consectetur',
-          '2 - Lorem ipsum dolor, sit amet consectetur',
-          '3 - Lorem ipsum dolor, sit amet consectetur',
-        ],
-      },
-      {
-        number: 3,
-        questionBody:
-          '3 - Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga\
-          molestiae nesciunt similique, corrupti neque, reiciendis',
-        answers: [
-          '1 - Lorem ipsum dolor, sit amet consectetur',
-          '2 - Lorem ipsum dolor, sit amet consectetur',
-          '3 - Lorem ipsum dolor, sit amet consectetur',
-        ],
-      },
-    ],
+    isModalVisible: false,
+    questions: [],
     currentQuestion: 1,
-    nextButtonText: 'NEXT',
+    nextQuestionButtonText: 'NEXT',
     answerColor: '#DCDCDC',
     selectedAnswer: -1,
     questionAnswers: [],
+  };
+
+  componentDidMount = () => {
+    fetch('http://demo8354958.mockable.io/clients/21/surveys/1')
+      .then(res => res.json())
+      .then(resJson => {
+        this.setState({
+          questions: resJson.questions,
+        });
+      });
+  };
+
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
   selectAnswer = answerNumber => {
@@ -73,7 +58,7 @@ export default class X extends React.Component {
       let selectedAnswer = this.state.questionAnswers.find(
         answer => answer.q == currentQuestion - 1
       );
-      if (this.state.nextButtonText === 'NEXT') {
+      if (this.state.nextQuestionButtonText === 'NEXT') {
         this.setState({
           currentQuestion: currentQuestion - 1,
           selectedAnswer: selectedAnswer.a,
@@ -82,13 +67,13 @@ export default class X extends React.Component {
         this.setState({
           currentQuestion: currentQuestion - 1,
           selectedAnswer: selectedAnswer.a,
-          nextButtonText: 'NEXT',
+          nextQuestionButtonText: 'NEXT',
         });
       }
     }
   };
 
-  nextButtonPressed = () => {
+   nextButtonPressed = async ()=>{
     if (this.state.selectedAnswer === -1) {
       return;
     } else {
@@ -128,17 +113,51 @@ export default class X extends React.Component {
       if (currentQuestion + 1 === this.state.questions.length) {
         if (selectedAnswer) {
           this.setState({
-            nextButtonText: 'SUBMIT',
+            nextQuestionButtonText: 'SUBMIT',
             selectedAnswer: selectedAnswer.a,
             questionAnswers,
           });
         } else {
           this.setState({
-            nextButtonText: 'SUBMIT',
+            nextQuestionButtonText: 'SUBMIT',
             selectedAnswer: -1,
             questionAnswers,
           });
         }
+      }
+      if (this.state.nextQuestionButtonText == 'SUBMIT') {
+         await this.setState({
+          questionAnswers,
+        });
+        fetch('http://demo8354958.mockable.io/submitSurvey', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            submitSurvey: {
+              clientName: 'zara',
+              surveyID: '1',
+              clientID: '21',
+              endUserID: '26',
+              questions: this.state.questionAnswers,
+            },
+          }),
+        })
+          .then(response => response.json())
+          .then(responseJson => {
+            if (responseJson.code === 200) {
+              this.toggleModal();
+            } else if (responseJson.code === 500) {
+              alert('Server Error!');
+            } else if (responseJson.code === 401) {
+              alert('Sorry, this survey is expired!');
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
       }
     }
   };
@@ -158,7 +177,7 @@ export default class X extends React.Component {
           style={styles.questionAnswer}
           onPress={() => this.selectAnswer(i + 1)}>
           <QuestionAnswer
-            answerBody={answer}
+            answerBody={answer.body}
             style={styles.questionAnswer}
             answerColor={answerColor}
             answerTextColor={answerTextColor}
@@ -178,7 +197,7 @@ export default class X extends React.Component {
         <View style={styles.main}>
           <SurveyQuestionContainer
             questionBody={
-              this.state.questions[this.state.currentQuestion - 1].questionBody
+              this.state.questions[this.state.currentQuestion - 1].body
             }
           />
           <ScrollView style={styles.answersContainer}>
@@ -195,12 +214,41 @@ export default class X extends React.Component {
                 style={styles.nextButton}
                 onPress={this.nextButtonPressed}>
                 <Text style={styles.movingBetweenQuestionsButtonText}>
-                  {this.state.nextButtonText}
+                  {this.state.nextQuestionButtonText}
                 </Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
         </View>
+        <Modal
+          isVisible={this.state.isModalVisible}
+          style={styles.popUpContainer}>
+          <View style={styles.popup}>
+            <View style={styles.closeButtonRow}>
+              <TouchableOpacity onPress={this.toggleModal}>
+                <Icon name="close-circle" style={styles.closeButton} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.popUpText}>
+              {' '}
+              THANKS FOR SUBMITTING{'\n'} THE SURVEY{' '}
+            </Text>
+            <Image
+              source={{
+                uri:
+                  'https://martielbeatty.com/wp-content/uploads/2018/03/green-tick-png-green-tick-icon-image-14141-1000.png',
+              }}
+              style={styles.tickImage}
+            />
+            <Text style={styles.surveySubmitReward}> Your reward is</Text>
+            <Text style={styles.surveySubmitReward}> 200 senses</Text>
+            <TouchableOpacity
+              onPress={this.toggleModal}
+              style={styles.hidePopupButton}>
+              <Text style={styles.hidePopupButtonText}> Home </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </ScrollView>
     );
   }
@@ -283,5 +331,57 @@ const styles = StyleSheet.create({
   movingBetweenQuestionsButtonText: {
     color: 'white',
     fontSize: screenWidth * 0.06,
+  },
+  popUpContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popup: {
+    borderRadius: 5,
+    backgroundColor: 'white',
+    height: screenWidth * 0.9,
+    width: screenWidth * 0.8,
+    alignItems: 'center',
+  },
+  closeButtonRow: {
+    alignItems: 'flex-end',
+    width: '100%',
+  },
+  closeButton: {
+    marginRight: -(screenWidth * 0.02),
+    marginTop: -(screenWidth * 0.025),
+    fontSize: screenWidth * 0.12,
+  },
+  popUpText: {
+    fontSize: screenWidth * 0.04,
+    fontWeight: 'bold',
+    marginTop: -(screenWidth * 0.02),
+    textAlign: 'center',
+  },
+  tickImage: {
+    marginTop: screenWidth * 0.05,
+    height: screenWidth * 0.25,
+    width: screenWidth * 0.25,
+    borderRadius: 10,
+  },
+  surveySubmitReward: {
+    marginTop: screenWidth * 0.02,
+    fontSize: screenWidth * 0.05,
+    fontWeight: 'bold',
+  },
+  hidePopupButton: {
+    height: screenWidth * 0.15,
+    width: '70%',
+    backgroundColor: '#5ecccf',
+    marginTop: screenWidth * 0.06,
+    borderRadius: 5,
+    justifyContent: 'center',
+    marginBottom: screenWidth * 0.5,
+  },
+  hidePopupButtonText: {
+    color: 'white',
+    fontSize: screenWidth * 0.06,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

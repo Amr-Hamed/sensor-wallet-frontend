@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     width : WIDTH*0.9,
     height: WIDTH*0.3,
     marginTop: WIDTH*(-0.15),
-    display: 'flex',
+    justifyContent : 'center',
     alignItems: 'center',
     borderRadius: 20,
     backgroundColor: 'white',
@@ -46,8 +46,9 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   questionBody: {
-    margin: WIDTH*0.03,
+    magin: WIDTH*0.03,
     padding: WIDTH*0.03,
     fontSize: WIDTH*0.05,
+    textAlign: 'center'
   },
 });

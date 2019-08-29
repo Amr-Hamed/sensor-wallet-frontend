@@ -6,8 +6,8 @@ import { Icon } from 'native-base';
 export default class UserTransaction extends React.Component {
   render() {
     return (
-      <View >
-        {this.props.data.sender.name == 'Amr Essam' && (
+      <View>
+        {this.props.data.senderUserName == 'mohelmy' && (
           <View style={styles.main}>
             <View style={styles.sender}>
               <View style={styles.senderLabelContainer}>
@@ -15,13 +15,14 @@ export default class UserTransaction extends React.Component {
               </View>
               <Image
                 source={{
-                  uri:
-                    'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.0-1/p50x50/50967370_1673125816120922_6830167314076270592_n.jpg?_nc_cat=106&_nc_oc=AQnaidCRY92GKJOv90Gu1-EriaO3kG5Cj4iQK_i0VyxPpQp4VGrmpj-4ZxKBpaozzWw&_nc_ht=scontent-hbe1-1.xx&oh=ae5e2f7eb373af258153c37e21e994e8&oe=5DD379DB',
+                  uri: this.props.data.senderImage,
                 }}
                 style={styles.senderImage}
               />
               <View style={styles.senderNameContainer}>
-                <Text style={styles.senderName}> Amr Essam </Text>
+                <Text style={styles.senderName}>
+                  {this.props.data.senderUserName}
+                </Text>
               </View>
             </View>
             <View style={styles.transaction}>
@@ -30,20 +31,20 @@ export default class UserTransaction extends React.Component {
                   {this.props.data.amount}
                 </Text>
                 <Text style={[styles.currency, { color: '#c93521' }]}>
-                  {this.props.data.currency}
+                  {this.props.data.name}
                 </Text>
               </View>
               <View style={styles.arrowImageContainer}>
                 <Image
                   source={{
                     uri:
-                      'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.15752-9/69469147_738304556627467_8634936353089388544_n.png?_nc_cat=100&_nc_oc=AQkVd_rnlf5zf80BCgtMAThTaNvWx2e_pWTGzSvriO4IgYpzNUtsEIEVKJxkqYVqQTc&_nc_ht=scontent-hbe1-1.xx&oh=107bb1703b3be56ac03c30580d393baf&oe=5DCF2F18',
+                      'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.15752-9/69469147_738304556627467_8634936353089388544_n.png?_nc_cat=100&_nc_oc=AQkVd_rnlf5zf80BCgtMAThTaNvWx2e_pWTGzSvriO4IgYpzNUtsEIEVKJxkqYVqQTc&_nc_ht=scontent-hbe1-1.xx&oh=107bb1703b3be56ac03c30580d393baf&oe=5DCF2F18'
                   }}
                   style={styles.transactionArrow}
                 />
               </View>
               <View style={styles.dateContainer}>
-                <Text style={styles.date}> {this.props.data.date} </Text>
+                <Text style={styles.date}> {this.props.data.transactionDate} </Text>
               </View>
             </View>
             <View style={styles.reciever}>
@@ -52,19 +53,19 @@ export default class UserTransaction extends React.Component {
               </View>
               <Image
                 source={{
-                  uri: this.props.data.reciever.image,
+                  uri: this.props.data.receiverImage
                 }}
                 style={styles.recieverImage}
               />
               <View style={styles.recieverNameContainer}>
                 <Text style={styles.recieverName}>
-                  {this.props.data.reciever.name}
+                  {this.props.data.receiverUserName}
                 </Text>
               </View>
             </View>
           </View>
         )}
-        {this.props.data.sender.name != 'Amr Essam' && (
+        {this.props.data.senderUserName != 'mohelmy' && (
           <View style={styles.main}>
             <View style={styles.reciever}>
               <View style={styles.recieverLabelContainer}>
@@ -72,48 +73,50 @@ export default class UserTransaction extends React.Component {
               </View>
               <Image
                 source={{
-                  uri: this.props.data.reciever.image,
+                  uri: this.props.data.receiverImage,
                 }}
                 style={styles.recieverImage}
               />
               <Text style={styles.recieverName}>
-                {this.props.data.reciever.name}
+                {this.props.data.receiverUserName}
               </Text>
             </View>
-             <View style={styles.transaction}>
-            <View style={styles.transactionData}>
-              <Text style={[styles.amount, { color: '#70ad47' }]}>
-                {this.props.data.amount}
-              </Text>
-              <Text style={[styles.currency, { color: '#70ad47' }]}>
-                {this.props.data.currency}
-              </Text>
+            <View style={styles.transaction}>
+              <View style={styles.transactionData}>
+                <Text style={[styles.amount, { color: '#70ad47' }]}>
+                  {this.props.data.amount}
+                </Text>
+                <Text style={[styles.currency, { color: '#70ad47' }]}>
+                  {this.props.data.name}
+                </Text>
+              </View>
+              <View style={styles.arrowImageContainer}>
+                <Image
+                  source={{
+                    uri:
+                      'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.15752-9/68809578_439127240029969_8469208112190980096_n.png?_nc_cat=102&_nc_oc=AQmT8U5kwPU74IE5kjSmD7oHK9GshRUr96fMC6tU4yatA4Jc5stBx88_rIlBSBXra2c&_nc_ht=scontent-hbe1-1.xx&oh=61fcbe18d357ec37626c87729d564c6b&oe=5E087F5F',
+                  }}
+                  style={styles.transactionArrow}
+                />
+              </View>
+              <View style={styles.dateContainer}>
+                <Text style={styles.date}> {this.props.data.transactionDate} </Text>
+              </View>
             </View>
-            <View style={styles.arrowImageContainer}>
-              <Image
-                source={{
-                  uri:
-                    'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.15752-9/68809578_439127240029969_8469208112190980096_n.png?_nc_cat=102&_nc_oc=AQmT8U5kwPU74IE5kjSmD7oHK9GshRUr96fMC6tU4yatA4Jc5stBx88_rIlBSBXra2c&_nc_ht=scontent-hbe1-1.xx&oh=61fcbe18d357ec37626c87729d564c6b&oe=5E087F5F',
-                }}
-                style={styles.transactionArrow}
-              />
-            </View>
-            <View style={styles.dateContainer}>
-              <Text style={styles.date}> {this.props.data.date} </Text>
-            </View>
-          </View>
             <View style={styles.sender}>
               <View style={styles.senderLabelContainer}>
                 <Text style={styles.senderLabel}> Sender </Text>
               </View>
               <Image
                 source={{
-                  uri: this.props.data.sender.image
+                  uri: this.props.data.senderImage,
                 }}
                 style={styles.senderImage}
               />
               <View style={styles.senderNameContainer}>
-                <Text style={styles.senderName}> {this.props.data.sender.name} </Text>
+                <Text style={styles.senderName}>
+                  {this.props.data.senderUserName}
+                </Text>
               </View>
             </View>
           </View>

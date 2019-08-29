@@ -5,40 +5,178 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+  ScrollView,
   TextInput,
+  Dimensions,
   TouchableOpacity,
 } from 'react-native';
 
-import SocialMediaLogin from '../../components/SocialMediaLogin/SocialMediaLogin'
+import SocialMediaLogin from '../../components/SocialMediaLogin/SocialMediaLogin';
+
+import DatePicker from 'react-native-datepicker';
+import { RadioButton } from 'react-native-paper';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faUserCircle,
   faLock,
   faEnvelope,
+  faUser,
+  faPhone,
+  faCalendarWeek,
+  faCheckCircle,
+  faVenusMars,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Icon } from 'native-base';
 
 export default class AssetExample extends React.Component {
-  state = {
-    choosnTab: 'signIn',
-  };
-  
+  constructor(props) {
+    super(props);
+    let day = new Date().getDate(); //Current Date
+    let month = new Date().getMonth(); //Current Month
+    let year = new Date().getFullYear(); //Current Year
+    let today = `${year}-${month}-${day}`;
 
+    this.state = {
+      choosnTab: 'signIn',
+      today,
+      birthDate: today,
+      gender: 'male',
+    };
+  }
 
   selectTab = selectedTab => {
     this.setState({
       choosnTab: selectedTab,
     });
   };
- 
+
+  setDate = birthDate => {
+    this.setState({
+      birthDate,
+    });
+  };
+
+  signInPressed = () => {
+    if (this.state.email) {
+      if (this.state.password) {
+        fetch('https://bondnbeyond-apigateway.herokuapp.com/enduser/login', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email: this.state.email,
+              passWord: this.state.password,
+          }),
+        })
+          .then(response => response.json())
+          .then(responseJson => {
+            if (responseJson.code === 200) {
+              alert('Logged in successfully!');
+            } else if (responseJson.code === 500) {
+              alert('Server Error!');
+            } else if (responseJson.code === 401) {
+              alert("Sorry, credentials don't match records!");
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      } else {
+        alert('Please enter your password!');
+      }
+    } else {
+      alert('Please enter your email!');
+    }
+  };
+
+  singUpClicked = () => {
+    let userDetails = {
+      userDetails: {
+        fullName: this.state.fullName,
+        userName: this.state.userName,
+        email: this.state.email,
+        phone: this.state.phone,
+        birthDate: this.state.birthDate,
+        gender: this.state.gender.charAt(0),
+        passWord: this.state.password,
+        signUpDate: this.state.today,
+        fawryWalletID: 100,
+        image: 'image',
+      },
+    };
+    if (this.state.email) {
+      if (this.state.fullName) {
+        if (this.state.userName) {
+          if (this.state.phone) {
+            if (this.state.birthDate) {
+              if (this.state.gender) {
+                if (this.state.password) {
+                  if (this.state.password.length >= 6) {
+                    if (this.state.confirmPassword) {
+                      if (this.state.password === this.state.confirmPassword) {
+                        fetch(
+                          'https://bondnbeyond-apigateway.herokuapp.com/enduser/signup',
+                          {
+                            method: 'POST',
+                            headers: {
+                              Accept: 'application/json',
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(userDetails),
+                          }
+                        ).then(response => response.json())
+                          .then(responseJson => {
+                            if (responseJson.code == 200) {
+                              alert('User created successfully!');
+                            } else if (responseJson.code == 500) {
+                              alert('Server Error!');
+                            }
+                          })
+                          .catch(error => {
+                            console.error(`e: ${error}`);
+                          });
+                      } else {
+                        alert('Sorry, password confirmed wrongly!');
+                      }
+                    } else {
+                      alert('Please confirm your password!');
+                    }
+                  } else {
+                    alert('Password should be 6 characters or more!');
+                  }
+                } else {
+                  alert('Please enter your password!');
+                }
+              } else {
+                alert('Please pick your gender!');
+              }
+            } else {
+              alert('Please pick your birthdate!');
+            }
+          } else {
+            alert('Please enter your mobile!');
+          }
+        } else {
+          alert('Please enter your username!');
+        }
+      } else {
+        alert('Please enter your full name!');
+      }
+    } else {
+      alert('Please enter your email!');
+    }
+  };
+
   render() {
     return (
       <ImageBackground
-        source={require('../../../assets/images/loginBackground.png')} 
+        source={require('../../../assets/images/loginBackground.png')}
         style={styles.container}>
-        <View style={styles.mainContainer}>
+        <ScrollView style={styles.mainContainer}>
           <Image
             source={require('../../../assets/images/sensesLogo.png')}
             style={styles.logo}
@@ -47,6 +185,13 @@ export default class AssetExample extends React.Component {
           <View style={styles.textContainer}>
             <Text style={styles.loginText2}> Sensor </Text>
             <Text style={styles.loginText3}> P.O.S </Text>
+          </View>
+          <View style={styles.socialMediaLoginContainer}>
+            <View style={styles.socialMediaLogin}>
+              <Icon name="logo-google" style={styles.googleIcon} />
+              <Icon name="logo-facebook" style={styles.facebookIcon} />
+              <Icon name="logo-twitter" style={styles.twitterIcon} />
+            </View>
           </View>
           {this.state.choosnTab === 'signIn' && (
             <View style={styles.main}>
@@ -67,32 +212,37 @@ export default class AssetExample extends React.Component {
                 </TouchableOpacity>
               </View>
               <View style={styles.loginTextInputContainer}>
-                <View style={styles.usernameInputContainer}>
+                <View style={styles.inputContainer}>
                   <FontAwesomeIcon
-                    style={styles.headerIcon}
-                    icon={faUserCircle}
-                    color={'gray'}
+                    style={styles.tabIcon}
+                    icon={faEnvelope}
                     size={20}
+                    color={'gray'}
                   />
                   <TextInput
-                    placeholder="Username"
-                    style={styles.usernameInput}
+                    placeholder="Email"
+                    style={styles.userInput}
+                    placeholderTextColor="gray"
+                    onChangeText={email => this.setState({ email })}
+                    value={this.state.email}
                   />
                 </View>
-                <View style={styles.passwordInputContainer}>
-                  <FontAwesomeIcon
-                    style={styles.headerIcon}
-                    icon={faLock}
-                    color={'gray'}
-                    size={20}
-                  />
+
+                <View style={styles.inputContainer}>
+                  <FontAwesomeIcon icon={faLock} color={'gray'} size={20} />
                   <TextInput
                     placeholder="Password"
-                    style={styles.passwordInput}
+                    style={styles.userInput}
+                    placeholderTextColor="gray"
+                    secureTextEntry={true}
+                    onChangeText={password => this.setState({ password })}
+                    value={this.state.password}
                   />
                 </View>
                 <View style={styles.submitButtonContainer}>
-                  <TouchableOpacity style={styles.submitButton} onPress={()=> this.props.navigation.navigate('Drawer')}>
+                  <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={this.signInPressed}>
                     <Text style={styles.submitButtonText}>SIGN IN</Text>
                   </TouchableOpacity>
                 </View>
@@ -123,53 +273,146 @@ export default class AssetExample extends React.Component {
                 </TouchableOpacity>
               </View>
               <View style={styles.loginTextInputContainer}>
-                <View style={styles.emailInputContainer}>
-                  <FontAwesomeIcon
-                    style={styles.headerIcon}
-                    icon={faEnvelope}
-                    color={'gray'}
-                    size={20}
+                <View style={styles.inputContainer}>
+                  <FontAwesomeIcon icon={faEnvelope} color={'gray'} size={20} />
+                  <TextInput
+                    placeholder="Email"
+                    style={styles.userInput}
+                    placeholderTextColor="gray"
+                    onChangeText={email => this.setState({ email })}
+                    value={this.state.email}
                   />
-                  <TextInput placeholder="Email" style={styles.emailInput} />
                 </View>
-                <View style={styles.usernameInputContainer}>
+                <View style={styles.inputContainer}>
+                  <FontAwesomeIcon icon={faUser} color={'gray'} size={20} />
+                  <TextInput
+                    placeholder="Full Name"
+                    style={styles.userInput}
+                    placeholderTextColor="gray"
+                    onChangeText={fullName => this.setState({ fullName })}
+                    value={this.state.fullName}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
                   <FontAwesomeIcon
-                    style={styles.headerIcon}
                     icon={faUserCircle}
                     color={'gray'}
                     size={20}
                   />
                   <TextInput
                     placeholder="Username"
-                    style={styles.usernameInput}
+                    style={styles.userInput}
+                    placeholderTextColor="gray"
+                    onChangeText={userName => this.setState({ userName })}
+                    value={this.state.userName}
                   />
                 </View>
-                <View style={styles.passwordInputContainer}>
+
+                <View style={styles.inputContainer}>
+                  <FontAwesomeIcon icon={faPhone} color={'gray'} size={20} />
+                  <TextInput
+                    placeholder="Mobile"
+                    style={styles.userInput}
+                    placeholderTextColor="gray"
+                    onChangeText={phone => this.setState({ phone })}
+                    value={this.state.phone}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
                   <FontAwesomeIcon
-                    style={styles.headerIcon}
-                    icon={faLock}
+                    icon={faCalendarWeek}
+                    color={'gray'}
+                    size={20}
+                  />
+                  <DatePicker
+                    placeholder="Birthdate"
+                    placeholderTextColor="gray"
+                    style={[
+                      styles.userInput,
+                      { justifyContent: 'center', alignItems: 'center' },
+                    ]}
+                    date={this.state.birthDate}
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    minDate="1950-01-01"
+                    maxDate={this.state.birthDate}
+                    onDateChange={birthDate => this.setDate(birthDate)}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <FontAwesomeIcon
+                    icon={faVenusMars}
+                    color={'gray'}
+                    size={20}
+                  />
+                  <View style={styles.genderContainer}>
+                    <TouchableOpacity
+                      style={styles.genderOption}
+                      onPress={() => this.setState({ gender: 'male' })}>
+                      <View style={styles.genderRadio}>
+                        {this.state.gender === 'male' && (
+                          <View style={styles.genderRadionChecked} />
+                        )}
+                      </View>
+                      <Text style={styles.genderLabel}> Male </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.genderOption}
+                      onPress={() => this.setState({ gender: 'female' })}>
+                      <View style={styles.genderRadio}>
+                        {this.state.gender === 'female' && (
+                          <View style={styles.genderRadionChecked} />
+                        )}
+                      </View>
+                      <Text style={styles.genderLabel}> Female </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.inputContainer}>
+                  <FontAwesomeIcon icon={faLock} color={'gray'} size={20} />
+                  <TextInput
+                    placeholder="Password"
+                    style={styles.userInput}
+                    placeholderTextColor="gray"
+                    secureTextEntry={true}
+                    onChangeText={password => this.setState({ password })}
+                    value={this.state.password}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
                     color={'gray'}
                     size={20}
                   />
                   <TextInput
-                    placeholder="Password"
-                    style={styles.passwordInput}
+                    placeholder="Confirm Password"
+                    style={styles.userInput}
+                    placeholderTextColor="gray"
+                    secureTextEntry={true}
+                    onChangeText={confirmPassword =>
+                      this.setState({ confirmPassword })
+                    }
+                    value={this.state.confirmPassword}
                   />
                 </View>
                 <View style={styles.submitButtonContainer}>
-                  <TouchableOpacity style={styles.submitButton}>
+                  <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={this.singUpClicked}>
                     <Text style={styles.submitButtonText}>SIGN UP</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
           )}
-          <SocialMediaLogin icons={['logo-google' , 'logo-facebook' , 'logo-twitter']}/>
-        </View>
+        </ScrollView>
       </ImageBackground>
     );
   }
 }
+
+let width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
@@ -182,121 +425,121 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   logo: {
-    width: 50,
-    height: 50,
-    marginTop: 40,
-    marginLeft: 20,
+    width: width * 0.15,
+    height: width * 0.15,
+    marginTop: width * 0.15,
+    marginLeft: width * 0.08,
   },
   textContainer: {
-    display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
   },
   loginText1: {
     color: 'white',
-    fontSize: 30,
-    marginLeft: 20,
-    marginTop: 10,
+    fontSize: width * 0.08,
+    marginLeft: width * 0.08,
   },
   loginText2: {
     color: 'white',
-    fontSize: 50,
     fontWeight: 'bold',
-    marginLeft: 20,
-    padding: 0,
+    fontSize: width * 0.13,
+    marginLeft: width * 0.08,
   },
   loginText3: {
     color: 'white',
-    fontSize: 15,
     fontWeight: 'bold',
-    marginTop: 30,
-    marginLeft: -5,
+    fontSize: width * 0.05,
+    marginTop: width * 0.08,
   },
   tabsContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop : 30
+    marginTop: width * 0.05,
   },
   signInSelectedTab: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: width * 0.06,
   },
   signUpSelectedTab: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: width * 0.06,
   },
   signUpTab: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: width * 0.06,
     opacity: 0.5,
   },
   signInTab: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: width * 0.06,
     opacity: 0.5,
   },
   loginTextInputContainer: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-
+    marginTop: width * 0.03,
+    marginBottom: width * 0.06,
   },
-  usernameInputContainer: {
+  inputContainer: {
     backgroundColor: 'white',
-    height: 50,
+    height: width * 0.12,
     width: '90%',
-    padding: 10,
+    padding: width * 0.02,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomColor: '#636363',
-    borderBottomWidth: 1,
-    marginTop: '1%',
-    marginBottom: '1%',
+    marginTop: '2%',
   },
-  emailInputContainer: {
-    backgroundColor: 'white',
-    height: 50,
+  userInput: {
+    marginLeft: width * 0.03,
+    height: '100%',
     width: '90%',
-    padding: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: '#636363',
-    borderBottomWidth: 1,
   },
-  usernameInput: {
-    marginLeft: 10,
-  },
-  emailInput: {
-    marginLeft: 10,
-  },
-  passwordInputContainer: {
-    backgroundColor: 'white',
-    height: 50,
+  genderContainer: {
+    marginLeft: width * 0.03,
+    height: '100%',
     width: '90%',
-    padding: 10,
-    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
-  passwordInput: {
-    marginLeft: 10,
+  genderOption: {
+    flexDirection: 'row',
+    width: '40%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  genderRadio: {
+    height: width * 0.04,
+    width: width * 0.04,
+    borderRadius: width * 0.02,
+    borderWidth: width * 0.005,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  genderRadionChecked: {
+    height: width * 0.02,
+    width: width * 0.02,
+    borderRadius: width * 0.01,
+    backgroundColor: '#25babc',
+  },
+  genderLabel: {
+    fontSize: width * 0.04,
+    marginLeft: width * 0.01,
   },
   submitButtonContainer: {
-    height: 50,
+    height: width * 0.12,
     width: '90%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop : '2%'
+    marginTop: '2%',
   },
   submitButton: {
     backgroundColor: '#25babc',
@@ -307,15 +550,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   submitButtonText: {
-    fontSize: 20,
+    fontSize: width * 0.06,
     color: 'white',
     fontWeight: 'bold',
   },
   forgotPasswordContainer: {
-    marginTop: 20,
+    marginTop: width * 0.06,
   },
   forgotPasswordText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  socialMediaLoginContainer: {
+    width: width,
+    height: width * 0.1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: width * 0.05,
+  },
+  socialMediaLogin: {
+    width: width * 0.5,
+    height: width * 0.1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  googleIcon: {
+    fontSize: width * 0.09,
+    color: '#dd4b39',
+  },
+  facebookIcon: {
+    fontSize: width * 0.09,
+    color: '#4267b2',
+  },
+  twitterIcon: {
+    fontSize: width * 0.09,
+    color: '#00aced',
   },
 });

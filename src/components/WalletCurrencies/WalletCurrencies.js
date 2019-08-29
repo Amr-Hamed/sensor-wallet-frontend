@@ -7,7 +7,7 @@ export default class WalletCurrencies extends React.Component{
 
   render(){
      let currencies = this.props.currencies.map((currency, i) => {
-      return <WalletCurrency data={currency.currency} key={i} />;
+      return <WalletCurrency data={currency} key={i} />;
     });
     return(
           <View style={styles.currencies}>{currencies}</View>
