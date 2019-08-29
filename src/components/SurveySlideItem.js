@@ -25,7 +25,7 @@ export default class SurveySlideItem extends Component {
 
   handleClick = () => {
     // fire navigation method in user profile screen with following props
-    this.props.pressed(this.props.title, this.props.brandName,this.props.brandLogo,this.props.brandID , this.props.cover, this.props.points, this.props.time);
+    this.props.pressed(this.props.title, this.props.brandName,this.props.brandLogo,this.props.brandID , this.props.cover, this.props.points, this.props.time , this.props.description);
   }
 
   render() {

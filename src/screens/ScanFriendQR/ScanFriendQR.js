@@ -27,7 +27,7 @@ import Modal from 'react-native-modal';
 
 
 import POSButton from '../../components/POSButton';
-import TransactionConfirm from '../../components/TransactionConfirm';
+import TransactionConfirm from '../TransactionConfirm/TransactionConfirm';
 
 
 import * as Permissions from 'expo-permissions';
@@ -90,10 +90,9 @@ export default class ScanFriendQR extends React.Component {
         <Content padder
           contentContainerStyle={{
             flex: 1,
-            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-
+            alignContent : 'center',
             backgroundColor: '#333'
           }}>
 
@@ -142,9 +141,9 @@ export default class ScanFriendQR extends React.Component {
     transactionInfo['senderSenses'] = this.state.user.points;
 
     this.setState({ scanned: true});
-    this.props.navigation.navigate('Profile',{
-      showTransConfirmDialog : true , transactionInfo , 
-      test : 'backFrom'
+    this.props.navigation.navigate('TransactionConfirm',{
+       transactionInfo , 
+      
     })
    
 
@@ -200,6 +199,8 @@ const styles = StyleSheet.create({
   barCodeContainer: {
     width: 500,
     height: 500,
+    marginVertical : 100 , 
+    marginHorizontal : 100
   },
   
 });

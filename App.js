@@ -58,6 +58,7 @@ export default class App extends React.Component {
         'Rubik-Regular': require('./assets/fonts/Rubik-Regular.ttf'),
         Ionicons: require('./assets/fonts/ionicons.ttf'),
         LexendDeca : require('./assets/fonts/LexendDeca.ttf'),
+        'Indie Flower' : require('./assets/fonts/IndieFlower-Regular.ttf')
       })
 
     ])

@@ -59,7 +59,7 @@ handleThumbClick = () => {
               </Left>
               <Body style={{ flexDirection: 'row' }}>
                 <Icon active name="time" style={styles.icon} />
-                <Text style={{ marginTop: 5 }}>{this.props.duration}</Text>
+                <Text style={{ marginTop: 5 }}>{this.props.duration} min</Text>
               </Body>
               <Right style={{ flexDirection: 'row' }} >
                 <Thumbnail source={imgPathes.senses} style={styles.sensesLogo} />

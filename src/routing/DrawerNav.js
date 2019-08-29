@@ -47,6 +47,10 @@ import UserSurveyHomePage from '../screens/UserSurveyHomePage/UserSurveyHomePage
 import UserQRCode from '../screens/UserQRCode/UserQRCode';
 import UserWallet from  '../screens/UserWallet/UserWallet';
 import ScanFriendQR from  '../screens/ScanFriendQR/ScanFriendQR';
+import TransactionConfirm from  '../screens/TransactionConfirm/TransactionConfirm';
+import Loading from  '../screens/Loading/Loading';
+
+
 
 import ProfileStack from '../routing/ProfileStack';
 
@@ -167,12 +171,21 @@ const FirstActivity_StackNavigator = createStackNavigator({
   ScanFriendQR: {
     screen: ScanFriendQR,
     navigationOptions: ({ navigation }) => ({
-      title: 'Demo Screen 1',
-      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#212121',
-      },
-      headerTintColor: '#fff',
+      header: null
+    }),
+  
+  },
+  TransactionConfirm: {
+    screen: TransactionConfirm,
+    navigationOptions: ({ navigation }) => ({
+      header : null
+     }),
+  
+  },
+  Loading: {
+    screen: Loading,
+    navigationOptions: ({ navigation }) => ({
+     header : null
     }),
   
   },

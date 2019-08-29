@@ -63,9 +63,9 @@ export default class UserProfileCard extends Component {
                 {this.props.rating}<Text style={{ color: 'grey' }}>({this.props.numberOfSurveys})</Text>
               </Text>
             </Left>
-            <Left style={{ marginLeft: 0.1 * WIDTH }}>
+            <Left >
               <Icon active name="time" style={{ color: 'grey' }} />
-              <Text style={{}}>{this.props.hours}</Text>
+              <Text style={{}}>{this.props.hours}min</Text>
             </Left>
             <Right style={{ flexDirection: 'row' }}>
               <Thumbnail source={imgPathes.senses} style={styles.sensesLogo} />

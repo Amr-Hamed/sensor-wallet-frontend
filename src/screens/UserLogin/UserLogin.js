@@ -24,6 +24,8 @@ export default class AssetExample extends React.Component {
   state = {
     choosnTab: 'signIn',
   };
+  
+
 
   selectTab = selectedTab => {
     this.setState({

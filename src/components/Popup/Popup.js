@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   closeButton: {
     marginRight: -10,
     marginTop: -10,
-    fontSize: '40em',
+    fontSize: 40,
   },
   popUpText : {
     fontSize : 22,

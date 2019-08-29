@@ -74,8 +74,8 @@ export default class SurveyIntro extends Component {
   takeSurvey = () => {
     this.props.navigation.navigate('SurveyQuestion')
   }
-  goToSurvey = (surveyTitle, brandName, brandLogo, brandID, surveyCover, surveyPoints, surveyDuration) => {
-    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration, brandLogo, brandID });
+  goToSurvey = (surveyTitle, brandName, brandLogo, brandID, surveyCover, surveyPoints, surveyDuration , surveyDescription) => {
+    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration, brandLogo, brandID ,surveyDescription });
   }
   goToCompanyProfile = (brandID) => {
 
@@ -98,10 +98,9 @@ export default class SurveyIntro extends Component {
           />
 
           <View style={styles.aboutSection}>
-            <Text style={styles.title}> ABOUT US  </Text>
+            <Text style={styles.title}> Survey Description  </Text>
             <Text style={styles.aboutBody}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. orum.
+              {this.props.navigation.getParam('surveyDescription')}
             </Text>
           </View>
 
