@@ -14,7 +14,8 @@ export default class SurveyItem extends Component {
 
   handleClick = () => {
     // fire navigation method in user profile screen with following props
-    this.props.pressed(this.props.title, this.props.brandName,this.props.brandLogo,this.props.brandID , this.props.cover, this.props.points, this.props.time);
+    // this.props.pressed(this.props.title, this.props.clientName,this.props.brandLogo,this.props.brandID , this.props.cover, this.props.points, this.props.time);
+    this.props.pressed(this.props.surveyID ,this.props.title, this.props.clientName,this.props.brandLogo,this.props.clientID , this.props.cover, this.props.points, this.props.time , this.props.description , this.props.userID );
   }
 
 
@@ -30,12 +31,12 @@ export default class SurveyItem extends Component {
         }}>
         <Image
           source={{
-            uri: this.props.brandCover,
+            uri: this.props.brandLogo,
           }}
           style={styles.surveyCover}
         />
         <View>
-          <Text note>{this.props.brandName}</Text>
+          <Text note>{this.props.clientName}</Text>
           <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
             {this.props.title}
           </Text>

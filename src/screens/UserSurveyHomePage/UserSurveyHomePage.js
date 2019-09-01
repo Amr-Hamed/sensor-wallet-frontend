@@ -12,6 +12,11 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 export default class UserSurveyHomePage extends React.Component {
   state = {};
 
+  constructor(props){
+    super(props); 
+    alert(this.props.navigation.getParam('userID'))
+  }
+
   render() {
     return (
       <View style={styles.main}>

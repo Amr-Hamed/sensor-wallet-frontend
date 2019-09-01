@@ -11,30 +11,17 @@ import {
 } from 'react-native';
 import {
   Container,
-  Header,
   Content,
-  Card,
-  CardItem,
-  Thumbnail,
-  Button,
-  Icon,
-  Left,
-  Body,
-  Right,
-  Title,
+  Spinner
 } from 'native-base';
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
 import SideLogoCard from '../../components/SideLogoCard';
 import POSButton from '../../components/POSButton';
-import RelatedSurvey from '../../components/RelatedSurvey';
-import POSHeader from '../../components/POSHeader';
 import SurveySlideItem from '../../components/SurveySlideItem';
 import RoundedBG from '../../components/RoundedBG';
 
 // Define Some Constants for default Values  
-const baseUrl = "http://demo9744643.mockable.io/";
-const userID = 5;
 const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
 const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg"
 
@@ -42,9 +29,14 @@ const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwo
 export default class SurveyIntro extends Component {
 
   state = {
-    userID: '',
+    userID: this.props.navigation.getParam('userID'),
+    clientID: this.props.navigation.getParam('clientID'),
+    surveyID: this.props.navigation.getParam('surveyID'),
+    clientName : this.props.navigation.getParam('clientName'),
+    surveyReward: '',
     loading: true,
-    userClientSurveys: []
+    userClientSurveys: [],
+    showActivity : true
   }
 
   constructor(props) {
@@ -64,24 +56,28 @@ export default class SurveyIntro extends Component {
       .then(res => res.json())
       .then(res =>
         this.setState({
-          userClientSurveys: res.data
+          userClientSurveys: res.data 
         })
       )
       .then(() => this.setState({
-        loading: false
+        loading: false , 
+        showActivity : false
       }))
   }
   takeSurvey = () => {
-    this.props.navigation.navigate('SurveyQuestion')
+    this.props.navigation.navigate('SurveyQuestion', {userID : this.state.userID , surveyID : this.state.surveyID, clientID : this.state.clientID,clientName : this.state.clientName ,surveyReward : this.state.surveyReward})
   }
-  goToSurvey = (surveyTitle, brandName, brandLogo, brandID, surveyCover, surveyPoints, surveyDuration , surveyDescription) => {
-    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration, brandLogo, brandID ,surveyDescription });
+  goToSurvey = () => {
+    this.props.navigation.navigate('SurveyIntro');
   }
   goToCompanyProfile = (brandID) => {
 
     this.props.navigation.navigate('CompanyProfile', { brandID })
   }
 
+  // takeSurveyClicked = () => {
+  //   this.takeSurvey(this.state.userID , this.state.surveyID, this.state.clientID, this.state.surveyReward)
+  // }
   render() {
     return (
       <Container>
@@ -89,16 +85,17 @@ export default class SurveyIntro extends Component {
           <RoundedBG />
           <SideLogoCard
             surveyTitle={this.props.navigation.getParam('surveyTitle')}
-            brandName={this.props.navigation.getParam('brandName')}
+            brandName={this.props.navigation.getParam('clientName')}
             surveyCover={this.props.navigation.getParam('surveyCover')}
             brandLogo={this.props.navigation.getParam('brandLogo')}
             brandLogoPressed={() => this.goToCompanyProfile(this.props.navigation.getParam('brandID'))}
-            points={this.props.navigation.getParam('surveyPoints')}
+            points={this.props.navigation.getParam('surveyReward')}
             duration={this.props.navigation.getParam('surveyDuration')}
+
           />
 
           <View style={styles.aboutSection}>
-            <Text style={styles.title}> Survey Description  </Text>
+            <Text style={styles.sideTitle}> Survey Description  </Text>
             <Text style={styles.aboutBody}>
               {this.props.navigation.getParam('surveyDescription')}
             </Text>
@@ -106,8 +103,10 @@ export default class SurveyIntro extends Component {
 
           <POSButton title="Take This Survey Now" style={styles.btnLogin} pressed={this.takeSurvey} />
           <Content padder>
-            <Text style={styles.sideTitle}>Top Surveys For You : </Text>
-
+            <Text style={styles.sideTitle}>Top Surveys For You </Text>
+            <View style={[styles.container, styles.horizontal]}>
+            <Spinner size="large" color="#45b3b5" style={{ display: this.state.showActivity ? 'flex' : 'none' }} />
+          </View>
             <ScrollView horizontal={true}>
               {this.state.userClientSurveys.map((survey) =>
                 <SurveySlideItem
@@ -137,11 +136,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     fontSize: 20,
   },
-  sideTitle: {
-    marginVertical: 16,
-    fontSize: 20,
-    marginLeft: 10,
-  },
+
   aboutBody: {
     alignSelf: 'center',
   },
@@ -163,4 +158,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     overflow: 'hidden',
   },
+  sideTitle: {
+    fontSize: 20,
+    marginBottom: 20,
+    fontFamily: 'Rubik-Regular',
+    alignSelf: 'center',
+    color: "#333",
+    borderColor: "#333",
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    marginVertical: 20,
+    paddingVertical: 10
+  }
 });

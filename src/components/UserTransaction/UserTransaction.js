@@ -7,7 +7,7 @@ export default class UserTransaction extends React.Component {
   render() {
     return (
       <View>
-        {this.props.data.senderUserName == 'mohelmy' && (
+        {this.props.data.senderUserName == this.props.userName && (
           <View style={styles.main}>
             <View style={styles.sender}>
               <View style={styles.senderLabelContainer}>
@@ -65,7 +65,7 @@ export default class UserTransaction extends React.Component {
             </View>
           </View>
         )}
-        {this.props.data.senderUserName != 'mohelmy' && (
+        {this.props.data.senderUserName != this.props.userName && (
           <View style={styles.main}>
             <View style={styles.reciever}>
               <View style={styles.recieverLabelContainer}>

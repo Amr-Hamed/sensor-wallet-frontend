@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-} from 'react-native'; 
+} from 'react-native';
+
+import { Spinner } from 'native-base';
 
 import WalletCurrencies from '../../components/WalletCurrencies/WalletCurrencies';
 import UserTransactions from '../../components/UserTransactions/UserTransactions';
@@ -20,21 +22,33 @@ export default class UserWallet extends React.Component {
     lastExpenses: 500,
     currencies: [],
     transactions: [],
+    userID: this.props.navigation.getParam('userID'),
+    walletID: this.props.navigation.getParam('walletID'),
+    userName: this.props.navigation.getParam('userName'),
+    userImg: this.props.navigation.getParam('userImg'),
+    showActivity: true
+
   };
+
+  constructor(props) {
+    super(props);
+  }
+
 
   componentDidMount = () => {
     let currencies = [],
       transactions = [];
-    fetch('https://bondnbeyond-apigateway.herokuapp.com/enduser/1/balance')
+    fetch(`https://bondnbeyond-apigateway.herokuapp.com/enduser/${this.state.userID}/balance`)
       .then(res => res.json())
       .then(resJson => {
         currencies = resJson.data;
         this.setState({
           currencies,
+          showActivity: false
         });
       });
     fetch(
-      'https://bondnbeyond-apigateway.herokuapp.com/enduser/wallet/33/transactions'
+      `https://bondnbeyond-apigateway.herokuapp.com/enduser/wallet/${this.state.walletID}/transactions`
     )
       .then(res => res.json())
       .then(resJson => {
@@ -63,10 +77,7 @@ export default class UserWallet extends React.Component {
           <View style={styles.walletMainInfo}>
             <View style={styles.userAvatarContainer}>
               <Image
-                source={{
-                  uri:
-                    'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.0-9/36789954_1406455036121336_5862702166598221824_n.jpg?_nc_cat=103&_nc_oc=AQncS86wr6Xl-p-8K7j3L0RzFqHm694kOTk9gBf6KnRoX33o-JG4TvSyVSdZfb7IzNA&_nc_ht=scontent-hbe1-1.xx&oh=94a0238a4b98981edb78c1c4d1ac83b4&oe=5DD577B4',
-                }}
+                source={{ uri: this.state.userImg }}
                 style={styles.userAvatar}
               />
             </View>
@@ -99,11 +110,15 @@ export default class UserWallet extends React.Component {
               <Text style={styles.tabText}> Transactions </Text>
             </TouchableOpacity>
           </View>
+
+          <View style={[styles.container, styles.horizontal]}>
+            <Spinner size="large" color="#45b3b5" style={{ display: this.state.showActivity ? 'flex' : 'none' }} />
+          </View>
           {this.state.selectedTab === 'wallet' && (
             <WalletCurrencies currencies={this.state.currencies} />
-          )} 
+          )}
           {this.state.selectedTab === 'transactions' && (
-            <UserTransactions transactions={this.state.transactions} />
+            <UserTransactions transactions={this.state.transactions} userImg={this.state.userImg} userName={this.state.userName} />
           )}
         </View>
       </ScrollView>
@@ -114,6 +129,16 @@ export default class UserWallet extends React.Component {
 let width = Dimensions.get('window').width;
 
 let styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    opacity: 0.8,
+    resizeMode: 'contain',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
+  },
   body: {
     width: width,
   },

@@ -30,10 +30,22 @@ export default class SurveyQuestion extends React.Component {
     answerColor: '#DCDCDC',
     selectedAnswer: -1,
     questionAnswers: [],
+    userID : this.props.navigation.getParam('userID') , 
+    clientID : this.props.navigation.getParam('clientID') , 
+    surveyID : this.props.navigation.getParam('surveyID') ,
+    surveyReward : this.props.navigation.getParam('surveyReward') , 
+    clientName : this.props.navigation.getParam('clientName')
   };
 
-  componentDidMount = () => {
-    fetch('http://demo8354958.mockable.io/clients/21/surveys/1')
+  // constructor(props){
+  //   super(props); 
+  // alert('clientID : ' +this.state.clientID + 'userID : '+ this.state.userID  + 'surveyID : ' + this.state.surveyID)
+
+  // }
+
+  constructor (props) {
+    super(props); 
+    fetch(`https://bondnbeyond-apigateway.herokuapp.com/clients/${this.state.clientID}/surveys/${this.state.surveyID}`)
       .then(res => res.json())
       .then(resJson => {
         this.setState({
@@ -90,7 +102,7 @@ export default class SurveyQuestion extends React.Component {
       }
       questionAnswers = [
         ...this.state.questionAnswers,
-        { q: currentQuestion, a: this.state.selectedAnswer },
+        { q: currentQuestion+"", a: this.state.selectedAnswer+"" },
       ];
       let selectedAnswer = this.state.questionAnswers.find(answer => {
         return answer.q == currentQuestion + 1;
@@ -129,7 +141,7 @@ export default class SurveyQuestion extends React.Component {
          await this.setState({
           questionAnswers,
         });
-        fetch('http://demo8354958.mockable.io/submitSurvey', {
+        fetch('https://bondnbeyond-apigateway.herokuapp.com/submitSurvey', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -137,10 +149,10 @@ export default class SurveyQuestion extends React.Component {
           },
           body: JSON.stringify({
             submitSurvey: {
-              clientName: 'zara',
-              surveyID: '1',
-              clientID: '21',
-              endUserID: '26',
+              clientName: this.state.clientName+"",
+              surveyID: this.state.surveyID+"",
+              clientID: this.state.clientID+"",
+              endUserID: this.state.userID+"",
               questions: this.state.questionAnswers,
             },
           }),
@@ -189,6 +201,8 @@ export default class SurveyQuestion extends React.Component {
       <ScrollView style={styles.body}>
         <View style={styles.header}>
           <View style={styles.headerTitleContainer}>
+        <Text>clientID {this.state.clientID}</Text>
+
             <Text style={styles.headerTitle}>
               Q : {this.state.currentQuestion} / {this.state.questions.length}
             </Text>
@@ -241,7 +255,7 @@ export default class SurveyQuestion extends React.Component {
               style={styles.tickImage}
             />
             <Text style={styles.surveySubmitReward}> Your reward is</Text>
-            <Text style={styles.surveySubmitReward}> 200 senses</Text>
+            <Text style={styles.surveySubmitReward}> {this.state.surveyReward} senses</Text>
             <TouchableOpacity
               onPress={this.toggleModal}
               style={styles.hidePopupButton}>

@@ -8,7 +8,7 @@ import {
   Body,
   Right,
 } from 'native-base';
-import Swiper from 'react-native-swiper';
+
 // import Modal from 'react-native-modal';
 
 
@@ -31,7 +31,7 @@ const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 const baseUrl = "https://bondnbeyond-apigateway.herokuapp.com/";
 
 
-const userID = 31;
+
 const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
 const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg" ; 
 const userAvatar = "http://avatars.design/wp-content/uploads/2016/09/avatar1b.jpg"; 
@@ -46,7 +46,7 @@ export default class UserProfile extends Component {
     this.state = {
 
       loading: true,
-      userID,
+      userID : this.props.navigation.getParam('userID'),
       refreshing: false,
       userName: '',
       profileAvatar: "https://image.flaticon.com/icons/svg/149/149071.png",
@@ -77,7 +77,7 @@ export default class UserProfile extends Component {
   }
 
   fetchData = async () => {
-    await fetch(baseUrl + `enduser/${userID}/profile`)
+    await fetch(baseUrl + `enduser/${this.state.userID}/profile`)
       .then(res => res.json())
       .then(res => {
 
@@ -99,6 +99,9 @@ export default class UserProfile extends Component {
       .then(() => {
         
         this.setState({ loading: false })})
+        .catch(error => {
+          console.error(`e: ${error}`);
+        });
   }
   _onRefresh = () => {
     this.setState({ refreshing: true });
@@ -109,21 +112,22 @@ export default class UserProfile extends Component {
 
 
 
-  goToSurvey = (surveyTitle, brandName, brandLogo, brandID, surveyCover, surveyPoints, surveyDuration , surveyDescription) => {
-    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration, brandLogo, brandID , surveyDescription});
+  goToSurvey = (surveyID , surveyTitle, clientName, brandLogo, clientID, surveyCover, surveyReward, surveyDuration , surveyDescription , userID ) => {
+    this.props.navigation.navigate('SurveyIntro', { surveyID , surveyTitle, clientName, surveyCover, surveyReward, surveyDuration, brandLogo, clientID , surveyDescription , userID });
   }
 
   goToQRCode = () => {
-    this.props.navigation.navigate('UserQRCode', { userID, userName: this.state.userName, walletID: this.state.walletID });
+    this.props.navigation.navigate('UserQRCode', { userID : this.state.userID, userName: this.state.userName, walletID: this.state.walletID });
   }
 
   goToWallet = () => {
-    this.props.navigation.navigate('UserWallet' , {walletID : this.state.walletID});
+    this.props.navigation.navigate('UserWallet' , {userID : this.state.userID , walletID : this.state.walletID , userName : this.state.userName , 
+      userImg : this.state.profileAvatar || userAvatar });
   }
 
   goToScanFriendQR = () => {
     this.props.navigation.navigate('ScanFriendQR', {
-      userID,
+      userID : this.state.userID,
       userName: this.state.userName,
       senses: this.state.senses
     });
@@ -168,7 +172,7 @@ export default class UserProfile extends Component {
             } >
             {/* Show Basic user Profile Data */}
             <UserProfileCard
-              id={userID}
+              id={this.state.userID}
               name={this.state.userName}
               rating={this.state.userRate}
               numberOfSurveys={this.state.numberOfTakenSurveys}
@@ -204,17 +208,19 @@ export default class UserProfile extends Component {
 
                 {this.state.latestSurveys.map((survey) =>
                   <SurveySlideItem
+                    userID = {this.state.userID}
                     surveyID={survey.surveyID}
+                    clientID={survey.surveyCreatorID}
                     cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
-                    brandName={survey.surveyCreatorName}
-                    brandID={survey.surveyCreatorID}
+                    clientName={survey.surveyCreatorName}
                     title={survey.title}
                     time={survey.duration}
-                    points={survey.surveyReward}
+                    points={survey.amountPerSurvey}
                     brandLogo={survey.surveyCreatorImageURL || clientAvatar}
                     pressed={this.goToSurvey}
                     key={survey.surveyID}
                     description = {survey.description}
+                    currencyData = {survey.rewardCurrency}
                   />
                 )}
 
@@ -227,17 +233,19 @@ export default class UserProfile extends Component {
             {this.state.recommendedSurveys.map((survey) =>
 
               <SurveyItem
-                surveyID={survey.surveyID}
-                brandName={survey.surveyCreatorName}
-                title={survey.title}
-                time={survey.duration}
-                points={survey.surveyReward}
-                brandCover={survey.imageURL || survey.surveyCreatorImageURL || clientAvatar}
-                brandLogo={survey.surveyCreatorImageURL || clientAvatar}
-                pressed={this.goToSurvey}
-                cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
-                brandID={survey.surveyCreatorID}
-                key={survey.surveyID}
+              userID = {this.state.userID}
+              surveyID={survey.surveyID}
+              clientID={survey.surveyCreatorID}
+              cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
+              clientName={survey.surveyCreatorName}
+              title={survey.title}
+              time={survey.duration}
+              points={survey.amountPerSurvey}
+              brandLogo={survey.surveyCreatorImageURL || clientAvatar}
+              pressed={this.goToSurvey}
+              key={survey.surveyID}
+              description = {survey.description}
+              currencyData = {survey.rewardCurrency}
               />
             )}
             <Text>{this.state.showTransConfirmDialog}</Text>

@@ -49,6 +49,7 @@ import UserWallet from  '../screens/UserWallet/UserWallet';
 import ScanFriendQR from  '../screens/ScanFriendQR/ScanFriendQR';
 import TransactionConfirm from  '../screens/TransactionConfirm/TransactionConfirm';
 import Loading from  '../screens/Loading/Loading';
+import Test from '../screens/Test/Test' ; 
 
 
 
@@ -392,7 +393,13 @@ const DrawerNavigatorExample = createDrawerNavigator({
     screen : UserWallet , 
     navigationOptions: {
       drawerLabel : 'Wallet'
+    } , 
+  Screen10:{
+    screen : Test , 
+    navigationOptions: {
+      drawerLabel : 'Test'
     }
+  }
   }
 
 

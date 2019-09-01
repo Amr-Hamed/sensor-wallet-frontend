@@ -10,7 +10,7 @@ import {
     KeyboardAvoidingView,
 } from 'react-native';
 
-import { Container, Header, Content, Card, CardItem, Button, Icon, Left, Body, Spinner } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Icon,  Body, Spinner } from 'native-base';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
@@ -83,7 +83,8 @@ export default class TransactionConfirm extends Component {
                         this.setState({
                             isModalVisible: true,
                             disableBtns: false,
-                            errorMessage: res.msg
+                            errorMessage: res.msg , 
+                            showActivity : false
                         })
                     }
                 })

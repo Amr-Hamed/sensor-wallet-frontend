@@ -25,7 +25,7 @@ export default class SurveySlideItem extends Component {
 
   handleClick = () => {
     // fire navigation method in user profile screen with following props
-    this.props.pressed(this.props.title, this.props.brandName,this.props.brandLogo,this.props.brandID , this.props.cover, this.props.points, this.props.time , this.props.description);
+    this.props.pressed(this.props.surveyID ,this.props.title, this.props.clientName,this.props.brandLogo,this.props.clientID ,  this.props.cover, this.props.points, this.props.time , this.props.description , this.props.userID );
   }
 
   render() {
@@ -52,7 +52,7 @@ export default class SurveySlideItem extends Component {
             </CardItem>
             <CardItem>
               <View style={{}}>
-                <Text note style={styles.brandName}>{this.props.brandName}</Text>
+                <Text note style={styles.brandName}>{this.props.clientName}</Text>
                 <Text style={styles.title}> {this.props.title} </Text>
                 <View style={{ flexDirection: 'row', width: 0.3 * WIDTH }}>
                   <Icon name="time" style={{ color: 'grey', marginRight: 2 }} />
@@ -87,7 +87,7 @@ export default class SurveySlideItem extends Component {
 }
 
 const styles = StyleSheet.create({
-  brandName: {
+  clientName: {
     color: 'grey',
     fontSize: 12
   },
