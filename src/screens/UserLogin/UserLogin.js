@@ -9,7 +9,8 @@ import {
   TextInput,
   Dimensions,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView , 
+  AsyncStorage
 } from 'react-native';
 
 import SocialMediaLogin from '../../components/SocialMediaLogin/SocialMediaLogin';
@@ -46,7 +47,23 @@ export default class AssetExample extends React.Component {
       gender: 'male',
       showActivity : false 
     };
+
+    // this.checkAuth();
   }
+
+  // checkAuth = async () => {
+
+  //   try {
+
+  //     await AsyncStorage.getItem('UserID', (err, userID) => {
+        
+        
+  //       this.props.navigation.navigate('Profile', {userID : parseInt(userID)}) 
+  //     })
+  //   } catch (e) {
+  //     console.log(e) ; 
+  //   }
+  // }
 
   selectTab = selectedTab => {
     this.setState({

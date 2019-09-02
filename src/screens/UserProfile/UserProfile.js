@@ -9,6 +9,10 @@ import {
   Right,
 } from 'native-base';
 
+import {Notifications} from 'expo';
+import * as Permissions from  'expo-permissions' ; 
+
+
 // import Modal from 'react-native-modal';
 
 
@@ -58,7 +62,8 @@ export default class UserProfile extends Component {
       latestSurveys: [],
       recommendedSurveys: [],
       afterScanLoad : false , 
-      showSuccessTrans : false
+      showSuccessTrans : false , 
+      token : ''
      
     }
     this.props.navigation.addListener('didFocus', async () =>
@@ -76,10 +81,38 @@ export default class UserProfile extends Component {
     )
   }
 
+  componentDidMount(){
+    this.regForPushNotefication();
+  }
+
+
+  // Get Token for notification
+  regForPushNotefication = async ()=>{
+
+    const {status} = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let filnalStatus = status;
+  
+    if (status !== 'granted'){
+      const {status} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+       filnalStatus = status;
+        }
+    if (filnalStatus !== 'granted'){
+      console.log("No");
+      return ;
+    }
+  
+    let token = await Notifications.getExpoPushTokenAsync();
+    console.log("Token : " ,token);
+    this.setState({token})
+    }
+
+
+
+  // fetching user profile data  
   fetchData = async () => {
     await fetch(baseUrl + `enduser/${this.state.userID}/profile`)
       .then(res => res.json())
-      .then(res => {
+      .then( async (res) => {
 
         this.setState({
           userName: res.data.userName,
@@ -90,19 +123,28 @@ export default class UserProfile extends Component {
           walletID: res.data.walletID,
           senses: res.data.senses,
           latestSurveys: res.data.latestSurveys,
-          recommendedSurveys: res.data.recommendedSurveys
+          recommendedSurveys: res.data.recommendedSurveys , 
+
         });
 
-        AsyncStorage.setItem('UserID', res.data.userID)
-
+      
+        
+      })
+      .then(async () => {
+        
+        await AsyncStorage.setItem('UserID',  JSON.stringify(this.state.userID)) ;
+        await AsyncStorage.setItem('userName', JSON.stringify(this.state.userName)) ;
       })
       .then(() => {
         
         this.setState({ loading: false })})
         .catch(error => {
           console.error(`e: ${error}`);
+          this.setState({ loading: false })
         });
   }
+
+  // on swip down refreshing 
   _onRefresh = () => {
     this.setState({ refreshing: true });
     this.fetchData().then(() => {
@@ -112,12 +154,12 @@ export default class UserProfile extends Component {
 
 
 
-  goToSurvey = (surveyID , surveyTitle, clientName, brandLogo, clientID, surveyCover, surveyReward, surveyDuration , surveyDescription , userID ) => {
-    this.props.navigation.navigate('SurveyIntro', { surveyID , surveyTitle, clientName, surveyCover, surveyReward, surveyDuration, brandLogo, clientID , surveyDescription , userID });
+  goToSurvey = (surveyID , surveyTitle, clientName, brandLogo, clientID, surveyCover, surveyReward, surveyDuration , surveyDescription , userID , currencyData) => {
+    this.props.navigation.navigate('SurveyIntro', { surveyID , surveyTitle, clientName, surveyCover, surveyReward, surveyDuration, brandLogo, clientID , surveyDescription , userID , currencyData });
   }
 
   goToQRCode = () => {
-    this.props.navigation.navigate('UserQRCode', { userID : this.state.userID, userName: this.state.userName, walletID: this.state.walletID });
+    this.props.navigation.navigate('UserQRCode', { userID : this.state.userID, userName: this.state.userName, walletID: this.state.walletID , token : this.state.token });
   }
 
   goToWallet = () => {
@@ -202,35 +244,43 @@ export default class UserProfile extends Component {
             </Content>
 
             <Content padder>
-              <Text style={styles.sideTitle}> Latest Surveys </Text>
+              <Text style={styles.sideTitle}> Latest Surveys { async()=> await console.log(AsyncStorage.getItem('UserName'))} </Text>
               {/* Show Latest Recommended survays ... max 5 */}
-              <ScrollView horizontal={true}>
 
-                {this.state.latestSurveys.map((survey) =>
-                  <SurveySlideItem
-                    userID = {this.state.userID}
-                    surveyID={survey.surveyID}
-                    clientID={survey.surveyCreatorID}
-                    cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
-                    clientName={survey.surveyCreatorName}
-                    title={survey.title}
-                    time={survey.duration}
-                    points={survey.amountPerSurvey}
-                    brandLogo={survey.surveyCreatorImageURL || clientAvatar}
-                    pressed={this.goToSurvey}
-                    key={survey.surveyID}
-                    description = {survey.description}
-                    currencyData = {survey.rewardCurrency}
-                  />
-                )}
+              { this.state.latestSurveys.length !== 0 ?  
+                  <ScrollView horizontal={true}>
 
-              </ScrollView>
+                    {this.state.latestSurveys.map((survey) =>
+                      <SurveySlideItem
+                        userID = {this.state.userID}
+                        surveyID={survey.surveyID}
+                        clientID={survey.surveyCreatorID}
+                        cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
+                        clientName={survey.surveyCreatorName}
+                        title={survey.title}
+                        time={survey.duration}
+                        points={survey.amountPerSurvey}
+                        brandLogo={survey.surveyCreatorImageURL || clientAvatar}
+                        pressed={this.goToSurvey}
+                        key={survey.surveyID}
+                        description = {survey.description}
+                        currencyData = {survey.rewardCurrency}
+                      />
+                    )}
+
+                  </ScrollView>
+                  : 
+                  <View>
+                    <Text style = {{alignSelf : 'center'}}> Sorry but There is no Surveys For you </Text>
+                  </View>
+                  }
             </Content>
 
             <Text style={styles.sideTitle}> Recommended Surveys </Text>
 
             {/* View All Recommended Surveys */}
-            {this.state.recommendedSurveys.map((survey) =>
+            { this.state.latestSurveys.length !== 0 ? 
+            this.state.recommendedSurveys.map((survey) =>
 
               <SurveyItem
               userID = {this.state.userID}
@@ -247,9 +297,14 @@ export default class UserProfile extends Component {
               description = {survey.description}
               currencyData = {survey.rewardCurrency}
               />
-            )}
-            <Text>{this.state.showTransConfirmDialog}</Text>
+            )
+            : 
+            <View>
+              <Text style = {{alignSelf : 'center'}}> Sorry but There is no Surveys For you </Text>
+            </View>
+            }
           </ScrollView>
+         
           {/* <CardItem style={{
             justifyContent: 'center',
             alignItems: 'center',
@@ -268,6 +323,7 @@ export default class UserProfile extends Component {
             </Modal>
 
           </CardItem> */}
+          
         </Container>
       );
   }

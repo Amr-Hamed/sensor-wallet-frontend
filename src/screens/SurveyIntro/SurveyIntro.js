@@ -32,18 +32,22 @@ export default class SurveyIntro extends Component {
     userID: this.props.navigation.getParam('userID'),
     clientID: this.props.navigation.getParam('clientID'),
     surveyID: this.props.navigation.getParam('surveyID'),
-    clientName : this.props.navigation.getParam('clientName'),
+    clientName: this.props.navigation.getParam('clientName'),
     surveyReward: '',
     loading: true,
     userClientSurveys: [],
-    showActivity : true
+    showActivity: true
   }
 
   constructor(props) {
     super(props);
     this.fetchSurveyData();
     // alert()
-    AsyncStorage.getItem('UserID', (err, userID) => {
+
+  }
+  componentDidMount = async () => {
+    await AsyncStorage.getItem('UserID', (err, userID) => {
+
 
       this.setState({
         userID
@@ -56,16 +60,16 @@ export default class SurveyIntro extends Component {
       .then(res => res.json())
       .then(res =>
         this.setState({
-          userClientSurveys: res.data 
+          userClientSurveys: res.data
         })
       )
       .then(() => this.setState({
-        loading: false , 
-        showActivity : false
+        loading: false,
+        showActivity: false
       }))
   }
   takeSurvey = () => {
-    this.props.navigation.navigate('SurveyQuestion', {userID : this.state.userID , surveyID : this.state.surveyID, clientID : this.state.clientID,clientName : this.state.clientName ,surveyReward : this.state.surveyReward})
+    this.props.navigation.navigate('SurveyQuestion', { userID: this.state.userID, surveyID: this.state.surveyID, clientID: this.state.clientID, clientName: this.state.clientName, surveyReward: this.props.navigation.getParam('surveyReward') })
   }
   goToSurvey = () => {
     this.props.navigation.navigate('SurveyIntro');
@@ -91,7 +95,7 @@ export default class SurveyIntro extends Component {
             brandLogoPressed={() => this.goToCompanyProfile(this.props.navigation.getParam('brandID'))}
             points={this.props.navigation.getParam('surveyReward')}
             duration={this.props.navigation.getParam('surveyDuration')}
-
+            currencyData = {this.props.navigation.getParam('currencyData')}
           />
 
           <View style={styles.aboutSection}>
@@ -105,21 +109,24 @@ export default class SurveyIntro extends Component {
           <Content padder>
             <Text style={styles.sideTitle}>Top Surveys For You </Text>
             <View style={[styles.container, styles.horizontal]}>
-            <Spinner size="large" color="#45b3b5" style={{ display: this.state.showActivity ? 'flex' : 'none' }} />
-          </View>
+              <Spinner size="large" color="#45b3b5" style={{ display: this.state.showActivity ? 'flex' : 'none' }} />
+            </View>
             <ScrollView horizontal={true}>
               {this.state.userClientSurveys.map((survey) =>
                 <SurveySlideItem
+                  userID={this.state.userID}
                   surveyID={survey.surveyID}
-                  cover={survey.surveyImageURL || survey.surveyCreatorImageURL || surveyCover}
-                  brandName={survey.surveyCreatorName}
-                  brandID={survey.surveyCreatorID}
-                  title={survey.surveyTitle}
-                  time={survey.surveyDuration}
-                  points={survey.surveyReward}
+                  clientID={survey.surveyCreatorID}
+                  cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
+                  clientName={survey.surveyCreatorName}
+                  title={survey.title}
+                  time={survey.duration}
+                  points={survey.amountPerSurvey}
                   brandLogo={survey.surveyCreatorImageURL || clientAvatar}
                   pressed={this.goToSurvey}
                   key={survey.surveyID}
+                  description={survey.description}
+                  currencyData={survey.rewardCurrency}
                 />
               )}
             </ScrollView>

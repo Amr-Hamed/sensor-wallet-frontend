@@ -4,23 +4,14 @@ import Constants from 'expo-constants';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
-import { AppLoading } from 'expo';
+import { AppLoading , Platform } from 'expo';
 
 
 // You can import from local files
-import SurveyIntro from './src/screens/SurveyIntro/SurveyIntro';
-import CompanyProfile from './src/screens/CompanyProfile/CompanyProfile';
-import ServiceDetails from './src/screens/ServiceDetails/ServiceDetails';
-import UserProfile from './src/screens/UserProfile/UserProfile';
-import Navbar from './src/components/Navbar/Navbar';
-import POSHeader from './src/components/POSHeader';
-import SurveyQuestion from './src/screens/SurveyQuestion/SurveyQuestion';
 import UserLogin from './src/screens/UserLogin/UserLogin';
 
-import Featured from './src/components/FeaturedSurveys';
-import TabNav from './src/routing/TabBottomNav';
 import DrawerNav from './src/routing/DrawerNav';
-import { Ionicons } from '@expo/vector-icons';
+
 
 
 
@@ -62,6 +53,13 @@ export default class App extends React.Component {
       })
 
     ])
+
+    if (Platform.OS === 'android') {
+      Expo.Notifications.createChannelAndroidAsync('recievePoints', {
+        name: 'Recieve Points',
+        sound: true,
+      });
+    }
 
   }
 

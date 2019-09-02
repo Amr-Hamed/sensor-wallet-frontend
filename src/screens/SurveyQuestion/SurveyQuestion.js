@@ -14,53 +14,69 @@ import Modal from 'react-native-modal';
 
 import { Icon } from 'native-base';
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
-
-import POSHeader from '../../components/POSHeader';
 import SurveyQuestionContainer from '../../components/SurveyQuestionContainer/SurveyQuestionContainer';
 import QuestionAnswer from '../../components/QuestionAnswer/QuestionAnswer';
 
 export default class SurveyQuestion extends React.Component {
   state = {
     isModalVisible: false,
-    questions: [],
+    questions: [
+      {
+        questionID: 1,
+        surveyID: 1,
+        questionTypeID: 1,
+        body: 'Which browser are you using?',
+        creationDate: '2019-09-01T20:55:13.000Z',
+        answers: {
+          code: 200,
+          msg: 'successfully retreiving answers for question id 1',
+          data: [
+            { answerID: 1, body: 'Chrome' },
+            { answerID: 2, body: 'Safari' },
+            { answerID: 3, body: 'Firefox' },
+            { answerID: 4, body: 'Explorer' },
+          ],
+        },
+      },
+    ],
     currentQuestion: 1,
     nextQuestionButtonText: 'NEXT',
     answerColor: '#DCDCDC',
     selectedAnswer: -1,
     questionAnswers: [],
-    userID : this.props.navigation.getParam('userID') , 
-    clientID : this.props.navigation.getParam('clientID') , 
-    surveyID : this.props.navigation.getParam('surveyID') ,
-    surveyReward : this.props.navigation.getParam('surveyReward') , 
-    clientName : this.props.navigation.getParam('clientName')
+    userID: this.props.navigation.getParam('userID'),
+    clientID: this.props.navigation.getParam('clientID'),
+    surveyID: this.props.navigation.getParam('surveyID'),
+    surveyReward: this.props.navigation.getParam('surveyReward'),
+    clientName: this.props.navigation.getParam('clientName'),
   };
 
-  // constructor(props){
-  //   super(props); 
-  // alert('clientID : ' +this.state.clientID + 'userID : '+ this.state.userID  + 'surveyID : ' + this.state.surveyID)
-
-  // }
-
-  constructor (props) {
-    super(props); 
-    fetch(`https://bondnbeyond-apigateway.herokuapp.com/clients/${this.state.clientID}/surveys/${this.state.surveyID}`)
+  componentDidMount() {
+    fetch(
+      `https://bondnbeyond-apigateway.herokuapp.com/clients/${
+        this.state.clientID
+      }/surveys/${this.state.surveyID}`
+    )
       .then(res => res.json())
       .then(resJson => {
         this.setState({
           questions: resJson.questions,
+          currentQuestion: resJson.questions[0].questionID,
         });
       });
-  };
+  }
 
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  selectAnswer = answerNumber => {
+  goToProfile = () => {
+    this.props.navigation.navigate('Profile');
+  };
+
+  selectAnswer = answerID => {
     this.setState({
-      selectedAnswer: answerNumber,
+      selectedAnswer: answerID,
     });
   };
 
@@ -68,7 +84,8 @@ export default class SurveyQuestion extends React.Component {
     if (this.state.currentQuestion > 1) {
       let currentQuestion = this.state.currentQuestion;
       let selectedAnswer = this.state.questionAnswers.find(
-        answer => answer.q == currentQuestion - 1
+        answer =>
+          answer.q == this.state.questions[currentQuestion - 2].questionID
       );
       if (this.state.nextQuestionButtonText === 'NEXT') {
         this.setState({
@@ -82,17 +99,21 @@ export default class SurveyQuestion extends React.Component {
           nextQuestionButtonText: 'NEXT',
         });
       }
+    } else {
+      alert('No Previous questions!');
     }
   };
 
-   nextButtonPressed = async ()=>{
+  nextButtonPressed = async () => {
     if (this.state.selectedAnswer === -1) {
-      return;
+      alert('Please select an answer to proceed!');
     } else {
       let currentQuestion = this.state.currentQuestion;
       let questionAnswers;
       let existingBefore = this.state.questionAnswers.find(
-        answer => answer.q == currentQuestion
+        answer =>
+          answer.q ==
+          this.state.questions[this.state.currentQuestion - 1].questionID
       );
       if (existingBefore) {
         this.state.questionAnswers.splice(
@@ -102,12 +123,23 @@ export default class SurveyQuestion extends React.Component {
       }
       questionAnswers = [
         ...this.state.questionAnswers,
-        { q: currentQuestion+"", a: this.state.selectedAnswer+"" },
+        {
+          q: this.state.questions[this.state.currentQuestion - 1].questionID,
+          a: this.state.selectedAnswer,
+        },
       ];
-      let selectedAnswer = this.state.questionAnswers.find(answer => {
-        return answer.q == currentQuestion + 1;
-      });
-      if (currentQuestion < this.state.questions.length) {
+      let selectedAnswer;
+
+      if (this.state.currentQuestion < this.state.questions.length) {
+        selectedAnswer = this.state.questionAnswers.find(answer => {
+          return (
+            answer.q ==
+            this.state.questions[this.state.currentQuestion].questionID
+          );
+        });
+      }
+
+      if (this.state.currentQuestion < this.state.questions.length) {
         if (selectedAnswer) {
           this.setState({
             currentQuestion: currentQuestion + 1,
@@ -122,7 +154,7 @@ export default class SurveyQuestion extends React.Component {
           });
         }
       }
-      if (currentQuestion + 1 === this.state.questions.length) {
+      if (this.state.currentQuestion + 1 === this.state.questions.length) {
         if (selectedAnswer) {
           this.setState({
             nextQuestionButtonText: 'SUBMIT',
@@ -138,9 +170,13 @@ export default class SurveyQuestion extends React.Component {
         }
       }
       if (this.state.nextQuestionButtonText == 'SUBMIT') {
-         await this.setState({
+        await this.setState({
           questionAnswers,
         });
+        let day = new Date().getDate(); //Current Date
+        let month = new Date().getMonth(); //Current Month
+        let year = new Date().getFullYear(); //Current Year
+        let today = `${year}-${month}-${day}`;
         fetch('https://bondnbeyond-apigateway.herokuapp.com/submitSurvey', {
           method: 'POST',
           headers: {
@@ -149,11 +185,12 @@ export default class SurveyQuestion extends React.Component {
           },
           body: JSON.stringify({
             submitSurvey: {
-              clientName: this.state.clientName+"",
-              surveyID: this.state.surveyID+"",
-              clientID: this.state.clientID+"",
-              endUserID: this.state.userID+"",
+              clientName: this.state.clientName + '',
+              surveyID: this.state.surveyID + '',
+              clientID: this.state.clientID + '',
+              endUserID: this.state.userID + '',
               questions: this.state.questionAnswers,
+              submissionDate: today,
             },
           }),
         })
@@ -163,8 +200,10 @@ export default class SurveyQuestion extends React.Component {
               this.toggleModal();
             } else if (responseJson.code === 500) {
               alert('Server Error!');
+              this.goToProfile();
             } else if (responseJson.code === 401) {
               alert('Sorry, this survey is expired!');
+              this.goToProfile();
             }
           })
           .catch(error => {
@@ -177,17 +216,17 @@ export default class SurveyQuestion extends React.Component {
   render() {
     let answers = this.state.questions[
       this.state.currentQuestion - 1
-    ].answers.map((answer, i) => {
+    ].answers.data.map((answer, i) => {
       let answerColor = '#DCDCDC',
         answerTextColor = 'black';
-      if (i === this.state.selectedAnswer - 1) {
+      if (answer.answerID == this.state.selectedAnswer) {
         (answerColor = '#5ecccf'), (answerTextColor = 'white');
       }
       return (
         <TouchableOpacity
-          key={i}
+          key={answer.answerID}
           style={styles.questionAnswer}
-          onPress={() => this.selectAnswer(i + 1)}>
+          onPress={() => this.selectAnswer(answer.answerID)}>
           <QuestionAnswer
             answerBody={answer.body}
             style={styles.questionAnswer}
@@ -201,8 +240,6 @@ export default class SurveyQuestion extends React.Component {
       <ScrollView style={styles.body}>
         <View style={styles.header}>
           <View style={styles.headerTitleContainer}>
-        <Text>clientID {this.state.clientID}</Text>
-
             <Text style={styles.headerTitle}>
               Q : {this.state.currentQuestion} / {this.state.questions.length}
             </Text>
@@ -244,8 +281,7 @@ export default class SurveyQuestion extends React.Component {
               </TouchableOpacity>
             </View>
             <Text style={styles.popUpText}>
-              {' '}
-              THANKS FOR SUBMITTING{'\n'} THE SURVEY{' '}
+              THANKS FOR SUBMITTING{'\n'} THE SURVEY
             </Text>
             <Image
               source={{
@@ -255,9 +291,11 @@ export default class SurveyQuestion extends React.Component {
               style={styles.tickImage}
             />
             <Text style={styles.surveySubmitReward}> Your reward is</Text>
-            <Text style={styles.surveySubmitReward}> {this.state.surveyReward} senses</Text>
+            <Text style={styles.surveySubmitReward}>
+              {this.state.surveyReward} senses
+            </Text>
             <TouchableOpacity
-              onPress={this.toggleModal}
+              onPress={this.goToProfile}
               style={styles.hidePopupButton}>
               <Text style={styles.hidePopupButtonText}> Home </Text>
             </TouchableOpacity>
@@ -289,7 +327,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: 'white',
     fontSize: screenWidth * 0.07,
-    marginTop: screenWidth * 0.15,
+    marginTop: screenWidth * 0.1,
   },
   main: {
     width: '100%',

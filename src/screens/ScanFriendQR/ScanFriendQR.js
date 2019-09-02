@@ -3,38 +3,17 @@ import {
   Text,
   View,
   StyleSheet,
-  DeviceEventEmitter,
   Dimensions,
-  
-  TouchableHighlight,
-  Alert
 } from 'react-native';
 
 import {
   Container,
-  Header,
   Content,
   Card,
   CardItem,
-  Thumbnail,
-  Button,
-  Icon,
-  Left,
-  Body,
-  Right,
 } from 'native-base';
-import Modal from 'react-native-modal';
-
-
-import POSButton from '../../components/POSButton';
-import TransactionConfirm from '../TransactionConfirm/TransactionConfirm';
-
-
 import * as Permissions from 'expo-permissions';
-
 import { BarCodeScanner } from 'expo-barcode-scanner';
-
-const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
 export default class ScanFriendQR extends React.Component {
   state = {
@@ -44,7 +23,7 @@ export default class ScanFriendQR extends React.Component {
     user: {
       id: this.props.navigation.getParam('userID'),
       username: this.props.navigation.getParam('userName'),
-      points: this.props.navigation.getParam('senses')
+      points: this.props.navigation.getParam('senses') , 
     },
     userPoints: this.props.navigation.getParam('senses'),
     transactionInfo:{}
@@ -110,32 +89,10 @@ export default class ScanFriendQR extends React.Component {
     );
   }
 
-  // Send Notification
-  sendNotification = token => {
 
-    token = token.replace(/\s/g, '');
-    let url = 'https://exp.host/--/api/v2/push/send';
-    let url2 = "https://320c36a815.to.intercept.rest";
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([
-        {
-          to: token,
-          sound: 'default',
-          body: `Hello , ${this.state.user.username} send 5 points to you`,
-        },
-      ]),
-    });
-    // .then(response )
-  };
 
   // Scan QR Code
   handleBarCodeScanned = ({ type, data }) => {
-    let url = 'https://bondserver.herokuapp.com/';
     let transactionInfo = JSON.parse(data);
     transactionInfo['senderID'] = this.state.user.id;
     transactionInfo['senderSenses'] = this.state.user.points;

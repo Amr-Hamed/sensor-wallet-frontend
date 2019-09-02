@@ -2,14 +2,11 @@
 import React, { Component } from 'react';
 //import react in our code.
 import {
-  Image,
   StyleSheet,
-  Text,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
 import {
-  Content,
   Header,
   Left,
   Right,
@@ -34,7 +31,6 @@ import {
 } from 'react-navigation';
 
 
-import POSHeader from '../components/POSHeader';
 
 import CompanyProfile from '../screens/CompanyProfile/CompanyProfile';
 import ServiceDetails from '../screens/ServiceDetails/ServiceDetails';
@@ -59,7 +55,7 @@ class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
   toggleDrawer = () => {
     //Props to open/close the drawer
-    this.props.navigationProps.toggleDrawer();
+    //this.props.navigationProps.toggleDrawer();
   };
   render() {
     return (
@@ -333,74 +329,74 @@ const DrawerNavigatorExample = createDrawerNavigator({
     },
   },
 
-  Screen2: {
-    //Title
-    screen: Screen2_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Service Details',
-    },
-  },
+  // Screen2: {
+  //   //Title
+  //   screen: Screen2_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Service Details',
+  //   },
+  // },
 
-  Screen3: {
-    //Title
-    screen: Screen3_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Survey Question',
-    },
-  },
+  // Screen3: {
+  //   //Title
+  //   screen: Screen3_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Survey Question',
+  //   },
+  // },
 
-  Screen4: {
-    //Title
-    screen: Screen4_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'User Login',
-    },
-  },
+  // Screen4: {
+  //   //Title
+  //   screen: Screen4_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'User Login',
+  //   },
+  // },
 
-  Screen5: {
-    //Title
-    screen: Screen5_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Places For Redeem',
-    },
-  },
+  // Screen5: {
+  //   //Title
+  //   screen: Screen5_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Places For Redeem',
+  //   },
+  // },
 
-  Screen6: {
-    //Title
-    screen: Screen6_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Company Profile',
-    },
-  },
+  // Screen6: {
+  //   //Title
+  //   screen: Screen6_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Company Profile',
+  //   },
+  // },
 
-  Screen7: {
-    //Title
-    screen: Screen7_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Search Survey',
-    },
-  },
+  // Screen7: {
+  //   //Title
+  //   screen: Screen7_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Search Survey',
+  //   },
+  // },
 
-  Screen8: {
-    //Title
-    screen: Screen8_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Survey Intro',
-    },
-  },
+  // Screen8: {
+  //   //Title
+  //   screen: Screen8_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Survey Intro',
+  //   },
+  // },
 
-  Screen9: {
-    screen : UserWallet , 
-    navigationOptions: {
-      drawerLabel : 'Wallet'
-    } , 
-  Screen10:{
-    screen : Test , 
-    navigationOptions: {
-      drawerLabel : 'Test'
-    }
-  }
-  }
+  // Screen9: {
+  //   screen : UserWallet , 
+  //   navigationOptions: {
+  //     drawerLabel : 'Wallet'
+  //   } , 
+  // Screen10:{
+  //   screen : Test , 
+  //   navigationOptions: {
+  //     drawerLabel : 'Test'
+  //   }
+  // }
+  // }
 
 
 
