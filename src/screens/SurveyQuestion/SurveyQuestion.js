@@ -21,23 +21,23 @@ export default class SurveyQuestion extends React.Component {
   state = {
     isModalVisible: false,
     questions: [
-      {
-        questionID: 1,
-        surveyID: 1,
-        questionTypeID: 1,
-        body: 'Which browser are you using?',
-        creationDate: '2019-09-01T20:55:13.000Z',
-        answers: {
-          code: 200,
-          msg: 'successfully retreiving answers for question id 1',
-          data: [
-            { answerID: 1, body: 'Chrome' },
-            { answerID: 2, body: 'Safari' },
-            { answerID: 3, body: 'Firefox' },
-            { answerID: 4, body: 'Explorer' },
-          ],
-        },
-      },
+      // {
+      //   questionID: 1,
+      //   surveyID: 1,
+      //   questionTypeID: 1,
+      //   body: 'Which browser are you using?',
+      //   creationDate: '2019-09-01T20:55:13.000Z',
+      //   answers: {
+      //     code: 200,
+      //     msg: 'successfully retreiving answers for question id 1',
+      //     data: [
+      //       { answerID: 1, body: 'Chrome' },
+      //       { answerID: 2, body: 'Safari' },
+      //       { answerID: 3, body: 'Firefox' },
+      //       { answerID: 4, body: 'Explorer' },
+      //     ],
+      //   },
+      // },
     ],
     currentQuestion: 1,
     nextQuestionButtonText: 'NEXT',
@@ -61,7 +61,6 @@ export default class SurveyQuestion extends React.Component {
       .then(resJson => {
         this.setState({
           questions: resJson.questions,
-          currentQuestion: resJson.questions[0].questionID,
         });
       });
   }
@@ -214,6 +213,7 @@ export default class SurveyQuestion extends React.Component {
   };
 
   render() {
+    if(this.state.questions.length > 0 ){
     let answers = this.state.questions[
       this.state.currentQuestion - 1
     ].answers.data.map((answer, i) => {
@@ -302,7 +302,11 @@ export default class SurveyQuestion extends React.Component {
           </View>
         </Modal>
       </ScrollView>
-    );
+    )}else{
+      return(
+        <View></View>
+      )
+    }
   }
 }
 

@@ -229,7 +229,7 @@ export default class UserProfile extends Component {
                 {/* click button to open camera for scan friend QR Code  */}
                 <Left>
                   <POSButton
-                    title="NEW SCAN"
+                    title="Make Transaction"
                     style={styles.newScanBtn}
                     height={0.15 * WIDTH}
                     pressed={this.goToScanFriendQR}

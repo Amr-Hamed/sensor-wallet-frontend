@@ -14,7 +14,7 @@ export default class UserTransactions extends React.Component {
     } else {
       return(
         <View>
-          <Text style = {{alignSelf : 'center'}}>Sorry Yau don't have any Transactions</Text>
+          <Text style = {{alignSelf : 'center'}}>Sorry You don't have any Transactions</Text>
         </View>
       )
     }

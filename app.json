@@ -1,17 +1,22 @@
 {
   "expo": {
     "name": "Sensor Wallet",
-    "description": "No description",
+    "description": "First Release for Sensor Wallet APK Applications",
     "slug": "SensorWallet14",
     "privacy": "unlisted",
     "sdkVersion": "34.0.0",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
     "icon": "assets/images/logo.png",
     "loading": {
       "icon": "assets/images/logo.png",
       "hideExponentText": false
+    },
+    "splash": {
+      "image": "assets/images/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#fff"
     },
     "packagerOpts": {
       "assetExts": [
@@ -26,11 +31,9 @@
     },
     "ios": {
       "supportsTablet": true
-    } ,
+    },
     "android": {
       "package": "com.Bond.sensorWallet"
     }
   }
 }
-
-
