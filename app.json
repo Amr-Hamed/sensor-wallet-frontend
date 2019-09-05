@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sensor Wallet",
     "description": "First Release for Sensor Wallet APK Applications",
-    "slug": "SensorWallet14",
+    "slug": "SensorWallet3",
     "privacy": "unlisted",
     "sdkVersion": "34.0.0",
     "version": "1.0.2",
@@ -10,11 +10,11 @@
     "primaryColor": "#cccccc",
     "icon": "assets/images/logo.png",
     "loading": {
-      "icon": "assets/images/logo.png",
+      "icon": "assets/images/splash.png",
       "hideExponentText": false
     },
     "splash": {
-      "image": "assets/images/logo.png",
+      "image": "assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#fff"
     },

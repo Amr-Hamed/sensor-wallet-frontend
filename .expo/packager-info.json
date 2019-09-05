@@ -1,10 +1,10 @@
 {
   "expoServerNgrokUrl": "https://kb-te4.mk14.sensor-wallet-frontend.exp.direct",
   "packagerNgrokUrl": "https://packager.kb-te4.mk14.sensor-wallet-frontend.exp.direct",
-  "ngrokPid": 9676,
+  "ngrokPid": 7824,
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 9647,
+  "packagerPid": 7799,
   "webpackServerPort": null
 }

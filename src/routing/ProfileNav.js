@@ -27,7 +27,6 @@ import {
   createDrawerNavigator,
   createStackNavigator,
   createAppContainer,
-  createSwitchNavigator,
 } from 'react-navigation';
 
 
@@ -45,17 +44,13 @@ import UserWallet from  '../screens/UserWallet/UserWallet';
 import ScanFriendQR from  '../screens/ScanFriendQR/ScanFriendQR';
 import TransactionConfirm from  '../screens/TransactionConfirm/TransactionConfirm';
 import Loading from  '../screens/Loading/Loading';
-import Test from '../screens/Test/Test' ; 
 
-
-
-import ProfileStack from '../routing/ProfileStack';
 
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
   toggleDrawer = () => {
     //Props to open/close the drawer
-    //this.props.navigationProps.toggleDrawer();
+    this.props.navigationProps.toggleDrawer();
   };
   render() {
     return (

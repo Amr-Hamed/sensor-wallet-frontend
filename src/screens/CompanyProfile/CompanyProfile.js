@@ -32,7 +32,11 @@ import Service from '../../components/Service';
 import RoundedBG from '../../components/RoundedBG';
 import SurveySlideItem from '../../components/SurveySlideItem';
 
-const coreApi = "http://demo9744643.mockable.io/"
+// const coreApi = "http://demo9744643.mockable.io/" ; 
+const coreApi = "https://bondnbeyond-apigateway.herokuapp.com" ; 
+const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
+const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg" ;
+
 
 export default class CompanyProfile extends Component {
 
@@ -41,24 +45,38 @@ export default class CompanyProfile extends Component {
     super(props);
 
     this.state = {
+      clientID : '',
       clientName : '' , 
-      clinetImage : 'https://cdn1.iconfinder.com/data/icons/business-power/32/business_avatar_company_hierarchy_level_position_post-512.png'
+      clientImage : 'https://www.fogratravel.pl/events/images/loader.gif' , 
+      cover : 'https://www.fogratravel.pl/events/images/loader.gif', 
+      surveys : [] , 
+      bio : '' , 
+
     }
+
+    alert(`${coreApi}/client/${this.props.navigation.getParam('clientID')}/${this.props.navigation.getParam('clientName')}/profile`) ; 
+   
+   
     // fetching Client Data From API
-    fetch(`https://demo9744643.mockable.io/clients/${this.props.navigation.getParam('brandID')}`)
+    fetch(`${coreApi}/client/${this.props.navigation.getParam('clientID')}/${this.props.navigation.getParam('clientName')}/profile`)
     .then(res => res.json())
     .then(res=>{
       this.setState({
-        clientName : res.clientName , 
-        clientImage : res.clientImage
+        clientID : res.data.clientID , 
+        clientName : res.data.userName , 
+        clientImage : res.data.imageURL , 
+        cover : res.data.cover , 
+        surveys : res.data.surveys , 
+        bio : res.data.bio
       })
     }) 
+    // .catch(err => alert(err))
 
 
   }
 
-  goToSurvey = (surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration) => {
-    this.props.navigation.navigate('SurveyIntro', { surveyTitle, brandName, surveyCover, surveyPoints, surveyDuration })
+  goToSurvey = (surveyID, surveyTitle, clientName, brandLogo, clientID, surveyCover, surveyReward, surveyDuration, surveyDescription, userID, currencyData) => {
+    this.props.navigation.navigate('SurveyIntro', { surveyID, surveyTitle, clientName, surveyCover, surveyReward, surveyDuration, brandLogo, clientID, surveyDescription, userID, currencyData });
   }
   goToService = () => {
     this.props.navigation.navigate('ServiceDetails')
@@ -72,15 +90,12 @@ export default class CompanyProfile extends Component {
             cardTitle={this.state.clientName}
             cardNote="Since 1971"
             coverUrl={this.state.clientImage}
-            profilePicUrl={this.state.clientImage}
+            profilePicUrl={this.state.cover || this.state.clientImage}
           />
 
           <Content padder>
             <Text style={styles.title}>BIO</Text>
-            <Text>UserQRCode
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. orum.
-            </Text>
+            <Text>{this.state.bio}</Text>
             <View style={{ flexDirection: 'row', alignContent: 'center' }}>
               <POSButton style={styles.btn} title="Contact" />
               <POSButton style={styles.btn} title="More" />
@@ -91,31 +106,35 @@ export default class CompanyProfile extends Component {
             <Content padder>
             <Text style={styles.sideTitle}>Company Surveys For You : </Text>
 
+
             <ScrollView horizontal={true}>
-              <SurveySlideItem
-                cover="https://www.pcclean.io/wp-content/gallery/messi-hd-wallpapers/Messi-HD-78.jpg"
-                brandName="Barcelona"
-                title="Leonel Messi"
-                time="10 min"
-                points="100"
-                pressed={this.goToSurvey}
-              />
-              <SurveySlideItem
-                cover="https://wallpapersite.com/images/wallpapers/cristiano-ronaldo-2560x1440-hd-17168.jpg"
-                brandName="Juventus"
-                title="Ronaldo"
-                time="7 min"
-                points="77"
-                pressed={this.goToSurvey}
-              />
-              <SurveySlideItem
-                cover="https://images2.alphacoders.com/961/961964.jpg"
-                brandName="Liverpool"
-                title="Mohamed Salah"
-                time="11 min"
-                points="111"
-                pressed={this.goToSurvey}
-              />
+            {this.state.surveys.length !== 0 ?
+                <ScrollView horizontal={true}>
+
+                  {this.state.surveys.map((survey) =>
+                    <SurveySlideItem
+                      userID={this.state.userID}
+                      surveyID={survey.surveyID}
+                      clientID={this.state.clientID}
+                      cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
+                      clientName={this.state.clientName}
+                      title={survey.title}
+                      time={survey.duration}
+                      points={survey.amountPerSurvey}
+                      brandLogo={this.state.clientImage || clientAvatar}
+                      pressed={this.goToSurvey}
+                      key={survey.surveyID}
+                      description={survey.description}
+                      currencyData={survey.rewardCurrency}
+                    />
+                  )}
+
+                </ScrollView>
+                :
+                <View>
+                  <Text style={{ alignSelf: 'center' }}> Sorry but There is no Surveys For you </Text>
+                </View>
+              }
             </ScrollView>
           </Content>
 
@@ -145,7 +164,7 @@ const styles = StyleSheet.create({
   },
   sideTitle: {
     marginVertical: 16,
-    fontSize: 20,
+    fontSize: 14,
     marginLeft: 10,
   },
   services: {

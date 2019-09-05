@@ -74,9 +74,9 @@ export default class SurveyIntro extends Component {
   goToSurvey = () => {
     this.props.navigation.navigate('SurveyIntro');
   }
-  goToCompanyProfile = (brandID) => {
-
-    this.props.navigation.navigate('CompanyProfile', { brandID })
+  goToCompanyProfile = (clientID , clientName) => {
+    console.log('clientID : '+clientID)
+    this.props.navigation.navigate('CompanyProfile', { clientID , clientName })
   }
 
   // takeSurveyClicked = () => {
@@ -92,7 +92,7 @@ export default class SurveyIntro extends Component {
             brandName={this.props.navigation.getParam('clientName')}
             surveyCover={this.props.navigation.getParam('surveyCover')}
             brandLogo={this.props.navigation.getParam('brandLogo')}
-            brandLogoPressed={() => this.goToCompanyProfile(this.props.navigation.getParam('brandID'))}
+            brandLogoPressed={() => this.goToCompanyProfile(this.props.navigation.getParam('clientID') , this.props.navigation.getParam('clientName'))}
             points={this.props.navigation.getParam('surveyReward')}
             duration={this.props.navigation.getParam('surveyDuration')}
             currencyData = {this.props.navigation.getParam('currencyData')}

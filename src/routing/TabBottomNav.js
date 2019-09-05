@@ -8,54 +8,56 @@ import { Icon } from 'native-base';
 
 import UserLoginTab from '../screens/UserLogin/UserLogin';
 import CompanyProfileTab from '../screens/CompanyProfile/CompanyProfile';
-import ServiceDetailsTab from '../screens/ServiceDetails/ServiceDetails';
+import ServiceDetails from '../screens/ServiceDetails/ServiceDetails';
+import UserSurveyHomePage from '../screens/UserSurveyHomePage/UserSurveyHomePage';
+import UserPlaceRedeem from '../screens/UserPlaceRedeem/UserPlaceRedeem';
 import SurveyIntroTab from '../screens/SurveyIntro/SurveyIntro';
 import UserProfile from '../screens/UserProfile/UserProfile';
+import ProfileNav from './ProfileNav';
 
 const AppNavigator = createBottomTabNavigator({
-  UserProfile: {
-    screen: UserProfile,
+  Home: {
+    screen: ProfileNav,
     navigationOptions: {
       tabBarLabel: 'Home',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name="home" color={tintColor} size={25} />
+        <Icon name="home" style={{color : tintColor}} size={25} />
       ),
       
     },
   },
-  CompanyProfileTab: {
-    screen: CompanyProfileTab,
+  UserSurveyHomePage: {
+    screen: UserSurveyHomePage,
     navigationOptions: {
       tabBarLabel: 'Survey',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name="today" color={tintColor} size={25} />
+        <Icon name="today" style={{color : tintColor}} size={25} />
       ),
     },
   },
-  ServiceDetails: {
-    screen: ServiceDetailsTab,
+  UserPlaceRedeem: {
+    screen: UserPlaceRedeem,
     navigationOptions: {
       tabBarLabel: 'Redeem',
-      tabBarIcon: ({ tintColor }) => (
-        <Icon name="repeat" color={tintColor} size={25} />
-      ),
+      tabBarIcon: ({ tintColor }) => 
+        <Icon name="repeat" style={{color : tintColor}} size={25} />
+      
     },
   },
-  SurveyIntro: {
-    screen: SurveyIntroTab,
+  Service: {
+    screen: ServiceDetails,
     navigationOptions: {
-      tabBarLabel: 'Profile',
-      tabBarIcon: ({ tintColor }) => (
-        <Icon name="person" color={tintColor} size={25} />
-      ),
+      tabBarLabel: 'Service',
+      tabBarIcon: ({ tintColor }) => 
+        <Icon name="shirt" style={{color : tintColor}} size={25} />
     },
   },
 } ,  {
-   swipeEnabled: true,
+    swipeEnabled: true,
     animationEnabled: true,
     tabBarOptions: {
-      activeTintColor: '#FFFFFF',
-      inactiveTintColor: '#F8F8F8',
+      activeTintColor: '#339193',
+      inactiveTintColor: '#eee',
       style: {
         backgroundColor: '#333',
       },

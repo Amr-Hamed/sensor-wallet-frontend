@@ -14,6 +14,7 @@ import {
 
 const defaultSenses = "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1280px-Flag_of_the_United_States.svg.png" ; 
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
+const loadingImgURL = 'https://www.fogratravel.pl/events/images/loader.gif';
 
 export default class SurveySlideItem extends Component {
 
@@ -37,7 +38,7 @@ export default class SurveySlideItem extends Component {
               <Image
                 source={{
                   uri:
-                    this.props.cover,
+                    this.props.cover || loadingImgURL,
                 }}
                 style={{
                   height: 200,
@@ -48,13 +49,13 @@ export default class SurveySlideItem extends Component {
                 }}
               />
             </CardItem>
-            <CardItem>
+            <CardItem footer style = {{ borderBottomRightRadius : 20 , borderBottomLeftRadius : 20}}>
               <View style={{}}>
                 <Text note style={styles.brandName}>{this.props.clientName}</Text>
-                <Text style={styles.title}> {this.props.title} </Text>
+                <Text style={styles.title}>{this.props.title}</Text>
                 <View style={{ flexDirection: 'row', width: 0.3 * WIDTH }}>
                   <Icon name="time" style={{ color: 'grey', marginRight: 2 }} />
-                  <Text style={styles.time}>{this.props.time} min</Text>
+                  <Text style={styles.time}>{this.props.time} min </Text>
                 </View>
               </View>
               <Body>

@@ -10,9 +10,8 @@ import { AppLoading , Platform } from 'expo';
 // You can import from local files
 import UserLogin from './src/screens/UserLogin/UserLogin';
 
-import DrawerNav from './src/routing/DrawerNav';
-
-
+import ProfileNav from './src/routing/ProfileNav';
+import TabBottomNav from './src/routing/TabBottomNav';
 
 
 // or any pure javascript modules available inhttps://snack.expo.io/@khaledamr/pos-routing   
@@ -22,7 +21,7 @@ import DrawerNav from './src/routing/DrawerNav';
 const MainNavigator = createStackNavigator(
   {
     Login: { screen: UserLogin },
-    Drawer: { screen: DrawerNav },
+    Drawer: { screen: TabBottomNav },
   },
   {
     headerMode: 'none',
