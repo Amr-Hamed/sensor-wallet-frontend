@@ -65,6 +65,7 @@ export default class AssetExample extends React.Component {
   };
 
   signInPressed = () => {
+    
     if (this.state.email) {
       if (this.state.password) {
         this.setState({
@@ -83,7 +84,7 @@ export default class AssetExample extends React.Component {
         })
           .then(response => response.json())
           .then(responseJson => {
-            if (responseJson.code === 200) {
+            if (responseJson.code === 200 ) {
               this.setState({
                 showActivity: false,
               });

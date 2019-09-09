@@ -14,6 +14,8 @@ import UserPlaceRedeem from '../screens/UserPlaceRedeem/UserPlaceRedeem';
 import SurveyIntroTab from '../screens/SurveyIntro/SurveyIntro';
 import UserProfile from '../screens/UserProfile/UserProfile';
 import ProfileNav from './ProfileNav';
+import SurveyNav from './SurveyNav';
+
 
 const AppNavigator = createBottomTabNavigator({
   Home: {
@@ -27,7 +29,7 @@ const AppNavigator = createBottomTabNavigator({
     },
   },
   UserSurveyHomePage: {
-    screen: UserSurveyHomePage,
+    screen: SurveyNav,
     navigationOptions: {
       tabBarLabel: 'Survey',
       tabBarIcon: ({ tintColor }) => (

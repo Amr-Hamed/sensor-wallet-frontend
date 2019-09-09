@@ -7,6 +7,7 @@ import {
   Left,
   Body,
   Right,
+  Icon
 } from 'native-base';
 
 import { Notifications } from 'expo';
@@ -44,7 +45,6 @@ const userAvatar = "http://avatars.design/wp-content/uploads/2016/09/avatar1b.jp
 
 
 export default class UserProfile extends Component {
-
 
 
   constructor(props) {
@@ -129,6 +129,8 @@ export default class UserProfile extends Component {
 
         await AsyncStorage.setItem('UserID', JSON.stringify(this.state.userID));
         await AsyncStorage.setItem('userName', JSON.stringify(this.state.userName));
+        await AsyncStorage.setItem('userProfileImg', JSON.stringify(this.state.profileAvatar));
+
       })
       .then(() => {
 

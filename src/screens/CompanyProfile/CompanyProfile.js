@@ -54,7 +54,7 @@ export default class CompanyProfile extends Component {
 
     }
 
-    alert(`${coreApi}/client/${this.props.navigation.getParam('clientID')}/${this.props.navigation.getParam('clientName')}/profile`) ; 
+    // alert(`${coreApi}/client/${this.props.navigation.getParam('clientID')}/${this.props.navigation.getParam('clientName')}/profile`) ; 
    
    
     // fetching Client Data From API
@@ -89,8 +89,8 @@ export default class CompanyProfile extends Component {
           <CompanyProfileCard
             cardTitle={this.state.clientName}
             cardNote="Since 1971"
-            coverUrl={this.state.clientImage}
-            profilePicUrl={this.state.cover || this.state.clientImage}
+            coverUrl={this.state.cover}
+            profilePicUrl={this.state.clientImage || this.state.clientImage}
           />
 
           <Content padder>

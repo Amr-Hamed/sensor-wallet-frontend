@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, View, Dimensions } from 'react-native';
-import { Content, Icon, Thumbnail, Body, Left } from 'native-base';
+import { Content, Icon, Thumbnail, Body, Left , Right } from 'native-base';
 
 import POSButton from '../components/POSButton';
 
@@ -57,14 +57,14 @@ export default class SurveyItem extends Component {
           </View>
         </View>
         <Body />
-        <Left>
+        <Right>
           <POSButton
             title="GO"
             style={{ borderRadius: 10, width: 0.15 * WIDTH }}
             height={0.15 * WIDTH} 
             pressed = {this.handleClick}
           />
-        </Left>
+        </Right>
       </View>
     );
   }
