@@ -192,12 +192,12 @@ export default class UserWallet extends React.Component {
 
           {this.state.selectedTab === "wallet" && (
             <GestureRecognizer onSwipe={direction => this.onSwipe(direction)}>
-              <WalletCurrencies currencies={this.state.currencies} />
+              <WalletCurrencies currencies={this.state.currencies} userName={this.state.userName} />
             </GestureRecognizer>
           )}
           {this.state.selectedTab === "transactions" && (
             <GestureRecognizer onSwipe={direction => this.onSwipe(direction)}>
-              <UserTransactions transactions={this.state.transactions} />
+              <UserTransactions transactions={this.state.transactions} userName={this.state.userName}/>
             </GestureRecognizer>
           )}
           {this.state.selectedTab === "rewards" && (

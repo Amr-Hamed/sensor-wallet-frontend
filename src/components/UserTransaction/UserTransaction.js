@@ -47,7 +47,7 @@ export default class UserTransaction extends React.Component {
               </View>
               <View style={styles.dateContainer}>
                 <Text style={styles.date}>
-                  {this.props.data.transactionDate}
+                  {transactionDay} {transactionTime}
                 </Text>
               </View>
             </View>
@@ -91,7 +91,7 @@ export default class UserTransaction extends React.Component {
             </View>
             <View style={styles.transaction}>
               <View style={styles.transactionData}>
-                <Text style={[styles.amountAndCurrency, { color: "#c93521" }]}>
+                <Text style={[styles.amountAndCurrency, { color: "#5eae33" }]}>
                   {this.props.data.amount} {this.props.data.name}
                 </Text>
               </View>
@@ -106,7 +106,7 @@ export default class UserTransaction extends React.Component {
               </View>
               <View style={styles.dateContainer}>
                 <Text style={styles.date}>
-                  {this.props.data.transactionDate}
+                  {transactionDay} {transactionTime}
                 </Text>
               </View>
             </View>

@@ -30,7 +30,7 @@ export default class UserTransactions extends React.Component {
       });
     } else if (item === "Income") {
       let displayed = this.state.transactions.filter(element => {
-        return element.senderUserName !== "helmy660 ";
+        return element.senderUserName !== this.props.userName;
       });
       await this.setState({
         selectedItem: item,
@@ -38,7 +38,7 @@ export default class UserTransactions extends React.Component {
       });
     } else if (item === "Expenses") {
       let displayed = this.state.transactions.filter(element => {
-        return element.senderUserName === "helmy660 ";
+        return element.senderUserName === this.props.userName;
       });
       await this.setState({
         selectedItem: item,
@@ -48,49 +48,42 @@ export default class UserTransactions extends React.Component {
   };
 
   render() {
-<<<<<<< HEAD
-    let transactions = this.state.displayed.map((transaction, i) => {
-      return (
-        <UserTransaction
-          data={transaction}
-          userName={this.props.userName}
-          userImg={this.props.userImg}
-        />
-      );
-    });
-    return (
-      <View style={styles.main}>
-        <RNPickerSelect
-          onValueChange={item => this.selectItem(item)}
-          placeholder={{
-            label: "Filter transactions",
-            value: ""
-          }}
-          items={[
-            { label: "All", value: "All" },
-            { label: "Income", value: "Income" },
-            { label: "Expenses", value: "Expenses" }
-          ]}
-          style={styles.dropdown}
-        />
-        <View style={styles.transactions}>{transactions}</View>
-      </View>
-    );
-=======
-    if (this.props.transactions.length !== 0 ){
+    if (this.props.transactions.length !== 0) {
 
-      let transactions = this.props.transactions.map((transaction, i) => {
-        return <UserTransaction data={transaction} userName = {this.props.userName} userImg = {this.props.userImg} />;
+      let transactions = this.state.displayed.map((transaction, i) => {
+        return (
+          <UserTransaction
+            data={transaction}
+            userName={this.props.userName}
+            userImg={this.props.userImg}
+          />
+        );
       });
-      return <View style={styles.transactions}>{transactions}</View>;
+      return (
+        <View style={styles.main}>
+          <RNPickerSelect
+            onValueChange={item => this.selectItem(item)}
+            placeholder={{
+              label: "Filter transactions",
+              value: ""
+            }}
+            items={[
+              { label: "All", value: "All" },
+              { label: "Income", value: "Income" },
+              { label: "Expenses", value: "Expenses" }
+            ]}
+            style={styles.dropdown}
+          />
+          <View style={styles.transactions}>{transactions}</View>
+        </View>
+      );
     } else {
-      return(
+      return (
         <View>
-          <Text style = {{alignSelf : 'center'}}>Sorry You don't have any Transactions</Text>
+          <Text style={{ alignSelf: 'center' }}>Sorry You don't have any Transactions</Text>
         </View>
       )
     }
->>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
   }
 }
 
