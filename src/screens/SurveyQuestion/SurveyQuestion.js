@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,60 +7,62 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
-  StyleSheet,
-} from 'react-native';
+  StyleSheet
+} from "react-native";
 
-import Modal from 'react-native-modal';
+import Modal from "react-native-modal";
 
-import { Icon } from 'native-base';
+import { Icon } from "native-base";
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faBars, faBell } from "@fortawesome/free-solid-svg-icons";
 
-import POSHeader from '../../components/POSHeader';
-import SurveyQuestionContainer from '../../components/SurveyQuestionContainer/SurveyQuestionContainer';
-import QuestionAnswer from '../../components/QuestionAnswer/QuestionAnswer';
+import POSHeader from "../../components/POSHeader";
+import SurveyQuestionContainer from "../../components/SurveyQuestionContainer/SurveyQuestionContainer";
+import QuestionAnswer from "../../components/QuestionAnswer/QuestionAnswer";
 
 export default class SurveyQuestion extends React.Component {
   state = {
     isModalVisible: false,
     questions: [],
     currentQuestion: 1,
-    nextQuestionButtonText: 'NEXT',
-    answerColor: '#DCDCDC',
+    nextQuestionButtonText: "NEXT",
+    answerColor: "#DCDCDC",
     selectedAnswer: -1,
     questionAnswers: [],
-    userID : this.props.navigation.getParam('userID') , 
-    clientID : this.props.navigation.getParam('clientID') , 
-    surveyID : this.props.navigation.getParam('surveyID') ,
-    surveyReward : this.props.navigation.getParam('surveyReward') , 
-    clientName : this.props.navigation.getParam('clientName')
+    userID: this.props.navigation.getParam("userID"),
+    clientID: this.props.navigation.getParam("clientID"),
+    surveyID: this.props.navigation.getParam("surveyID"),
+    surveyReward: this.props.navigation.getParam("surveyReward"),
+    clientName: this.props.navigation.getParam("clientName")
   };
 
   // constructor(props){
-  //   super(props); 
+  //   super(props);
   // alert('clientID : ' +this.state.clientID + 'userID : '+ this.state.userID  + 'surveyID : ' + this.state.surveyID)
 
   // }
 
-  constructor (props) {
-    super(props); 
-    fetch(`https://bondnbeyond-apigateway.herokuapp.com/clients/${this.state.clientID}/surveys/${this.state.surveyID}`)
+  constructor(props) {
+    super(props);
+    fetch(
+      `https://bondnbeyond-apigateway.herokuapp.com/clients/${this.state.clientID}/surveys/${this.state.surveyID}`
+    )
       .then(res => res.json())
       .then(resJson => {
         this.setState({
-          questions: resJson.questions,
+          questions: resJson.questions
         });
       });
-  };
+  }
 
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  selectAnswer = answerNumber => {
+  selectAnswer = answerID => {
     this.setState({
-      selectedAnswer: answerNumber,
+      selectedAnswer: answerID
     });
   };
 
@@ -68,31 +70,36 @@ export default class SurveyQuestion extends React.Component {
     if (this.state.currentQuestion > 1) {
       let currentQuestion = this.state.currentQuestion;
       let selectedAnswer = this.state.questionAnswers.find(
-        answer => answer.q == currentQuestion - 1
+        answer =>
+          answer.q == this.state.questions[currentQuestion - 2].questionID
       );
-      if (this.state.nextQuestionButtonText === 'NEXT') {
+      if (this.state.nextQuestionButtonText === "NEXT") {
         this.setState({
           currentQuestion: currentQuestion - 1,
-          selectedAnswer: selectedAnswer.a,
+          selectedAnswer: selectedAnswer.a
         });
       } else {
         this.setState({
           currentQuestion: currentQuestion - 1,
           selectedAnswer: selectedAnswer.a,
-          nextQuestionButtonText: 'NEXT',
+          nextQuestionButtonText: "NEXT"
         });
       }
+    } else {
+      alert("No Previous questions!");
     }
   };
 
-   nextButtonPressed = async ()=>{
+  nextButtonPressed = async () => {
     if (this.state.selectedAnswer === -1) {
       return;
     } else {
       let currentQuestion = this.state.currentQuestion;
       let questionAnswers;
       let existingBefore = this.state.questionAnswers.find(
-        answer => answer.q == currentQuestion
+        answer =>
+          answer.q ==
+          this.state.questions[this.state.currentQuestion - 1].questionID
       );
       if (existingBefore) {
         this.state.questionAnswers.splice(
@@ -102,69 +109,78 @@ export default class SurveyQuestion extends React.Component {
       }
       questionAnswers = [
         ...this.state.questionAnswers,
-        { q: currentQuestion+"", a: this.state.selectedAnswer+"" },
+        {
+          q: this.state.questions[this.state.currentQuestion - 1].questionID,
+          a: this.state.selectedAnswer
+        }
       ];
-      let selectedAnswer = this.state.questionAnswers.find(answer => {
-        return answer.q == currentQuestion + 1;
-      });
-      if (currentQuestion < this.state.questions.length) {
-        if (selectedAnswer) {
-          this.setState({
-            currentQuestion: currentQuestion + 1,
-            selectedAnswer: selectedAnswer.a,
-            questionAnswers,
-          });
-        } else {
-          this.setState({
-            currentQuestion: currentQuestion + 1,
-            selectedAnswer: -1,
-            questionAnswers,
-          });
-        }
-      }
-      if (currentQuestion + 1 === this.state.questions.length) {
-        if (selectedAnswer) {
-          this.setState({
-            nextQuestionButtonText: 'SUBMIT',
-            selectedAnswer: selectedAnswer.a,
-            questionAnswers,
-          });
-        } else {
-          this.setState({
-            nextQuestionButtonText: 'SUBMIT',
-            selectedAnswer: -1,
-            questionAnswers,
-          });
-        }
-      }
-      if (this.state.nextQuestionButtonText == 'SUBMIT') {
-         await this.setState({
-          questionAnswers,
+      let selectedAnswer;
+      if (this.state.currentQuestion < this.state.questions.length) {
+        selectedAnswer = this.state.questionAnswers.find(answer => {
+          return (
+            answer.q ==
+            this.state.questions[this.state.currentQuestion].questionID
+          );
         });
-        fetch('https://bondnbeyond-apigateway.herokuapp.com/submitSurvey', {
-          method: 'POST',
+      }
+      if (this.state.currentQuestion < this.state.questions.length) {
+        if (selectedAnswer) {
+          this.setState({
+            currentQuestion: currentQuestion + 1,
+            selectedAnswer: selectedAnswer.a,
+            questionAnswers
+          });
+        } else {
+          this.setState({
+            currentQuestion: currentQuestion + 1,
+            selectedAnswer: -1,
+            questionAnswers
+          });
+        }
+      }
+      if (this.state.currentQuestion + 1 === this.state.questions.length) {
+        if (selectedAnswer) {
+          this.setState({
+            nextQuestionButtonText: "SUBMIT",
+            selectedAnswer: selectedAnswer.a,
+            questionAnswers
+          });
+        } else {
+          this.setState({
+            nextQuestionButtonText: "SUBMIT",
+            selectedAnswer: -1,
+            questionAnswers
+          });
+        }
+      }
+      if (this.state.nextQuestionButtonText == "SUBMIT") {
+        await this.setState({
+          questionAnswers
+        });
+        fetch("https://bondnbeyond-apigateway.herokuapp.com/submitSurvey", {
+          method: "POST",
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            Accept: "application/json",
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             submitSurvey: {
-              clientName: this.state.clientName+"",
-              surveyID: this.state.surveyID+"",
-              clientID: this.state.clientID+"",
-              endUserID: this.state.userID+"",
-              questions: this.state.questionAnswers,
-            },
-          }),
+              clientName: this.state.clientName + "",
+              surveyID: this.state.surveyID + "",
+              clientID: this.state.clientID + "",
+              endUserID: this.state.userID + "",
+              questions: this.state.questionAnswers
+            }
+          })
         })
           .then(response => response.json())
           .then(responseJson => {
             if (responseJson.code === 200) {
               this.toggleModal();
             } else if (responseJson.code === 500) {
-              alert('Server Error!');
+              alert("Server Error!");
             } else if (responseJson.code === 401) {
-              alert('Sorry, this survey is expired!');
+              alert("Sorry, this survey is expired!");
             }
           })
           .catch(error => {
@@ -178,16 +194,17 @@ export default class SurveyQuestion extends React.Component {
     let answers = this.state.questions[
       this.state.currentQuestion - 1
     ].answers.map((answer, i) => {
-      let answerColor = '#DCDCDC',
-        answerTextColor = 'black';
-      if (i === this.state.selectedAnswer - 1) {
-        (answerColor = '#5ecccf'), (answerTextColor = 'white');
+      let answerColor = "#DCDCDC",
+        answerTextColor = "black";
+      if (answer.answerID === this.state.selectedAnswer) {
+        (answerColor = "#5ecccf"), (answerTextColor = "white");
       }
       return (
         <TouchableOpacity
           key={i}
           style={styles.questionAnswer}
-          onPress={() => this.selectAnswer(i + 1)}>
+          onPress={() => this.selectAnswer(answer.answerID)}
+        >
           <QuestionAnswer
             answerBody={answer.body}
             style={styles.questionAnswer}
@@ -201,11 +218,29 @@ export default class SurveyQuestion extends React.Component {
       <ScrollView style={styles.body}>
         <View style={styles.header}>
           <View style={styles.headerTitleContainer}>
-        <Text>clientID {this.state.clientID}</Text>
-
-            <Text style={styles.headerTitle}>
-              Q : {this.state.currentQuestion} / {this.state.questions.length}
+            <Text style={styles.headerTitleQuestionNumber}>
+              Q : {this.state.currentQuestion}
             </Text>
+            {this.state.nextQuestionButtonText === "NEXT" && (
+              <Text
+                style={[
+                  styles.headerTitleTotalQuesionsNumber,
+                  { color: "#ffffff80" }
+                ]}
+              >
+                /{this.state.questions.length}
+              </Text>
+            )}
+            {this.state.nextQuestionButtonText === "SUBMIT" && (
+              <Text
+                style={[
+                  styles.headerTitleTotalQuesionsNumber,
+                  { color: "white" }
+                ]}
+              >
+                / {this.state.questions.length}
+              </Text>
+            )}
           </View>
         </View>
         <View style={styles.main}>
@@ -219,14 +254,16 @@ export default class SurveyQuestion extends React.Component {
             <View style={styles.movingBetweenQuestionsContainer}>
               <TouchableOpacity
                 style={styles.backButton}
-                onPress={this.backButtonPressed}>
+                onPress={this.backButtonPressed}
+              >
                 <Text style={styles.movingBetweenQuestionsButtonText}>
                   BACK
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.nextButton}
-                onPress={this.nextButtonPressed}>
+                onPress={this.nextButtonPressed}
+              >
                 <Text style={styles.movingBetweenQuestionsButtonText}>
                   {this.state.nextQuestionButtonText}
                 </Text>
@@ -236,7 +273,8 @@ export default class SurveyQuestion extends React.Component {
         </View>
         <Modal
           isVisible={this.state.isModalVisible}
-          style={styles.popUpContainer}>
+          style={styles.popUpContainer}
+        >
           <View style={styles.popup}>
             <View style={styles.closeButtonRow}>
               <TouchableOpacity onPress={this.toggleModal}>
@@ -244,21 +282,25 @@ export default class SurveyQuestion extends React.Component {
               </TouchableOpacity>
             </View>
             <Text style={styles.popUpText}>
-              {' '}
-              THANKS FOR SUBMITTING{'\n'} THE SURVEY{' '}
+              {" "}
+              THANKS FOR SUBMITTING{"\n"} THE SURVEY{" "}
             </Text>
             <Image
               source={{
                 uri:
-                  'https://martielbeatty.com/wp-content/uploads/2018/03/green-tick-png-green-tick-icon-image-14141-1000.png',
+                  "https://martielbeatty.com/wp-content/uploads/2018/03/green-tick-png-green-tick-icon-image-14141-1000.png"
               }}
               style={styles.tickImage}
             />
             <Text style={styles.surveySubmitReward}> Your reward is</Text>
-            <Text style={styles.surveySubmitReward}> {this.state.surveyReward} senses</Text>
+            <Text style={styles.surveySubmitReward}>
+              {" "}
+              {this.state.surveyReward} senses
+            </Text>
             <TouchableOpacity
               onPress={this.toggleModal}
-              style={styles.hidePopupButton}>
+              style={styles.hidePopupButton}
+            >
               <Text style={styles.hidePopupButtonText}> Home </Text>
             </TouchableOpacity>
           </View>
@@ -268,134 +310,140 @@ export default class SurveyQuestion extends React.Component {
   }
 }
 
-const screenWidth = Math.round(Dimensions.get('window').width);
+const screenWidth = Math.round(Dimensions.get("window").width);
 const containerDimension = screenWidth / 3;
 
 const styles = StyleSheet.create({
   body: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%"
   },
   header: {
     height: screenWidth * 0.45,
-    backgroundColor: '#212121',
+    backgroundColor: "#212121"
   },
   headerTitleContainer: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  headerTitle: {
-    color: 'white',
-    fontSize: screenWidth * 0.07,
-    marginTop: screenWidth * 0.15,
+  headerTitleQuestionNumber: {
+    color: "white",
+    fontSize: screenWidth * 0.06,
+    marginTop: screenWidth * 0.15
+  },
+  headerTitleTotalQuesionsNumber: {
+    fontSize: screenWidth * 0.06,
+    marginTop: screenWidth * 0.15
   },
   main: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center"
   },
   answersContainer: {
     width: screenWidth * 0.9,
-    marginTop: screenWidth * 0.02,
+    marginTop: screenWidth * 0.02
   },
   questionAnswer: {
     marginTop: screenWidth * 0.04,
+    alignItems: "center"
   },
   movingBetweenQuestionsContainer: {
     height: screenWidth * 0.2,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: screenWidth * 0.04,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: screenWidth * 0.04
   },
   backButton: {
     height: screenWidth * 0.15,
     width: screenWidth * 0.3,
-    backgroundColor: '#A9A9A9',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#b4b4b4",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
-    elevation: 8,
+    elevation: 8
   },
   nextButton: {
     height: screenWidth * 0.15,
     width: screenWidth * 0.3,
-    backgroundColor: '#5ecccf',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#5ecccf",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
-    elevation: 8,
+    elevation: 8
   },
   movingBetweenQuestionsButtonText: {
-    color: 'white',
-    fontSize: screenWidth * 0.06,
+    color: "white",
+    fontSize: screenWidth * 0.05,
+    fontWeight: "bold"
   },
   popUpContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   popup: {
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     height: screenWidth * 0.9,
     width: screenWidth * 0.8,
-    alignItems: 'center',
+    alignItems: "center"
   },
   closeButtonRow: {
-    alignItems: 'flex-end',
-    width: '100%',
+    alignItems: "flex-end",
+    width: "100%"
   },
   closeButton: {
     marginRight: -(screenWidth * 0.02),
     marginTop: -(screenWidth * 0.025),
-    fontSize: screenWidth * 0.12,
+    fontSize: screenWidth * 0.12
   },
   popUpText: {
     fontSize: screenWidth * 0.04,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: -(screenWidth * 0.02),
-    textAlign: 'center',
+    textAlign: "center"
   },
   tickImage: {
     marginTop: screenWidth * 0.05,
     height: screenWidth * 0.25,
     width: screenWidth * 0.25,
-    borderRadius: 10,
+    borderRadius: 10
   },
   surveySubmitReward: {
     marginTop: screenWidth * 0.02,
     fontSize: screenWidth * 0.05,
-    fontWeight: 'bold',
+    fontWeight: "bold"
   },
   hidePopupButton: {
     height: screenWidth * 0.15,
-    width: '70%',
-    backgroundColor: '#5ecccf',
+    width: "70%",
+    backgroundColor: "#5ecccf",
     marginTop: screenWidth * 0.06,
     borderRadius: 5,
-    justifyContent: 'center',
-    marginBottom: screenWidth * 0.5,
+    justifyContent: "center",
+    marginBottom: screenWidth * 0.5
   },
   hidePopupButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: screenWidth * 0.06,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+    fontWeight: "bold",
+    textAlign: "center"
+  }
 });
