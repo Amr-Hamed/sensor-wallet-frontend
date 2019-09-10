@@ -22,13 +22,13 @@ export default class UserPlaceRedeem extends React.Component {
   };
 
   componentDidMount() {
-    fetch('http://demo8354958.mockable.io/logos')
+    fetch('http://demo8354958.mockable.io/userRedeemPlace')
       .then(res => {
         return res.json();
       })
       .then(myJson => {
         this.setState({
-          placesLogos: myJson.placesLogos,
+          placesLogos: myJson.places,
         });
       });
   }
@@ -38,18 +38,17 @@ export default class UserPlaceRedeem extends React.Component {
       let placeLogoRow = (
         <View style={styles.placesLogoRow} key={i}>
           <View style={styles.placeLogoConainer}>
-            <RedeemPlaceContainer placeLogo={this.state.placesLogos[i]} />
+            <RedeemPlaceContainer placeLogo={this.state.placesLogos[i].logo} />
           </View>
           <View style={styles.placeLogoConainer}>
-            <RedeemPlaceContainer placeLogo={this.state.placesLogos[i + 1]} />
+            <RedeemPlaceContainer placeLogo={this.state.placesLogos[i + 1].logo} />
           </View>
         </View>
       );
       placeLogoRows.push(placeLogoRow);
     }
-    console.log(placeLogoRows);
     return (
-      <View style={styles.body}>
+      <ScrollView style={styles.body}>
         <View style={styles.header}>
           <View style={styles.headerTitleContainer}>
             <Text style={styles.headerTitle}>You can use Senses in</Text>
@@ -57,45 +56,40 @@ export default class UserPlaceRedeem extends React.Component {
         </View>
         <View style={styles.main}>
           <View style={styles.dropDownContainer}>
-            <Dropdown style={styles.dropDown} />
+            {/* <Dropdown style={styles.dropDown} /> */}
           </View>
           <View style={styles.content}>
-            <ScrollView>{placeLogoRows}</ScrollView>
+            {placeLogoRows}
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
 
 const screenWidth = Math.round(Dimensions.get('window').width);
-const containerDimension = screenWidth / 3;
 
 const styles = StyleSheet.create({
   body: {
     width: '100%',
-    height: '100%',
+    // marginBottom : screenWidth*0.1,
   },
   header: {
-    height: '25%',
+    height: screenWidth*0.4,
     backgroundColor: '#212121',
   },
   headerTitleContainer: {
     width: '100%',
-    marginTop: '5%',
-    display: 'flex',
+    marginTop: screenWidth*0.15,
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle : {
     color : 'white',
-    fontSize : 19,
+    fontSize : screenWidth*0.05,
     fontWeight : 'bold'
   },
   main: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
     alignItems: 'center',
   },
   dropDownContainer: {

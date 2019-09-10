@@ -5,6 +5,10 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
+<<<<<<< HEAD
   "packagerPid": 20299,
+=======
+  "packagerPid": 11503,
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
   "webpackServerPort": null
 }

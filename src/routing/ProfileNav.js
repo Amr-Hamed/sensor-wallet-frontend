@@ -2,14 +2,15 @@
 import React, { Component } from 'react';
 //import react in our code.
 import {
-  Image,
   StyleSheet,
-  Text,
   Dimensions,
   TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+  Image,
+  Text
 } from 'react-native';
 import {
-  Content,
   Header,
   Left,
   Right,
@@ -17,6 +18,10 @@ import {
   Title,
   Thumbnail,
   Icon,
+  View,
+  Content,
+  CardItem , 
+  Card
 } from 'native-base';
 
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
@@ -30,11 +35,10 @@ import {
   createDrawerNavigator,
   createStackNavigator,
   createAppContainer,
-  createSwitchNavigator,
+  DrawerItems
 } from 'react-navigation';
 
 
-import POSHeader from '../components/POSHeader';
 
 import CompanyProfile from '../screens/CompanyProfile/CompanyProfile';
 import ServiceDetails from '../screens/ServiceDetails/ServiceDetails';
@@ -45,15 +49,12 @@ import UserPlaceRedeem from '../screens/UserPlaceRedeem/UserPlaceRedeem';
 import UserProfile from '../screens/UserProfile/UserProfile';
 import UserSurveyHomePage from '../screens/UserSurveyHomePage/UserSurveyHomePage';
 import UserQRCode from '../screens/UserQRCode/UserQRCode';
-import UserWallet from  '../screens/UserWallet/UserWallet';
-import ScanFriendQR from  '../screens/ScanFriendQR/ScanFriendQR';
-import TransactionConfirm from  '../screens/TransactionConfirm/TransactionConfirm';
-import Loading from  '../screens/Loading/Loading';
-import Test from '../screens/Test/Test' ; 
+import UserWallet from '../screens/UserWallet/UserWallet';
+import ScanFriendQR from '../screens/ScanFriendQR/ScanFriendQR';
+import TransactionConfirm from '../screens/TransactionConfirm/TransactionConfirm';
+import Loading from '../screens/Loading/Loading';
 
 
-
-import ProfileStack from '../routing/ProfileStack';
 
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
@@ -90,7 +91,10 @@ class NavigationDrawerStructure extends Component {
   }
 }
 
-const FirstActivity_StackNavigator = createStackNavigator({
+// const ProfileImage = await AsyncStorage.getItem('userProfileImg');
+
+
+const MainStack = createStackNavigator({
   Profile: {
     screen: UserProfile,
     navigationOptions: ({ navigation }) => ({
@@ -167,33 +171,33 @@ const FirstActivity_StackNavigator = createStackNavigator({
       },
       headerTintColor: '#fff',
     }),
-  
+
   },
   ScanFriendQR: {
     screen: ScanFriendQR,
     navigationOptions: ({ navigation }) => ({
       header: null
     }),
-  
+
   },
   TransactionConfirm: {
     screen: TransactionConfirm,
     navigationOptions: ({ navigation }) => ({
-      header : null
-     }),
-  
+      header: null
+    }),
+
   },
   Loading: {
     screen: Loading,
     navigationOptions: ({ navigation }) => ({
-     header : null
+      header: null
     }),
-  
+
   },
 });
 
 //For React Navigation 2.+ need to use StackNavigator instead createStackNavigator
-//const FirstActivity_StackNavigator = StackNavigator({
+//const MainStack = StackNavigator({
 
 //For React Navigation 3.+
 const Screen2_StackNavigator = createStackNavigator({
@@ -301,7 +305,7 @@ const Screen7_StackNavigator = createStackNavigator({
 
 
 //For React Navigation 2.+ need to use StackNavigator instead createStackNavigator
-//const FirstActivity_StackNavigator = StackNavigator({
+//const MainStack = StackNavigator({
 
 //For React Navigation 3.+
 const Screen8_StackNavigator = createStackNavigator({
@@ -319,93 +323,142 @@ const Screen8_StackNavigator = createStackNavigator({
   },
 });
 
-//For React Navigation 2.+ need to use DrawerNavigator instead createDrawerNavigator
-//const DrawerNavigatorExample = DrawerNavigator({
+
+
+// Cutomize Top of Drawer Navigator ( Side bar )
+const CustomDrawerComponent = (props) => (
+  <SafeAreaView style={{ flex: 1 }}>
+    <Header style={{ backgroundColor: '#333' }} />
+    <Content style={{ flexDirection: 'row' , borderWidth: 0 }}>
+          <CardItem style = {{borderWidth : 0, backgroundColor:'#333'}}>
+            <Left>
+              <Thumbnail
+                style={{ borderRadius: 0.125*WIDTH, width:0.25 * WIDTH , height : 0.25 * WIDTH }}
+                source={{
+                  uri: 'http://tawsah.com/uploads/2aeefea22dd585016711ecc1c381b9cd.jpg',
+                }}
+              />
+              <Body>
+                <Text style={styles.menuHead}> Mohamed Khaled </Text>
+                <Text style={styles.country}> Egypt </Text>
+              </Body>
+            </Left>
+            <Right>
+              <TouchableOpacity onPress={this.handleWalletClicked}>
+                <View style={styles.walletBtn}>
+                  <Thumbnail source={imgPathes.wallet} style={{ borderRadius: 10 }} />
+                </View>
+              </TouchableOpacity>
+            </Right>
+          </CardItem >
+          </Content>
+    <ScrollView>
+      <DrawerItems {...props} />
+    </ScrollView>
+  </SafeAreaView>
+
+)
+
+
+
 
 //For React Navigation 3.+
 const DrawerNavigatorExample = createDrawerNavigator({
   //Drawer Optons and indexing
   Screen1: {
     //Title
-    screen: FirstActivity_StackNavigator,
+    screen: MainStack,
     navigationOptions: {
       drawerLabel: 'User Profile',
+      drawerIcon: ({ tintColor }) => (<Icon name="home" style={{ fontSize: 24, color: tintColor }} />)
     },
   },
 
-  Screen2: {
-    //Title
-    screen: Screen2_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Service Details',
-    },
-  },
+  // Screen2: {
+  //   //Title
+  //   screen: Screen2_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Service Details',
+  //   },
+  // },
 
-  Screen3: {
-    //Title
-    screen: Screen3_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Survey Question',
-    },
-  },
+  // Screen3: {
+  //   //Title
+  //   screen: Screen3_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Survey Question',
+  //   },
+  // },
 
-  Screen4: {
-    //Title
-    screen: Screen4_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'User Login',
-    },
-  },
+  // Screen4: {
+  //   //Title
+  //   screen: Screen4_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'User Login',
+  //   },
+  // },
 
-  Screen5: {
-    //Title
-    screen: Screen5_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Places For Redeem',
-    },
-  },
+  // Screen5: {
+  //   //Title
+  //   screen: Screen5_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Places For Redeem',
+  //   },
+  // },
 
-  Screen6: {
-    //Title
-    screen: Screen6_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Company Profile',
-    },
-  },
+  // Screen6: {
+  //   //Title
+  //   screen: Screen6_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Company Profile',
+  //   },
+  // },
 
-  Screen7: {
-    //Title
-    screen: Screen7_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Search Survey',
-    },
-  },
+  // Screen7: {
+  //   //Title
+  //   screen: Screen7_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Search Survey',
+  //   },
+  // },
 
-  Screen8: {
-    //Title
-    screen: Screen8_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Survey Intro',
-    },
-  },
+  // Screen8: {
+  //   //Title
+  //   screen: Screen8_StackNavigator,
+  //   navigationOptions: {
+  //     drawerLabel: 'Survey Intro',
+  //   },
+  // },
 
-  Screen9: {
-    screen : UserWallet , 
-    navigationOptions: {
-      drawerLabel : 'Wallet'
-    } , 
-  Screen10:{
-    screen : Test , 
-    navigationOptions: {
-      drawerLabel : 'Test'
+  // Screen9: {
+  //   screen : UserWallet , 
+  //   navigationOptions: {
+  //     drawerLabel : 'Wallet'
+  //   } , 
+  // Screen10:{
+  //   screen : Test , 
+  //   navigationOptions: {
+  //     drawerLabel : 'Test'
+  //   }
+  // }
+  // }
+
+
+
+
+}, {
+    drawerPosition: 'left',
+    contentComponent: CustomDrawerComponent,
+    contentOptions: {
+      activeTintColor: '#45b3b5',
+      backgroundColor: '#333',
+      inactiveTintColor: 'white'
+    },
+    style: {
+      backgroundColor: '#333'
     }
-  }
-  }
 
-
-
-
-});
+  });
 
 //For React Navigation 2.+ need to export App only
 //export default DrawerNavigatorExample;
@@ -414,6 +467,15 @@ export default createAppContainer(DrawerNavigatorExample);
 
 const styles = StyleSheet.create({
   sensesLogo: { width: 30, height: 30, marginHorizontal: 20 },
+  menuHead: {
+    color:'#eee' , 
+    fontWeight : 'bold' , 
+    fontSize : 16
+  } , 
+  country: {
+    color : '#aedffe' , 
+
+  }
 });
 // <View style={{ flexDirection: 'row' }}>
 //         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>

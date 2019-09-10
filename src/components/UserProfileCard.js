@@ -26,15 +26,15 @@ const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
 export default class UserProfileCard extends Component {
 
-  handleWalletClicked = ()=>{
-    this.props.walletClcked() ; 
+  handleWalletClicked = () => {
+    this.props.walletClcked();
   }
 
   render() {
     return (
       <Content style={{ borderRaduis: 10 }} padder>
-        <Card style={{ borderRaduis: 10 }}>
-          <CardItem>
+        <Card style={styles.cardContainer}>
+          <CardItem style = {{borderTopRightRadius : 8  , borderTopLeftRadius: 8 }}>
             <Left>
               <Thumbnail
                 style={{ borderRadius: 10 }}
@@ -50,13 +50,13 @@ export default class UserProfileCard extends Component {
             <Right>
               <TouchableOpacity onPress={this.handleWalletClicked}>
                 <View style={styles.walletBtn}>
-                  <Thumbnail source={imgPathes.wallet} style={{ borderRadius: 10 }}  />
+                  <Thumbnail source={imgPathes.wallet} style={{ borderRadius: 10 }} />
                 </View>
               </TouchableOpacity>
             </Right>
-          </CardItem>
+          </CardItem >
 
-          <CardItem style={{ borderTopWidth: 1, borderColor: '#eee' }}>
+          <CardItem  footer style={{ borderBottomRightRadius : 8 , borderBottomLeftRadius : 8}}>
             <Left>
               <Icon active name="star" style={{ color: 'gold' }} />
               <Text>
@@ -78,7 +78,7 @@ export default class UserProfileCard extends Component {
                 {this.props.score}
               </Text>
             </Right>
-          </CardItem>
+          </CardItem >
         </Card>
       </Content>
     );
@@ -87,7 +87,24 @@ export default class UserProfileCard extends Component {
 
 const styles = StyleSheet.create({
   sensesLogo: { width: 20, height: 20, marginRight: 10 },
+  cardContainer: {
+    borderRadius: 10,
+    backgroundColor: "green",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
+
+   
+  },
+
   walletBtn: {
+    
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

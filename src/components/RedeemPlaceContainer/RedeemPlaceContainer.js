@@ -3,7 +3,7 @@ import { View, Image, StyleSheet } from 'react-native';
 
 export default class RedeemPlaceContainer extends React.Component {
   state = {
-    logoPath: this.props.placeLogo,
+    logoPath: this.props.placeLogo || 'https://www.fogratravel.pl/events/images/loader.gif',
   };
 
   componentWillReceiveProps(nextProps) {

@@ -14,22 +14,46 @@ import Modal from "react-native-modal";
 
 import { Icon } from "native-base";
 
+<<<<<<< HEAD
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBars, faBell } from "@fortawesome/free-solid-svg-icons";
 
 import POSHeader from "../../components/POSHeader";
 import SurveyQuestionContainer from "../../components/SurveyQuestionContainer/SurveyQuestionContainer";
 import QuestionAnswer from "../../components/QuestionAnswer/QuestionAnswer";
+=======
+import SurveyQuestionContainer from '../../components/SurveyQuestionContainer/SurveyQuestionContainer';
+import QuestionAnswer from '../../components/QuestionAnswer/QuestionAnswer';
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
 
 export default class SurveyQuestion extends React.Component {
   state = {
     isModalVisible: false,
-    questions: [],
+    questions: [
+      // {
+      //   questionID: 1,
+      //   surveyID: 1,
+      //   questionTypeID: 1,
+      //   body: 'Which browser are you using?',
+      //   creationDate: '2019-09-01T20:55:13.000Z',
+      //   answers: {
+      //     code: 200,
+      //     msg: 'successfully retreiving answers for question id 1',
+      //     data: [
+      //       { answerID: 1, body: 'Chrome' },
+      //       { answerID: 2, body: 'Safari' },
+      //       { answerID: 3, body: 'Firefox' },
+      //       { answerID: 4, body: 'Explorer' },
+      //     ],
+      //   },
+      // },
+    ],
     currentQuestion: 1,
     nextQuestionButtonText: "NEXT",
     answerColor: "#DCDCDC",
     selectedAnswer: -1,
     questionAnswers: [],
+<<<<<<< HEAD
     userID: this.props.navigation.getParam("userID"),
     clientID: this.props.navigation.getParam("clientID"),
     surveyID: this.props.navigation.getParam("surveyID"),
@@ -47,6 +71,20 @@ export default class SurveyQuestion extends React.Component {
     super(props);
     fetch(
       `https://bondnbeyond-apigateway.herokuapp.com/clients/${this.state.clientID}/surveys/${this.state.surveyID}`
+=======
+    userID: this.props.navigation.getParam('userID'),
+    clientID: this.props.navigation.getParam('clientID'),
+    surveyID: this.props.navigation.getParam('surveyID'),
+    surveyReward: this.props.navigation.getParam('surveyReward'),
+    clientName: this.props.navigation.getParam('clientName'),
+  };
+
+  componentDidMount() {
+    fetch(
+      `https://bondnbeyond-apigateway.herokuapp.com/clients/${
+        this.state.clientID
+      }/surveys/${this.state.surveyID}`
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
     )
       .then(res => res.json())
       .then(resJson => {
@@ -60,9 +98,19 @@ export default class SurveyQuestion extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
+<<<<<<< HEAD
   selectAnswer = answerID => {
     this.setState({
       selectedAnswer: answerID
+=======
+  goToProfile = () => {
+    this.props.navigation.navigate('Profile');
+  };
+
+  selectAnswer = answerID => {
+    this.setState({
+      selectedAnswer: answerID,
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
     });
   };
 
@@ -86,13 +134,17 @@ export default class SurveyQuestion extends React.Component {
         });
       }
     } else {
+<<<<<<< HEAD
       alert("No Previous questions!");
+=======
+      alert('No Previous questions!');
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
     }
   };
 
   nextButtonPressed = async () => {
     if (this.state.selectedAnswer === -1) {
-      return;
+      alert('Please select an answer to proceed!');
     } else {
       let currentQuestion = this.state.currentQuestion;
       let questionAnswers;
@@ -111,10 +163,18 @@ export default class SurveyQuestion extends React.Component {
         ...this.state.questionAnswers,
         {
           q: this.state.questions[this.state.currentQuestion - 1].questionID,
+<<<<<<< HEAD
           a: this.state.selectedAnswer
         }
       ];
       let selectedAnswer;
+=======
+          a: this.state.selectedAnswer,
+        },
+      ];
+      let selectedAnswer;
+
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
       if (this.state.currentQuestion < this.state.questions.length) {
         selectedAnswer = this.state.questionAnswers.find(answer => {
           return (
@@ -123,6 +183,10 @@ export default class SurveyQuestion extends React.Component {
           );
         });
       }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
       if (this.state.currentQuestion < this.state.questions.length) {
         if (selectedAnswer) {
           this.setState({
@@ -153,18 +217,32 @@ export default class SurveyQuestion extends React.Component {
           });
         }
       }
+<<<<<<< HEAD
       if (this.state.nextQuestionButtonText == "SUBMIT") {
         await this.setState({
           questionAnswers
         });
         fetch("https://bondnbeyond-apigateway.herokuapp.com/submitSurvey", {
           method: "POST",
+=======
+      if (this.state.nextQuestionButtonText == 'SUBMIT') {
+        await this.setState({
+          questionAnswers,
+        });
+        let day = new Date().getDate(); //Current Date
+        let month = new Date().getMonth(); //Current Month
+        let year = new Date().getFullYear(); //Current Year
+        let today = `${year}-${month}-${day}`;
+        fetch('https://bondnbeyond-apigateway.herokuapp.com/submitSurvey', {
+          method: 'POST',
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
             submitSurvey: {
+<<<<<<< HEAD
               clientName: this.state.clientName + "",
               surveyID: this.state.surveyID + "",
               clientID: this.state.clientID + "",
@@ -172,15 +250,33 @@ export default class SurveyQuestion extends React.Component {
               questions: this.state.questionAnswers
             }
           })
+=======
+              clientName: this.state.clientName + '',
+              surveyID: this.state.surveyID + '',
+              clientID: this.state.clientID + '',
+              endUserID: this.state.userID + '',
+              questions: this.state.questionAnswers,
+              submissionDate: today,
+            },
+          }),
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
         })
           .then(response => response.json())
           .then(responseJson => {
             if (responseJson.code === 200) {
               this.toggleModal();
             } else if (responseJson.code === 500) {
+<<<<<<< HEAD
               alert("Server Error!");
             } else if (responseJson.code === 401) {
               alert("Sorry, this survey is expired!");
+=======
+              alert('Server Error!');
+              this.goToProfile();
+            } else if (responseJson.code === 401) {
+              alert('Sorry, this survey is expired!');
+              this.goToProfile();
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
             }
           })
           .catch(error => {
@@ -191,20 +287,33 @@ export default class SurveyQuestion extends React.Component {
   };
 
   render() {
+    if(this.state.questions.length > 0 ){
     let answers = this.state.questions[
       this.state.currentQuestion - 1
+<<<<<<< HEAD
     ].answers.map((answer, i) => {
       let answerColor = "#DCDCDC",
         answerTextColor = "black";
       if (answer.answerID === this.state.selectedAnswer) {
         (answerColor = "#5ecccf"), (answerTextColor = "white");
+=======
+    ].answers.data.map((answer, i) => {
+      let answerColor = '#DCDCDC',
+        answerTextColor = 'black';
+      if (answer.answerID == this.state.selectedAnswer) {
+        (answerColor = '#5ecccf'), (answerTextColor = 'white');
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
       }
       return (
         <TouchableOpacity
-          key={i}
+          key={answer.answerID}
           style={styles.questionAnswer}
+<<<<<<< HEAD
           onPress={() => this.selectAnswer(answer.answerID)}
         >
+=======
+          onPress={() => this.selectAnswer(answer.answerID)}>
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
           <QuestionAnswer
             answerBody={answer.body}
             style={styles.questionAnswer}
@@ -218,8 +327,13 @@ export default class SurveyQuestion extends React.Component {
       <ScrollView style={styles.body}>
         <View style={styles.header}>
           <View style={styles.headerTitleContainer}>
+<<<<<<< HEAD
             <Text style={styles.headerTitleQuestionNumber}>
               Q : {this.state.currentQuestion}
+=======
+            <Text style={styles.headerTitle}>
+              Q : {this.state.currentQuestion} / {this.state.questions.length}
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
             </Text>
             {this.state.nextQuestionButtonText === "NEXT" && (
               <Text
@@ -282,8 +396,12 @@ export default class SurveyQuestion extends React.Component {
               </TouchableOpacity>
             </View>
             <Text style={styles.popUpText}>
+<<<<<<< HEAD
               {" "}
               THANKS FOR SUBMITTING{"\n"} THE SURVEY{" "}
+=======
+              THANKS FOR SUBMITTING{'\n'} THE SURVEY
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
             </Text>
             <Image
               source={{
@@ -294,6 +412,7 @@ export default class SurveyQuestion extends React.Component {
             />
             <Text style={styles.surveySubmitReward}> Your reward is</Text>
             <Text style={styles.surveySubmitReward}>
+<<<<<<< HEAD
               {" "}
               {this.state.surveyReward} senses
             </Text>
@@ -301,12 +420,23 @@ export default class SurveyQuestion extends React.Component {
               onPress={this.toggleModal}
               style={styles.hidePopupButton}
             >
+=======
+              {this.state.surveyReward} senses
+            </Text>
+            <TouchableOpacity
+              onPress={this.goToProfile}
+              style={styles.hidePopupButton}>
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
               <Text style={styles.hidePopupButtonText}> Home </Text>
             </TouchableOpacity>
           </View>
         </Modal>
       </ScrollView>
-    );
+    )}else{
+      return(
+        <View></View>
+      )
+    }
   }
 }
 
@@ -328,6 +458,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+<<<<<<< HEAD
   headerTitleQuestionNumber: {
     color: "white",
     fontSize: screenWidth * 0.06,
@@ -336,6 +467,12 @@ const styles = StyleSheet.create({
   headerTitleTotalQuesionsNumber: {
     fontSize: screenWidth * 0.06,
     marginTop: screenWidth * 0.15
+=======
+  headerTitle: {
+    color: 'white',
+    fontSize: screenWidth * 0.07,
+    marginTop: screenWidth * 0.1,
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
   },
   main: {
     width: "100%",
@@ -443,7 +580,14 @@ const styles = StyleSheet.create({
   hidePopupButtonText: {
     color: "white",
     fontSize: screenWidth * 0.06,
+<<<<<<< HEAD
     fontWeight: "bold",
     textAlign: "center"
   }
 });
+=======
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307

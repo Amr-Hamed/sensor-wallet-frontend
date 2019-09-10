@@ -12,10 +12,9 @@ import {
 } from 'native-base';
 // import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const imgPathes = {
-  senses: require('../../assets/images/sensesLogo.png'),
-};
+const defaultSenses = "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1280px-Flag_of_the_United_States.svg.png" ; 
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
+const loadingImgURL = 'https://www.fogratravel.pl/events/images/loader.gif';
 
 export default class SurveySlideItem extends Component {
 
@@ -25,7 +24,7 @@ export default class SurveySlideItem extends Component {
 
   handleClick = () => {
     // fire navigation method in user profile screen with following props
-    this.props.pressed(this.props.surveyID ,this.props.title, this.props.clientName,this.props.brandLogo,this.props.clientID ,  this.props.cover, this.props.points, this.props.time , this.props.description , this.props.userID );
+    this.props.pressed(this.props.surveyID ,this.props.title, this.props.clientName,this.props.brandLogo,this.props.clientID ,  this.props.cover, this.props.points, this.props.time , this.props.description , this.props.userID  , this.props.currencyData);
   }
 
   render() {
@@ -39,7 +38,7 @@ export default class SurveySlideItem extends Component {
               <Image
                 source={{
                   uri:
-                    this.props.cover,
+                    this.props.cover || loadingImgURL,
                 }}
                 style={{
                   height: 200,
@@ -50,13 +49,13 @@ export default class SurveySlideItem extends Component {
                 }}
               />
             </CardItem>
-            <CardItem>
+            <CardItem footer style = {{ borderBottomRightRadius : 20 , borderBottomLeftRadius : 20}}>
               <View style={{}}>
                 <Text note style={styles.brandName}>{this.props.clientName}</Text>
-                <Text style={styles.title}> {this.props.title} </Text>
+                <Text style={styles.title}>{this.props.title}</Text>
                 <View style={{ flexDirection: 'row', width: 0.3 * WIDTH }}>
                   <Icon name="time" style={{ color: 'grey', marginRight: 2 }} />
-                  <Text style={styles.time}>{this.props.time} min</Text>
+                  <Text style={styles.time}>{this.props.time} min </Text>
                 </View>
               </View>
               <Body>
@@ -65,14 +64,14 @@ export default class SurveySlideItem extends Component {
 
               <Right style={{ flexDirection: 'column', alignItems: 'baseline', paddingTop: -0.1 * WIDTH }} >
                 <View style={{ flexDirection: 'row' }}>
-                  <Thumbnail source={imgPathes.senses} style={styles.sensesLogo} />
+                  <Thumbnail source={{uri : this.props.currencyData.imageURL || defaultSenses}} style={styles.sensesLogo} />
                   <Text
                     style={{
                       color: '#45b3b5',
                       fontWeight: 'bold',
                       marginRight: 4,
                     }}>
-                    {this.props.points}
+                    {this.props.points} 
                   </Text>
                 </View>
               </Right>

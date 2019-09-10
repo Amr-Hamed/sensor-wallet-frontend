@@ -62,8 +62,8 @@ handleThumbClick = () => {
                 <Text style={{ marginTop: 5 }}>{this.props.duration} min</Text>
               </Body>
               <Right style={{ flexDirection: 'row' }} >
-                <Thumbnail source={imgPathes.senses} style={styles.sensesLogo} />
-                <Text style={{ color: '#137b08' }}>{this.props.points}</Text>
+                <Thumbnail source={{uri : this.props.currencyData.imageURL}} style={styles.sensesLogo} />
+                <Text style={{ color: '#137b08' }}>{this.props.points} {this.props.currencyData.symbol}</Text>
               </Right>
             </CardItem>
           </Card>

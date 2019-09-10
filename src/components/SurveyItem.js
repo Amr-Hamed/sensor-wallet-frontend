@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, View, Dimensions } from 'react-native';
-import { Content, Icon, Thumbnail, Body, Left } from 'native-base';
+import { Content, Icon, Thumbnail, Body, Left , Right } from 'native-base';
 
 import POSButton from '../components/POSButton';
 
@@ -15,7 +15,7 @@ export default class SurveyItem extends Component {
   handleClick = () => {
     // fire navigation method in user profile screen with following props
     // this.props.pressed(this.props.title, this.props.clientName,this.props.brandLogo,this.props.brandID , this.props.cover, this.props.points, this.props.time);
-    this.props.pressed(this.props.surveyID ,this.props.title, this.props.clientName,this.props.brandLogo,this.props.clientID , this.props.cover, this.props.points, this.props.time , this.props.description , this.props.userID );
+    this.props.pressed(this.props.surveyID ,this.props.title, this.props.clientName,this.props.brandLogo,this.props.clientID , this.props.cover, this.props.points, this.props.time , this.props.description , this.props.userID , this.props.currencyData );
   }
 
 
@@ -44,27 +44,27 @@ export default class SurveyItem extends Component {
             <Icon name="time" style={{ color: 'grey' }} />
             <View style={{ flexDirection: 'row', marginTop: 4 }}>
               <Text note> {this.props.time} min |</Text>
-              <Thumbnail source={imgPathes.senses} style={styles.sensesLogo} />
+              <Thumbnail source={{uri : this.props.currencyData.imageURL}} style={styles.sensesLogo} />
               <Text
                 style={{
                   color: '#45b3b5',
                   fontWeight: 'bold',
                   marginRight: 7,
                 }}>
-                {this.props.points}
+                {this.props.points} {this.props.currencyData.symbol}
               </Text>
             </View>
           </View>
         </View>
         <Body />
-        <Left>
+        <Right>
           <POSButton
             title="GO"
             style={{ borderRadius: 10, width: 0.15 * WIDTH }}
             height={0.15 * WIDTH} 
             pressed = {this.handleClick}
           />
-        </Left>
+        </Right>
       </View>
     );
   }

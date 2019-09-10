@@ -10,7 +10,7 @@ import {
     KeyboardAvoidingView,
 } from 'react-native';
 
-import { Container, Header, Content, Card, CardItem, Icon,  Body, Spinner } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Icon, Body, Spinner } from 'native-base';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
@@ -18,6 +18,10 @@ import Modal from 'react-native-modal';
 
 import { faMoneyBillWave } from '@fortawesome/free-solid-svg-icons';
 import POSButton from '../../components/POSButton';
+import { AsyncStorage } from 'react-native';
+
+
+
 
 // const coreURL = "https://hookb.in/8PMgyqQ9PNhXgXYxO6mP" ; 
 const coreURL = "https://bondnbeyond-apigateway.herokuapp.com/transaction";
@@ -34,17 +38,55 @@ export default class TransactionConfirm extends Component {
         errorMessage: '',
         error: false,
         transactionSuccess: false,
-        isModalVisible: false
+        isModalVisible: false , 
+        userName :''
     };
+
+    componentDidMount = async () => {
+        await AsyncStorage.getItem('userName', (err, userName) => {
+    
+        
+          this.setState({
+            userName
+          })
+        })
+      }
 
     goToProfile = () => {
         // this.props.goToProfile();
-        this.props.navigation.navigate('Profile', { 'showSuccessTrans': true })
+        this.props.navigation.navigate('Profile')
     };
 
     toggleModal = () => {
         this.setState({ isModalVisible: !this.state.isModalVisible });
     };
+
+
+    showToken = token => {
+        alert(token);
+    }
+    // Send Notification
+    sendNotification = token => {
+
+        token = token.replace(/\s/g, '');
+        let url = 'https://exp.host/--/api/v2/push/send';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify([
+                {
+                    to: token,
+                    sound: 'default',
+                    body: `Hello , ${this.state.userName} send ${this.state.amount} senses to you`,
+                    
+                },
+            ]),
+        });
+    }
+
 
     makeTransaction = () => {
         // check if amount entered iszy
@@ -77,17 +119,18 @@ export default class TransactionConfirm extends Component {
                             transactionSuccess: true
                         })
                         // this.goToProfile();
-
+                        this.sendNotification(this.state.transactionInfo.token)
                     }
                     else {
                         this.setState({
                             isModalVisible: true,
                             disableBtns: false,
-                            errorMessage: res.msg , 
-                            showActivity : false
-                        })
+                            errorMessage: res.msg,
+                            showActivity: false
+                        });
                     }
                 })
+            
         } else {
             this.setState({
                 ValidAmount: false
@@ -138,6 +181,8 @@ export default class TransactionConfirm extends Component {
 
                             <CardItem header>
                                 <Text style={styles.popUpText}> You Will make a Transaction with </Text>
+                                
+
                                 <Text style={{ fontWeight: 'bold', color: '#45b3b5', alignSelf: 'center', fontSize: 14 }}>{this.state.transactionInfo.receiverName}  </Text>
                             </CardItem>
                             <CardItem>

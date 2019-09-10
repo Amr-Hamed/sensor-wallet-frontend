@@ -48,6 +48,7 @@ export default class UserTransactions extends React.Component {
   };
 
   render() {
+<<<<<<< HEAD
     let transactions = this.state.displayed.map((transaction, i) => {
       return (
         <UserTransaction
@@ -75,6 +76,21 @@ export default class UserTransactions extends React.Component {
         <View style={styles.transactions}>{transactions}</View>
       </View>
     );
+=======
+    if (this.props.transactions.length !== 0 ){
+
+      let transactions = this.props.transactions.map((transaction, i) => {
+        return <UserTransaction data={transaction} userName = {this.props.userName} userImg = {this.props.userImg} />;
+      });
+      return <View style={styles.transactions}>{transactions}</View>;
+    } else {
+      return(
+        <View>
+          <Text style = {{alignSelf : 'center'}}>Sorry You don't have any Transactions</Text>
+        </View>
+      )
+    }
+>>>>>>> e5c0da887c62527f77f9d2ffc6ad8cf7dc0dd307
   }
 }
 
