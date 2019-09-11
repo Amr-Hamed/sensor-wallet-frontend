@@ -1,64 +1,70 @@
-import React from 'react';
-import { View, Text, Image, Dimensions, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, Image, Dimensions, StyleSheet } from "react-native";
 
-import { Icon } from 'native-base';
+import { Icon } from "native-base";
 
 export default class UserTransaction extends React.Component {
   render() {
+    let transactionDate = this.props.data.transactionDate.split("T");
+    let transactionDay = transactionDate[0];
+    let transactionTime = transactionDate[1].split(".")[0];
     return (
       <View>
         {this.props.data.senderUserName == this.props.userName && (
           <View style={styles.main}>
-            <View style={styles.sender}>
-              <View style={styles.senderLabelContainer}>
-                <Text style={styles.senderLabel}> Sender </Text>
+            <View style={styles.user}>
+              <View style={styles.userLabelContainer}>
+                <Text style={styles.userLabel}>Sender</Text>
               </View>
-              <Image
-                source={{
-                  uri: this.props.data.senderImage,
-                }}
-                style={styles.senderImage}
-              />
-              <View style={styles.senderNameContainer}>
-                <Text style={styles.senderName}>
+              <View style={styles.userImageContainer}>
+                <Image
+                  source={{
+                    uri: this.props.data.senderImage
+                  }}
+                  style={styles.userImage}
+                />
+              </View>
+              <View style={styles.userNameContainer}>
+                <Text style={styles.userName}>
                   {this.props.data.senderUserName}
                 </Text>
               </View>
             </View>
             <View style={styles.transaction}>
               <View style={styles.transactionData}>
-                <Text style={[styles.amount, { color: '#c93521' }]}>
-                  {this.props.data.amount}
-                </Text>
-                <Text style={[styles.currency, { color: '#c93521' }]}>
-                  {this.props.data.name}
+                <Text style={[styles.amountAndCurrency, { color: "#c93521" }]}>
+                  {this.props.data.amount} {this.props.data.name}
                 </Text>
               </View>
               <View style={styles.arrowImageContainer}>
                 <Image
                   source={{
                     uri:
-                      'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.15752-9/69469147_738304556627467_8634936353089388544_n.png?_nc_cat=100&_nc_oc=AQkVd_rnlf5zf80BCgtMAThTaNvWx2e_pWTGzSvriO4IgYpzNUtsEIEVKJxkqYVqQTc&_nc_ht=scontent-hbe1-1.xx&oh=107bb1703b3be56ac03c30580d393baf&oe=5DCF2F18'
+                      "https://scontent-hbe1-1.xx.fbcdn.net/v/t1.15752-9/69469147_738304556627467_8634936353089388544_n.png?_nc_cat=100&_nc_oc=AQkVd_rnlf5zf80BCgtMAThTaNvWx2e_pWTGzSvriO4IgYpzNUtsEIEVKJxkqYVqQTc&_nc_ht=scontent-hbe1-1.xx&oh=107bb1703b3be56ac03c30580d393baf&oe=5DCF2F18"
                   }}
                   style={styles.transactionArrow}
                 />
               </View>
               <View style={styles.dateContainer}>
-                <Text style={styles.date}> {this.props.data.transactionDate} </Text>
+                <Text style={styles.date}>
+                  {transactionDay} {transactionTime}
+                </Text>
               </View>
             </View>
-            <View style={styles.reciever}>
-              <View style={styles.recieverLabelContainer}>
-                <Text style={styles.recieverLabel}> Reciever </Text>
+            <View style={styles.user}>
+              <View style={styles.userLabelContainer}>
+                <Text style={styles.userLabel}>Reciever</Text>
               </View>
-              <Image
-                source={{
-                  uri: this.props.data.receiverImage
-                }}
-                style={styles.recieverImage}
-              />
-              <View style={styles.recieverNameContainer}>
-                <Text style={styles.recieverName}>
+              <View style={styles.userImageContainer}>
+                <Image
+                  source={{
+                    uri: this.props.data.receiverImage
+                  }}
+                  style={styles.userImage}
+                />
+              </View>
+              <View style={styles.userNameContainer}>
+                <Text style={styles.userName}>
                   {this.props.data.receiverUserName}
                 </Text>
               </View>
@@ -67,54 +73,57 @@ export default class UserTransaction extends React.Component {
         )}
         {this.props.data.senderUserName != this.props.userName && (
           <View style={styles.main}>
-            <View style={styles.reciever}>
-              <View style={styles.recieverLabelContainer}>
-                <Text style={styles.recieverLabel}> Reciever </Text>
+            <View style={styles.user}>
+              <View style={styles.userLabelContainer}>
+                <Text style={styles.userLabel}>Reciever</Text>
               </View>
-              <Image
-                source={{
-                  uri: this.props.data.receiverImage,
-                }}
-                style={styles.recieverImage}
-              />
-              <Text style={styles.recieverName}>
+              <View style={styles.userImageContainer}>
+                <Image
+                  source={{
+                    uri: this.props.data.receiverImage
+                  }}
+                  style={styles.userImage}
+                />
+              </View>
+              <Text style={styles.userName}>
                 {this.props.data.receiverUserName}
               </Text>
             </View>
             <View style={styles.transaction}>
               <View style={styles.transactionData}>
-                <Text style={[styles.amount, { color: '#70ad47' }]}>
-                  {this.props.data.amount}
-                </Text>
-                <Text style={[styles.currency, { color: '#70ad47' }]}>
-                  {this.props.data.name}
+                <Text style={[styles.amountAndCurrency, { color: "#5eae33" }]}>
+                  {this.props.data.amount} {this.props.data.name}
                 </Text>
               </View>
               <View style={styles.arrowImageContainer}>
                 <Image
                   source={{
                     uri:
-                      'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.15752-9/68809578_439127240029969_8469208112190980096_n.png?_nc_cat=102&_nc_oc=AQmT8U5kwPU74IE5kjSmD7oHK9GshRUr96fMC6tU4yatA4Jc5stBx88_rIlBSBXra2c&_nc_ht=scontent-hbe1-1.xx&oh=61fcbe18d357ec37626c87729d564c6b&oe=5E087F5F',
+                      "https://scontent-hbe1-1.xx.fbcdn.net/v/t1.15752-9/68809578_439127240029969_8469208112190980096_n.png?_nc_cat=102&_nc_oc=AQmT8U5kwPU74IE5kjSmD7oHK9GshRUr96fMC6tU4yatA4Jc5stBx88_rIlBSBXra2c&_nc_ht=scontent-hbe1-1.xx&oh=61fcbe18d357ec37626c87729d564c6b&oe=5E087F5F"
                   }}
                   style={styles.transactionArrow}
                 />
               </View>
               <View style={styles.dateContainer}>
-                <Text style={styles.date}> {this.props.data.transactionDate} </Text>
+                <Text style={styles.date}>
+                  {transactionDay} {transactionTime}
+                </Text>
               </View>
             </View>
-            <View style={styles.sender}>
-              <View style={styles.senderLabelContainer}>
-                <Text style={styles.senderLabel}> Sender </Text>
+            <View style={styles.user}>
+              <View style={styles.userLabelContainer}>
+                <Text style={styles.userLabel}> Sender </Text>
               </View>
-              <Image
-                source={{
-                  uri: this.props.data.senderImage,
-                }}
-                style={styles.senderImage}
-              />
-              <View style={styles.senderNameContainer}>
-                <Text style={styles.senderName}>
+              <View style={styles.userImageContainer}>
+                <Image
+                  source={{
+                    uri: this.props.data.senderImage
+                  }}
+                  style={styles.userImage}
+                />
+              </View>
+              <View style={styles.userNameContainer}>
+                <Text style={styles.userName}>
                   {this.props.data.senderUserName}
                 </Text>
               </View>
@@ -126,110 +135,94 @@ export default class UserTransaction extends React.Component {
   }
 }
 
-let width = Dimensions.get('window').width;
+let width = Dimensions.get("window").width;
 let styles = StyleSheet.create({
   main: {
     width: width * 0.9,
-    height: width * 0.35,
-    flexDirection: 'row',
-    alignItems: 'center',
+    height: width * 0.23,
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: width * 0.02,
-    backgroundColor: 'white',
-    shadowColor: '#000',
+    backgroundColor: "white",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
-    borderRadius: 10,
+    borderRadius: 5
   },
-  sender: {
-    height: '100%',
+  user: {
+    height: "100%",
     width: width * 0.25,
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: "space-around",
+    alignItems: "center"
   },
-  senderLabelContainer: {
+  userLabelContainer: {
     width: width * 0.25,
-    height: '20%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "30%",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  senderLabel: {
-    fontSize: width * 0.04,
+  userLabel: {
+    fontSize: width * 0.03
   },
-  senderImage: {
-    height: width * 0.2,
-    width: width * 0.2,
-    borderRadius: width * 0.1,
+  userImageContainer: {
+    width: "100%",
+    height: "30%",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  senderName: {
-    fontSize: width * 0.04,
-    textAlign: 'center',
-    marginTop: width * 0.03,
+  userImage: {
+    height: width * 0.1,
+    width: width * 0.1,
+    borderRadius: width * 0.05
+  },
+  userNameContainer: {
+    height: "30%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  userName: {
+    fontSize: width * 0.03,
+    textAlign: "center"
   },
   transaction: {
-    height: '100%',
+    height: "100%",
     width: width * 0.4,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    alignItems: "center",
+    justifyContent: "space-around"
   },
   transactionData: {
-    height: '40%',
-    width: '100%',
-    justifyContent: 'center',
+    height: "30%",
+    width: "100%",
+    justifyContent: "center"
   },
-  amount: {
-    textAlign: 'center',
-    fontSize: width * 0.04,
-  },
-  currency: {
-    textAlign: 'center',
-    fontSize: width * 0.04,
+  amountAndCurrency: {
+    textAlign: "center",
+    fontSize: width * 0.03
   },
   arrowImageContainer: {
-    height: '20%',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "30%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
   },
   transactionArrow: {
-    height: width * 0.05,
-    width: '90%',
+    height: "50%",
+    width: "50%",
+    resizeMode: "contain"
   },
   dateContainer: {
-    height: '40%',
-    width: '100%',
-    justifyContent: 'center',
+    height: "30%",
+    width: "100%",
+    justifyContent: "center"
   },
   date: {
-    fontSize: width * 0.04,
-    textAlign: 'center',
-  },
-  reciever: {
-    height: '100%',
-    width: width * 0.25,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  recieverLabelContainer: {
-    width: width * 0.25,
-    height: '20%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  recieverLabel: {
-    fontSize: width * 0.04,
-  },
-  recieverImage: {
-    height: width * 0.2,
-    width: width * 0.2,
-    borderRadius: width * 0.1,
-  },
-  recieverName: {
-    textAlign: 'center',
-    fontSize: width * 0.04,
-  },
+    fontSize: width * 0.03,
+    textAlign: "center"
+  }
 });

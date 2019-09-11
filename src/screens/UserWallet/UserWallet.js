@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -6,39 +6,43 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  StyleSheet,
-} from 'react-native';
+  StyleSheet
+} from "react-native";
 
-import { Spinner } from 'native-base';
+import { Spinner } from "native-base";
 
-import WalletCurrencies from '../../components/WalletCurrencies/WalletCurrencies';
-import UserTransactions from '../../components/UserTransactions/UserTransactions';
+import GestureRecognizer, {
+  swipeDirections
+} from "react-native-swipe-gestures";
+
+import WalletCurrencies from "../../components/WalletCurrencies/WalletCurrencies";
+import UserTransactions from "../../components/UserTransactions/UserTransactions";
 
 export default class UserWallet extends React.Component {
   state = {
-    selectedTab: 'wallet',
+    selectedTab: "wallet",
     accountBalance: 20000,
     lastIncome: 1000,
     lastExpenses: 500,
     currencies: [],
     transactions: [],
-    userID: this.props.navigation.getParam('userID'),
-    walletID: this.props.navigation.getParam('walletID'),
-    userName: this.props.navigation.getParam('userName'),
-    userImg: this.props.navigation.getParam('userImg'),
+    userID: this.props.navigation.getParam("userID"),
+    walletID: this.props.navigation.getParam("walletID"),
+    userName: this.props.navigation.getParam("userName"),
+    userImg: this.props.navigation.getParam("userImg"),
     showActivity: true
-
   };
 
   constructor(props) {
     super(props);
   }
 
-
   componentDidMount = () => {
     let currencies = [],
       transactions = [];
-    fetch(`https://bondnbeyond-apigateway.herokuapp.com/enduser/${this.state.userID}/balance`)
+    fetch(
+      `https://bondnbeyond-apigateway.herokuapp.com/enduser/${this.state.userID}/balance`
+    )
       .then(res => res.json())
       .then(resJson => {
         currencies = resJson.data;
@@ -54,21 +58,42 @@ export default class UserWallet extends React.Component {
       .then(resJson => {
         transactions = resJson.data;
         this.setState({
-          transactions,
+          transactions
         });
       });
   };
 
   selectTab = selectedTab => {
     this.setState({
-      selectedTab,
+      selectedTab
     });
   };
+
+  onSwipe(gestureName) {
+    const { SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+    switch (gestureName) {
+      case SWIPE_LEFT:
+        if (this.state.selectedTab == "wallet") {
+          this.setState({ selectedTab: "transactions" });
+        } else if (this.state.selectedTab == "transactions") {
+          this.setState({ selectedTab: "rewards" });
+        }
+        break;
+      case SWIPE_RIGHT:
+        if (this.state.selectedTab == "rewards") {
+          this.setState({ selectedTab: "transactions" });
+        } else if (this.state.selectedTab == "transactions") {
+          this.setState({ selectedTab: "wallet" });
+        }
+        break;
+    }
+  }
+
   render() {
     return (
       <ScrollView style={styles.body}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}> Account Balance </Text>
+          <Text style={styles.headerTitle}>Account Balance</Text>
           <Text style={styles.headerTitle}>
             {this.state.accountBalance} L.E.
           </Text>
@@ -83,7 +108,7 @@ export default class UserWallet extends React.Component {
             </View>
             <View style={styles.walletLastIncomeContainer}>
               <Text style={styles.walletLastIncomeLabel}>
-                {'\u2022'} Last income
+                {"\u2022"} Last income
               </Text>
               <Text style={styles.walletLastIncomeAmount}>
                 {this.state.lastIncome} L.E.
@@ -91,34 +116,104 @@ export default class UserWallet extends React.Component {
             </View>
             <View style={styles.walletLastExpensesContainer}>
               <Text style={styles.walletLastExpensesLabel}>
-                {'\u2022'} Last expenses
+                {"\u2022"} Last expenses
               </Text>
               <Text style={styles.walletLastExpensesAmount}>
                 {this.state.lastExpenses} L.E.
               </Text>
             </View>
           </View>
-          <View style={styles.tabsContainer}>
-            <TouchableOpacity
-              onPress={() => this.selectTab('wallet')}
-              style={styles.tab}>
-              <Text style={styles.tabText}> Wallet </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.selectTab('transactions')}
-              style={styles.tab}>
-              <Text style={styles.tabText}> Transactions </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.container, styles.horizontal]}>
-            <Spinner size="large" color="#45b3b5" style={{ display: this.state.showActivity ? 'flex' : 'none' }} />
-          </View>
-          {this.state.selectedTab === 'wallet' && (
-            <WalletCurrencies currencies={this.state.currencies} />
+          {this.state.selectedTab === "wallet" && (
+            <View style={styles.tabsContainer}>
+              <TouchableOpacity
+                onPress={() => this.selectTab("wallet")}
+                style={styles.selectedTab}
+              >
+                <Text style={styles.selectedTabText}>Wallet</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.selectTab("transactions")}
+                style={styles.tab}
+              >
+                <Text style={styles.tabText}>Transactions</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.selectTab("rewards")}
+                style={styles.tab}
+              >
+                <Text style={styles.tabText}>Rewards</Text>
+              </TouchableOpacity>
+            </View>
           )}
-          {this.state.selectedTab === 'transactions' && (
-            <UserTransactions transactions={this.state.transactions} userImg={this.state.userImg} userName={this.state.userName} />
+          {this.state.selectedTab === "transactions" && (
+            <View style={styles.tabsContainer}>
+              <TouchableOpacity
+                onPress={() => this.selectTab("wallet")}
+                style={styles.tab}
+              >
+                <Text style={styles.tabText}>Wallet</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.selectTab("transactions")}
+                style={styles.selectedTab}
+              >
+                <Text style={styles.selectedTabText}>Transactions</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.selectTab("rewards")}
+                style={styles.tab}
+              >
+                <Text style={styles.tabText}>Rewards</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {this.state.selectedTab === "rewards" && (
+            <View style={styles.tabsContainer}>
+              <TouchableOpacity
+                onPress={() => this.selectTab("wallet")}
+                style={styles.tab}
+              >
+                <Text style={styles.tabText}>Wallet</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.selectTab("transactions")}
+                style={styles.tab}
+              >
+                <Text style={styles.tabText}>Transactions</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.selectTab("rewards")}
+                style={styles.selectedTab}
+              >
+                <Text style={styles.selectedTabText}>Rewards</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {this.state.selectedTab === "wallet" && (
+            <GestureRecognizer onSwipe={direction => this.onSwipe(direction)}>
+              <WalletCurrencies currencies={this.state.currencies} userName={this.state.userName} />
+            </GestureRecognizer>
+          )}
+          {this.state.selectedTab === "transactions" && (
+            <GestureRecognizer onSwipe={direction => this.onSwipe(direction)}>
+              <UserTransactions transactions={this.state.transactions} userName={this.state.userName}/>
+            </GestureRecognizer>
+          )}
+          {this.state.selectedTab === "rewards" && (
+            <GestureRecognizer onSwipe={direction => this.onSwipe(direction)}>
+              <Text
+                style={{
+                  height: 100,
+                  width: width,
+                  textAlign: "center",
+                  backgroundColor: "#eee",
+                  padding: 20
+                }}
+              >
+                Feature Coming Soon
+              </Text>
+            </GestureRecognizer>
           )}
         </View>
       </ScrollView>
@@ -126,122 +221,124 @@ export default class UserWallet extends React.Component {
   }
 }
 
-let width = Dimensions.get('window').width;
+let width = Dimensions.get("window").width;
 
 let styles = StyleSheet.create({
   container: {
     flex: 1,
     opacity: 0.8,
-    resizeMode: 'contain',
+    resizeMode: "contain"
   },
   horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     padding: 10
   },
   body: {
-    width: width,
+    width: width
   },
   header: {
     width: width,
-    height: width * 0.6,
-    backgroundColor: '#212121',
+    height: width * 0.55,
+    backgroundColor: "#212121",
     borderBottomRightRadius: 50,
     borderBottomLeftRadius: 50,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center"
   },
   headerTitle: {
-    color: 'white',
-    fontSize: width * 0.05,
-    fontWeight: 'bold',
-    marginTop: width * 0.15,
+    color: "white",
+    fontSize: width * 0.04,
+    fontWeight: "bold",
+    marginTop: width * 0.15
   },
   main: {
-    alignItems: 'center',
+    alignItems: "center"
   },
   walletMainInfo: {
-    height: width * 0.35,
+    height: width * 0.3,
     width: width * 0.9,
-    backgroundColor: 'white',
-    shadowColor: '#000',
+    backgroundColor: "white",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
     borderRadius: 10,
-    marginTop: width * -0.175,
-    alignItems: 'center',
+    marginTop: width * -0.15,
+    alignItems: "center"
   },
   userAvatarContainer: {
     width: width * 0.25,
     height: width * 0.25,
-    backgroundColor: '#A9A9A9',
+    backgroundColor: "#A9A9A9",
     borderRadius: width * 0.125,
     marginTop: width * -0.125,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   userAvatar: {
     height: width * 0.23,
     width: width * 0.23,
-    borderRadius: width * 0.115,
+    borderRadius: width * 0.115
   },
   walletLastIncomeContainer: {
     width: width * 0.8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: width * 0.02,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: width * 0.01
   },
   walletLastIncomeLabel: {
-    fontSize: width * 0.06,
+    fontSize: width * 0.045
   },
   walletLastIncomeAmount: {
-    fontSize: width * 0.06,
-    color: 'green',
+    fontSize: width * 0.045,
+    color: "green"
   },
   walletLastExpensesContainer: {
     width: width * 0.8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: width * 0.02,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: width * 0.02
   },
   walletLastExpensesLabel: {
-    fontSize: width * 0.06,
+    fontSize: width * 0.045
   },
   walletLastExpensesAmount: {
-    fontSize: width * 0.06,
-    color: 'red',
+    fontSize: width * 0.045,
+    color: "red"
   },
   tabsContainer: {
-    width: width * 0.9,
+    width: width,
     height: width * 0.15,
     marginTop: width * 0.03,
-    justifyContent: 'space-around',
-    flexDirection: 'row',
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#cfcece"
   },
   tab: {
-    backgroundColor: '#25babc',
-    width: width * 0.4,
+    width: width / 3,
     height: width * 0.15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-    justifyContent: 'center',
-    borderRadius: 10,
+    justifyContent: "center"
   },
   tabText: {
-    color: 'white',
-    fontSize: width * 0.06,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "#444343cc",
+    fontSize: width * 0.04,
+    fontWeight: "bold",
+    textAlign: "center"
   },
+  selectedTab: {
+    width: width / 3,
+    height: width * 0.15,
+    justifyContent: "center",
+    borderBottomWidth: 2
+  },
+  selectedTabText: {
+    fontSize: width * 0.04,
+    fontWeight: "bold",
+    textAlign: "center"
+  }
 });

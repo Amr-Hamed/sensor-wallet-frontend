@@ -25,49 +25,49 @@ export default class WalletCurrency extends React.Component {
   }
 }
 
-let width = Dimensions.get('window').width;
+let width = Dimensions.get("window").width;
 
 let styles = StyleSheet.create({
   main: {
     width: width * 0.9,
-    height: width * 0.2,
-    flexDirection: 'row',
-    alignItems: 'center',
+    height: width * 0.15,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
     marginTop: width * 0.02,
-    backgroundColor: 'white',
-    shadowColor: '#000',
+    backgroundColor: "white",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
-    borderRadius : 10
+    borderRadius: 5
   },
   currencyImage: {
-    height: width * 0.15,
-    width: width * 0.15,
-    borderRadius: width * 0.075,
-    marginLeft : width*0.02
+    height: width * 0.12,
+    width: width * 0.12,
+    borderRadius: width * 0.06,
+    marginLeft: width * 0.02,
+    resizeMode: "cover"
   },
 
   currencyNameContainer: {
-    width: '50%',
-    marginLeft : width*0.02,
+    width: "50%"
   },
   currencyAbbreviation: {
-    fontSize: width * 0.06,
-    color: '#808080',
-    fontWeight: 'bold',
+    fontSize: width * 0.05,
+    color: "#808080",
+    fontWeight: "bold"
   },
   currencyName: {
-    fontSize: width * 0.035,
+    fontSize: width * 0.035
   },
   currencyAmount: {
-    fontSize: width * 0.05,
-    width : '30%',
-    textAlign : 'center'
-  },
-
+    fontSize: width * 0.035,
+    width: "30%",
+    textAlign: "center"
+  }
 });

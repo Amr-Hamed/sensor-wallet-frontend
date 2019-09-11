@@ -12,6 +12,8 @@ import WebContetntView from '../WebContetnView/WebContetntView';
 
 import SearchBar from '../../components/SearchBar/SearchBar';
 import POSBotton from '../../components/POSButton';
+import SurveySlideItem from '../../components/SurveySlideItem';
+
 
 
 export default class UserSurveyHomePage extends React.Component {
@@ -35,9 +37,21 @@ export default class UserSurveyHomePage extends React.Component {
         <Container>
 
           <Content padder>
-            <POSBotton
-              title="Go to web View"
-              pressed={this.gotoPost} />
+            <SurveySlideItem
+              userID={this.state.userID}
+              surveyID={survey.surveyID}
+              clientID={survey.surveyCreatorID}
+              cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
+              clientName={survey.surveyCreatorName}
+              title={survey.title}
+              time={survey.duration}
+              points={survey.amountPerSurvey}
+              brandLogo={survey.surveyCreatorImageURL || clientAvatar}
+              pressed={this.goToSurvey}
+              key={survey.surveyID}
+              description={survey.description}
+              currencyData={survey.rewardCurrency}
+            />
           </Content>
         </Container>
       </ScrollView>
