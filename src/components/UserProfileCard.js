@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Dimensions, View } from 'react-native';
+import { Image, StyleSheet, Dimensions, View , TouchableOpacity} from 'react-native';
 import {
   Container,
   Header,
@@ -14,7 +14,6 @@ import {
   Body,
   Right,
 } from 'native-base';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const imgPathes = {

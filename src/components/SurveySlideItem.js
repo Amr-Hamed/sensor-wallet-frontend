@@ -10,7 +10,6 @@ import {
   Thumbnail,
   Icon,
 } from 'native-base';
-// import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const defaultSenses = "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1280px-Flag_of_the_United_States.svg.png" ; 
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
