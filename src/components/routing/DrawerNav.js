@@ -46,7 +46,7 @@ import UserProfile from '../screens/UserProfile/UserProfile';
 import UserSurveyHomePage from '../screens/UserSurveyHomePage/UserSurveyHomePage';
 import UserQRCode from '../screens/UserQRCode/UserQRCode';
 import UserWallet from  '../screens/UserWallet/UserWallet';
-import ProfileStack from '../routing/ProfileStack';
+import ProfileStack from '../routes/ProfileStack';
 
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer

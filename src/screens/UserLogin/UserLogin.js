@@ -17,6 +17,8 @@ import SocialMediaLogin from "../../components/SocialMediaLogin/SocialMediaLogin
 import DatePicker from "react-native-datepicker";
 import { RadioButton } from "react-native-paper";
 
+import {MyContext} from '../../myContext/Provider';
+
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faUserCircle,
@@ -64,7 +66,7 @@ export default class AssetExample extends React.Component {
     });
   };
 
-  signInPressed = () => {
+  signInPressed = (context) => {
     
     if (this.state.email) {
       if (this.state.password) {
@@ -88,7 +90,7 @@ export default class AssetExample extends React.Component {
               this.setState({
                 showActivity: false
               });
-
+              context.action.changeUserID(responseJson.data.userID)
               this.props.navigation.navigate("Profile", {
                 userID: responseJson.data.userID
               });
@@ -256,6 +258,9 @@ export default class AssetExample extends React.Component {
 
   render() {
     return (
+      <MyContext.Consumer>
+        {(context)=>
+        
       <ImageBackground
         source={require("../../../assets/images/loginBackground.png")}
         style={styles.container}
@@ -343,7 +348,7 @@ export default class AssetExample extends React.Component {
                   <View style={styles.submitButtonContainer}>
                     <TouchableOpacity
                       style={styles.submitButton}
-                      onPress={this.signInPressed}
+                      onPress={()=>this.signInPressed(context)}
                     >
                       <Text style={styles.submitButtonText}>SIGN IN</Text>
                     </TouchableOpacity>
@@ -568,6 +573,8 @@ export default class AssetExample extends React.Component {
           </ScrollView>
         </KeyboardAvoidingView>
       </ImageBackground>
+        }
+      </MyContext.Consumer>
     );
   }
 }
