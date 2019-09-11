@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Text,
   View,
@@ -9,15 +9,17 @@ import {
   TextInput,
   Dimensions,
   TouchableOpacity,
-  KeyboardAvoidingView,
-} from 'react-native';
+  KeyboardAvoidingView
+} from "react-native";
 
-import SocialMediaLogin from '../../components/SocialMediaLogin/SocialMediaLogin';
+import SocialMediaLogin from "../../components/SocialMediaLogin/SocialMediaLogin";
 
-import DatePicker from 'react-native-datepicker';
-import { RadioButton } from 'react-native-paper';
+import DatePicker from "react-native-datepicker";
+import { RadioButton } from "react-native-paper";
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {MyContext} from '../../myContext/Provider';
+
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faUserCircle,
   faLock,
@@ -26,10 +28,10 @@ import {
   faPhone,
   faCalendarWeek,
   faCheckCircle,
-  faVenusMars,
-} from '@fortawesome/free-solid-svg-icons';
+  faVenusMars
+} from "@fortawesome/free-solid-svg-icons";
 
-import { Icon, Spinner } from 'native-base';
+import { Icon, Spinner } from "native-base";
 
 export default class AssetExample extends React.Component {
   constructor(props) {
@@ -40,11 +42,11 @@ export default class AssetExample extends React.Component {
     let today = `${year}-${month}-${day}`;
 
     this.state = {
-      choosnTab: 'signIn',
+      choosnTab: "signIn",
       today,
       birthDate: today,
-      gender: 'male',
-      showActivity: false,
+      gender: "male",
+      showActivity: false
     };
   }
 
@@ -54,53 +56,53 @@ export default class AssetExample extends React.Component {
 
   selectTab = selectedTab => {
     this.setState({
-      choosnTab: selectedTab,
+      choosnTab: selectedTab
     });
   };
 
   setDate = birthDate => {
     this.setState({
-      birthDate,
+      birthDate
     });
   };
 
-  signInPressed = () => {
+  signInPressed = (context) => {
     
     if (this.state.email) {
       if (this.state.password) {
         this.setState({
-          showActivity: true,
+          showActivity: true
         });
-        fetch('https://bondnbeyond-apigateway.herokuapp.com/enduser/login', {
-          method: 'POST',
+        fetch("https://bondnbeyond-apigateway.herokuapp.com/enduser/login", {
+          method: "POST",
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            Accept: "application/json",
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             email: this.state.email,
-            passWord: this.state.password,
-          }),
+            passWord: this.state.password
+          })
         })
           .then(response => response.json())
           .then(responseJson => {
             if (responseJson.code === 200 ) {
               this.setState({
-                showActivity: false,
+                showActivity: false
               });
-
-              this.props.navigation.navigate('Profile', {
-                userID: responseJson.data.userID,
+              context.action.changeUserID(responseJson.data.userID)
+              this.props.navigation.navigate("Profile", {
+                userID: responseJson.data.userID
               });
             } else if (responseJson.code === 500) {
-              alert('Server Error!');
+              alert("Server Error!");
               this.setState({
-                showActivity: false,
+                showActivity: false
               });
             } else if (responseJson.code === 401) {
               alert("Sorry, credentials don't match records!");
               this.setState({
-                showActivity: false,
+                showActivity: false
               });
             }
           })
@@ -108,10 +110,10 @@ export default class AssetExample extends React.Component {
             console.error(error);
           });
       } else {
-        alert('Please enter your password!');
+        alert("Please enter your password!");
       }
     } else {
-      alert('Please enter your email!');
+      alert("Please enter your email!");
     }
   };
 
@@ -148,37 +150,33 @@ export default class AssetExample extends React.Component {
         passWord: this.state.password,
         signUpDate: this.state.today,
         fawryWalletID: 100,
-        image: '',
-      },
+        image: ""
+      }
     };
     if (this.state.email) {
-      if (this.validateEmail(this.state.email))
-        if (this.state.fullName) {
-          if (this.state.userName) {
-            if (this.state.phone) {
-              if(this.validatePhone(this.state.phone))
-              if (this.state.birthDate) {
-                if (this.state.gender) {
-                  if (this.state.password) {
-                    if (this.state.password.length >= 6) {
-                      if (this.state.confirmPassword) {
-                        if (
-                          this.state.password === this.state.confirmPassword
-                        ) {
-                          this.setState({
-                            showActivity: true,
-                          });
-                          fetch(
-                            'https://bondnbeyond-apigateway.herokuapp.com/enduser/signup',
-                            {
-                              method: 'POST',
-                              headers: {
-                                Accept: 'application/json',
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify(userDetails),
-                            }
-                          )
+      if (this.state.fullName) {
+        if (this.state.userName) {
+          if (this.state.phone) {
+            if (this.state.birthDate) {
+              if (this.state.gender) {
+                if (this.state.password) {
+                  if (this.state.password.length >= 6) {
+                    if (this.state.confirmPassword) {
+                      if (this.state.password === this.state.confirmPassword) {
+                        this.setState({
+                          showActivity: true
+                        });
+                        fetch(
+                          "https://bondnbeyond-apigateway.herokuapp.com/enduser/signup",
+                          {
+                            method: "POST",
+                            headers: {
+                              Accept: "application/json",
+                              "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(userDetails)
+                          }
+                        )
                             .then(response => response.json())
                             .then(responseJson => {
                               if (responseJson.code == 200) {
@@ -196,94 +194,87 @@ export default class AssetExample extends React.Component {
                             .catch(error => {
                               console.error(`e: ${error}`);
                             });
-                        } else {
+                      } else {
                           alert('Sorry, password confirmed wrongly!');
                           this.setState({
                             showActivity: false,
                           });
                         }
-                      } else {
-                        alert('Please confirm your password!');
-                        this.setState({
-                          showActivity: false,
-                        });
-                      }
-                    } else {
-                      alert('Password should be 6 characters or more!');
+                  } else {
+                      alert("Please confirm your password!");
                       this.setState({
-                        showActivity: false,
+                        showActivity: false
                       });
                     }
-                  } else {
-                    alert('Please enter your password!');
+                }else {
+                    alert("Password should be 6 characters or more!");
                     this.setState({
-                      showActivity: false,
+                      showActivity: false
                     });
                   }
-                } else {
-                  alert('Please pick your gender!');
+              } else {
+                  alert("Please enter your password!");
                   this.setState({
-                    showActivity: false,
+                    showActivity: false
                   });
                 }
               } else {
-                alert('Please pick your birthdate!');
+                alert("Please pick your gender!");
                 this.setState({
-                  showActivity: false,
+                  showActivity: false
                 });
-              }else{
-                alert('Sorry, invalid phone number format!');
-              this.setState({
-                showActivity: false,
-              });
               }
-            } else {
-              alert('Please enter your mobile!');
+          } else {
+              alert("Please pick your birthdate!");
               this.setState({
-                showActivity: false,
+                showActivity: false
               });
             }
           } else {
-            alert('Please enter your username!');
+            alert("Please enter your mobile!");
             this.setState({
-              showActivity: false,
+              showActivity: false
             });
           }
         } else {
-          alert('Please enter your full name!');
+          alert("Please enter your username!");
           this.setState({
-            showActivity: false,
+            showActivity: false
           });
         }
-      else {
-        alert('Sorry, invalid email format!');
+      } else {
+        alert("Please enter your full name!");
         this.setState({
-          showActivity: false,
+          showActivity: false
         });
       }
     } else {
-      alert('Please enter your email!');
+      alert("Please enter your email!");
       this.setState({
-        showActivity: false,
+        showActivity: false
       });
     }
   };
 
   render() {
     return (
+      <MyContext.Consumer>
+        {(context)=>
+        
       <ImageBackground
-        source={require('../../../assets/images/loginBackground.png')}
-        style={styles.container}>
+        source={require("../../../assets/images/loginBackground.png")}
+        style={styles.container}
+      >
         <KeyboardAvoidingView behavior="padding">
           <ScrollView style={styles.mainContainer}>
             <Image
-              source={require('../../../assets/images/sensesLogo.png')}
+              source={require("../../../assets/images/sensesLogo.png")}
               style={styles.logo}
             />
-            <Text style={styles.loginText1}> Welcome to </Text>
+            <Text style={styles.loginText1}>Welcome to</Text>
             <View style={styles.textContainer}>
-              <Text style={styles.loginText2}> Sensor </Text>
-              <Text style={styles.loginText3}> P.O.S </Text>
+              <Text style={styles.loginText2}>Sensor</Text>
+              <Text style={styles.loginText3}>P.O.S</Text>
             </View>
             <View style={styles.socialMediaLoginContainer}>
               <View style={styles.socialMediaLogin}>
@@ -298,47 +289,57 @@ export default class AssetExample extends React.Component {
                 </TouchableOpacity>
               </View>
             </View>
-            {this.state.choosnTab === 'signIn' && (
+            {this.state.choosnTab === "signIn" && (
               <View style={styles.main}>
                 <View style={styles.tabsContainer}>
                   <TouchableOpacity>
                     <Text
                       style={styles.signInSelectedTab}
-                      onPress={() => this.selectTab('signIn')}>
+                      onPress={() => this.selectTab("signIn")}
+                    >
                       SIGN IN
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity>
                     <Text
                       style={styles.signUpTab}
-                      onPress={() => this.selectTab('signUp')}>
+                      onPress={() => this.selectTab("signUp")}
+                    >
                       SIGN UP
                     </Text>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.loginTextInputContainer}>
                   <View style={styles.inputContainer}>
-                    <FontAwesomeIcon
-                      style={styles.tabIcon}
-                      icon={faEnvelope}
-                      size={20}
-                      color={'gray'}
-                    />
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        style={styles.tabIcon}
+                        icon={faEnvelope}
+                        size={25}
+                        color={"#8c8c8c"}
+                      />
+                    </View>
                     <TextInput
                       placeholder="Email"
                       style={styles.userInput}
-                      placeholderTextColor="gray"
+                      placeholderTextColor="#8c8c8c"
                       onChangeText={email => this.setState({ email })}
                       value={this.state.email}
                     />
                   </View>
 
                   <View style={styles.inputContainer}>
-                    <FontAwesomeIcon icon={faLock} color={'gray'} size={20} />
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faLock}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
                     <TextInput
                       placeholder="Password"
                       style={styles.userInput}
-                      placeholderTextColor="gray"
+                      placeholderTextColor="#8c8c8c"
                       secureTextEntry={true}
                       onChangeText={password => this.setState({ password })}
                       value={this.state.password}
@@ -347,7 +348,8 @@ export default class AssetExample extends React.Component {
                   <View style={styles.submitButtonContainer}>
                     <TouchableOpacity
                       style={styles.submitButton}
-                      onPress={this.signInPressed}>
+                      onPress={()=>this.signInPressed(context)}
+                    >
                       <Text style={styles.submitButtonText}>SIGN IN</Text>
                     </TouchableOpacity>
                   </View>
@@ -361,364 +363,433 @@ export default class AssetExample extends React.Component {
                       size="large"
                       color="#45b3b5"
                       style={{
-                        display: this.state.showActivity ? 'flex' : 'none',
+                        display: this.state.showActivity ? "flex" : "none"
                       }}
                     />
                   </View>
                 </View>
               </View>
             )}
-            {this.state.choosnTab === 'signUp' && (
+            {this.state.choosnTab === "signUp" && (
               <View style={styles.main}>
                 <View style={styles.tabsContainer}>
                   <TouchableOpacity>
                     <Text
                       style={styles.signInTab}
-                      onPress={() => this.selectTab('signIn')}>
+                      onPress={() => this.selectTab("signIn")}
+                    >
                       SIGN IN
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity>
                     <Text
                       style={styles.signUpSelectedTab}
-                      onPress={() => this.selectTab('signUp')}>
+                      onPress={() => this.selectTab("signUp")}
+                    >
                       SIGN UP
                     </Text>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.loginTextInputContainer}>
                   <View style={styles.inputContainer}>
-                    <FontAwesomeIcon
-                      icon={faEnvelope}
-                      color={'gray'}
-                      size={20}
-                    />
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faEnvelope}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
                     <TextInput
                       placeholder="Email"
                       style={styles.userInput}
-                      placeholderTextColor="gray"
+                      placeholderTextColor="#8c8c8c"
                       onChangeText={email => this.setState({ email })}
                       value={this.state.email}
                     />
                   </View>
                   <View style={styles.inputContainer}>
-                    <FontAwesomeIcon icon={faUser} color={'gray'} size={20} />
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faUser}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
                     <TextInput
                       placeholder="Full Name"
                       style={styles.userInput}
-                      placeholderTextColor="gray"
+                      placeholderTextColor="#8c8c8c"
                       onChangeText={fullName => this.setState({ fullName })}
                       value={this.state.fullName}
                     />
                   </View>
                   <View style={styles.inputContainer}>
+                    View style={styles.inputIconContainer}>
                     <FontAwesomeIcon
                       icon={faUserCircle}
-                      color={'gray'}
-                      size={20}
-                    />
-                    <TextInput
-                      placeholder="Username"
-                      style={styles.userInput}
-                      placeholderTextColor="gray"
-                      onChangeText={userName => this.setState({ userName })}
-                      value={this.state.userName}
+                      color={"#8c8c8c"}
+                      size={25}
                     />
                   </View>
+                  <TextInput
+                    placeholder="Username"
+                    style={styles.userInput}
+                    placeholderTextColor="#8c8c8c"
+                    onChangeText={userName => this.setState({ userName })}
+                    value={this.state.userName}
+                  />
+                </View>
 
                   <View style={styles.inputContainer}>
-                    <FontAwesomeIcon icon={faPhone} color={'gray'} size={20} />
+                    <FontAwesomeIcon icon={faPhone} color={"#8c8c8c"}
+                    size={25} />
                     <TextInput
                       keyboardType="numeric"
                       placeholder="Mobile"
                       style={styles.userInput}
-                      placeholderTextColor="gray"
+                      placeholderTextColor="#8c8c8c"
                       onChangeText={phone => this.setState({ phone })}
                       value={this.state.phone}
                     />
                   </View>
-                  <View style={styles.inputContainer}>
+                  <TextInput
+                    placeholder="Mobile"
+                    style={styles.userInput}
+                    placeholderTextColor="#8c8c8c"
+                    onChangeText={phone => this.setState({ phone })}
+                    value={this.state.phone}
+                  />
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputIconContainer}>
                     <FontAwesomeIcon
                       icon={faCalendarWeek}
-                      color={'gray'}
-                      size={20}
-                    />
-                    <DatePicker
-                      placeholder="Birthdate"
-                      placeholderTextColor="gray"
-                      style={[
-                        styles.userInput,
-                        { justifyContent: 'center', alignItems: 'center' },
-                      ]}
-                      date={this.state.birthDate}
-                      confirmBtnText="Confirm"
-                      cancelBtnText="Cancel"
-                      minDate="1950-01-01"
-                      maxDate={this.state.birthDate}
-                      onDateChange={birthDate => this.setDate(birthDate)}
+                      color={"#8c8c8c"}
+                      size={25}
                     />
                   </View>
-                  <View style={styles.inputContainer}>
+                  <DatePicker
+                    placeholder="Birthdate"
+                    placeholderTextColor="#8c8c8c"
+                    style={[
+                      styles.userInput,
+                      { justifyContent: "center", alignItems: "center" }
+                    ]}
+                    date={this.state.birthDate}
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    minDate="1950-01-01"
+                    maxDate={this.state.birthDate}
+                    onDateChange={birthDate => this.setDate(birthDate)}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputIconContainer}>
                     <FontAwesomeIcon
                       icon={faVenusMars}
-                      color={'gray'}
-                      size={20}
-                    />
-                    <View style={styles.genderContainer}>
-                      <TouchableOpacity
-                        style={styles.genderOption}
-                        onPress={() => this.setState({ gender: 'male' })}>
-                        <View style={styles.genderRadio}>
-                          {this.state.gender === 'male' && (
-                            <View style={styles.genderRadionChecked} />
-                          )}
-                        </View>
-                        <Text style={styles.genderLabel}> Male </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.genderOption}
-                        onPress={() => this.setState({ gender: 'female' })}>
-                        <View style={styles.genderRadio}>
-                          {this.state.gender === 'female' && (
-                            <View style={styles.genderRadionChecked} />
-                          )}
-                        </View>
-                        <Text style={styles.genderLabel}> Female </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <FontAwesomeIcon icon={faLock} color={'gray'} size={20} />
-                    <TextInput
-                      placeholder="Password"
-                      style={styles.userInput}
-                      placeholderTextColor="gray"
-                      secureTextEntry={true}
-                      onChangeText={password => this.setState({ password })}
-                      value={this.state.password}
+                      color={"#8c8c8c"}
+                      size={25}
                     />
                   </View>
-                  <View style={styles.inputContainer}>
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      color={'gray'}
-                      size={20}
-                    />
-                    <TextInput
-                      placeholder="Confirm Password"
-                      style={styles.userInput}
-                      placeholderTextColor="gray"
-                      secureTextEntry={true}
-                      onChangeText={confirmPassword =>
-                        this.setState({ confirmPassword })
-                      }
-                      value={this.state.confirmPassword}
-                    />
-                  </View>
-                  <View style={styles.submitButtonContainer}>
+                  <View style={styles.genderContainer}>
                     <TouchableOpacity
-                      style={styles.submitButton}
-                      onPress={this.singUpClicked}>
-                      <Text style={styles.submitButtonText}>SIGN UP</Text>
+                      style={styles.genderOption}
+                      onPress={() => this.setState({ gender: "male" })}
+                    >
+                      <View style={styles.genderRadio}>
+                        {this.state.gender === "male" && (
+                          <View style={styles.genderRadionChecked} />
+                        )}
+                      </View>
+                      <Text style={styles.genderLabel}> Male </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.genderOption}
+                      onPress={() => this.setState({ gender: "female" })}
+                    >
+                      <View style={styles.genderRadio}>
+                        {this.state.gender === "female" && (
+                          <View style={styles.genderRadionChecked} />
+                        )}
+                      </View>
+                      <Text style={styles.genderLabel}> Female </Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={[styles.container, styles.horizontal]}>
-                    <Spinner
-                      size="large"
-                      color="#45b3b5"
-                      style={{
-                        display: this.state.showActivity ? 'flex' : 'none',
-                      }}
+                </View>
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputIconContainer}>
+                    <FontAwesomeIcon
+                      icon={faLock}
+                      color={"#8c8c8c"}
+                      size={25}
                     />
                   </View>
+                  <TextInput
+                    placeholder="Password"
+                    style={styles.userInput}
+                    placeholderTextColor="#8c8c8c"
+                    secureTextEntry={true}
+                    onChangeText={password => this.setState({ password })}
+                    value={this.state.password}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputIconContainer}>
+                    <FontAwesomeIcon
+                      icon={faCheckCircle}
+                      color={"#8c8c8c"}
+                      size={25}
+                    />
+                  </View>
+                  <TextInput
+                    placeholder="Confirm Password"
+                    style={styles.userInput}
+                    placeholderTextColor="#8c8c8c"
+                    secureTextEntry={true}
+                    onChangeText={confirmPassword =>
+                      this.setState({ confirmPassword })
+                    }
+                    value={this.state.confirmPassword}
+                  />
+                </View>
+                <View style={styles.submitButtonContainer}>
+                  <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={this.singUpClicked}
+                  >
+                    <Text style={styles.submitButtonText}>SIGN UP</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={[styles.container, styles.horizontal]}>
+                  <Spinner
+                    size="large"
+                    color="#45b3b5"
+                    style={{
+                      display: this.state.showActivity ? "flex" : "none"
+                    }}
+                  />
                 </View>
               </View>
             )}
           </ScrollView>
         </KeyboardAvoidingView>
       </ImageBackground>
+        }
+      </MyContext.Consumer>
     );
   }
 }
 
-let width = Dimensions.get('window').width;
+let width = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     opacity: 0.8,
-    resizeMode: 'contain',
+    resizeMode: "contain"
   },
   mainContainer: {
-    backgroundColor: '#00000080',
-    height: '100%',
+    backgroundColor: "#00000099",
+    height: "100%"
   },
   logo: {
-    width: width * 0.15,
-    height: width * 0.15,
-    marginTop: width * 0.15,
-    marginLeft: width * 0.08,
-  },
-  textContainer: {
-    flexDirection: 'row',
+    width: width * 0.18,
+    height: width * 0.18,
+    marginTop: width * 0.18,
+    marginLeft: width * 0.045
   },
   loginText1: {
-    color: 'white',
-    fontSize: width * 0.08,
-    marginLeft: width * 0.08,
+    color: "white",
+    fontSize: width * 0.1,
+    marginLeft: width * 0.045,
+    marginTop: width * 0.02,
+    includeFontPadding: false
+  },
+  textContainer: {
+    flexDirection: "row",
+    marginTop: width * 0.02
   },
   loginText2: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: width * 0.13,
-    marginLeft: width * 0.08,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: width * 0.16,
+    marginLeft: width * 0.045,
+    lineHeight: width * 0.16
   },
   loginText3: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
     fontSize: width * 0.05,
-    marginTop: width * 0.08,
+    marginTop: width * 0.07,
+    marginLeft: width * 0.02
+  },
+  socialMediaLoginContainer: {
+    width: width,
+    height: width * 0.1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: width * 0.05
+  },
+  socialMediaLogin: {
+    width: width * 0.5,
+    height: width * 0.1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  googleIcon: {
+    fontSize: width * 0.09,
+    color: "#dd4b39"
+  },
+  facebookIcon: {
+    fontSize: width * 0.09,
+    color: "#4267b2"
+  },
+  twitterIcon: {
+    fontSize: width * 0.09,
+    color: "#00aced"
   },
   tabsContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: width * 0.05,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: width * 0.05
   },
   signInSelectedTab: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: width * 0.06,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: width * 0.05,
+    width: width * 0.3,
+    textAlign: "right"
   },
   signUpSelectedTab: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: width * 0.06,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: width * 0.05,
+    width: width * 0.3,
+    textAlign: "left"
   },
   signUpTab: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: width * 0.06,
-    opacity: 0.5,
+    color: "#ffffffcc",
+    fontSize: width * 0.05,
+    width: width * 0.3,
+    textAlign: "left"
   },
   signInTab: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: width * 0.06,
-    opacity: 0.5,
+    color: "#ffffffcc",
+    fontSize: width * 0.05,
+    width: width * 0.3,
+    textAlign: "right"
   },
   loginTextInputContainer: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     marginTop: width * 0.03,
-    marginBottom: width * 0.06,
+    marginBottom: width * 0.06
   },
   inputContainer: {
-    backgroundColor: 'white',
-    height: width * 0.12,
-    width: '90%',
-    padding: width * 0.02,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: '#636363',
-    marginTop: '2%',
+    backgroundColor: "white",
+    height: width * 0.15,
+    width: "90%",
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#8c8c8c"
+  },
+  inputIconContainer: {
+    alignItems: "center",
+    width: "20%"
   },
   userInput: {
-    marginLeft: width * 0.03,
-    height: '100%',
-    width: '90%',
+    height: "100%",
+    width: "80%"
   },
   genderContainer: {
-    marginLeft: width * 0.03,
-    height: '100%',
-    width: '90%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    height: "100%",
+    width: "80%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center"
   },
   genderOption: {
-    flexDirection: 'row',
-    width: '40%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    width: "40%",
+    justifyContent: "center",
+    alignItems: "center"
   },
   genderRadio: {
     height: width * 0.04,
     width: width * 0.04,
     borderRadius: width * 0.02,
     borderWidth: width * 0.005,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   genderRadionChecked: {
     height: width * 0.02,
     width: width * 0.02,
     borderRadius: width * 0.01,
-    backgroundColor: '#25babc',
+    backgroundColor: "#25babc"
   },
   genderLabel: {
     fontSize: width * 0.04,
-    marginLeft: width * 0.01,
+    marginLeft: width * 0.01
   },
   submitButtonContainer: {
-    height: width * 0.12,
-    width: '90%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginTop: '2%',
+    height: width * 0.15,
+    width: "90%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   submitButton: {
-    backgroundColor: '#25babc',
-    width: '50%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#25babc",
+    width: "50%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   },
   submitButtonText: {
-    fontSize: width * 0.06,
-    color: 'white',
-    fontWeight: 'bold',
+    fontSize: width * 0.05,
+    color: "white",
+    fontWeight: "bold"
   },
   forgotPasswordContainer: {
-    marginTop: width * 0.06,
+    marginTop: width * 0.06
   },
   forgotPasswordText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold"
   },
   socialMediaLoginContainer: {
     width: width,
     height: width * 0.1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: width * 0.05,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: width * 0.05
   },
   socialMediaLogin: {
     width: width * 0.5,
     height: width * 0.1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   googleIcon: {
     fontSize: width * 0.09,
-    color: '#dd4b39',
+    color: "#dd4b39"
   },
   facebookIcon: {
     fontSize: width * 0.09,
-    color: '#4267b2',
+    color: "#4267b2"
   },
   twitterIcon: {
     fontSize: width * 0.09,
-    color: '#00aced',
+    color: "#00aced"
   },
   horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-  },
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
+  }
 });

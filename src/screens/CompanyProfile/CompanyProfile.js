@@ -97,8 +97,8 @@ export default class CompanyProfile extends Component {
             <Text style={styles.title}>BIO</Text>
             <Text>{this.state.bio}</Text>
             <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-              <POSButton style={styles.btn} title="Contact" />
-              <POSButton style={styles.btn} title="More" />
+              <POSButton style={styles.btn} title="Contact" height= {0.1 * WIDTH}  />
+              <POSButton style={styles.btn} title="More" height= {0.1 * WIDTH}  />
             </View>
 
             <VoucherBtn points="30" value="25" style={{ marginVertical: 10 }} />

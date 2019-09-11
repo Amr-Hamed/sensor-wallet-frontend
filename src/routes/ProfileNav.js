@@ -20,7 +20,7 @@ import {
   Icon,
   View,
   Content,
-  CardItem , 
+  CardItem,
   Card
 } from 'native-base';
 
@@ -54,7 +54,9 @@ import ScanFriendQR from '../screens/ScanFriendQR/ScanFriendQR';
 import TransactionConfirm from '../screens/TransactionConfirm/TransactionConfirm';
 import Loading from '../screens/Loading/Loading';
 
+import { MyContext } from '../myContext/Provider';
 
+import POSButton from '../components/POSButton'
 
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
@@ -326,38 +328,61 @@ const Screen8_StackNavigator = createStackNavigator({
 
 
 // Cutomize Top of Drawer Navigator ( Side bar )
-const CustomDrawerComponent = (props) => (
-  <SafeAreaView style={{ flex: 1 }}>
-    <Header style={{ backgroundColor: '#333' }} />
-    <Content style={{ flexDirection: 'row' , borderWidth: 0 }}>
-          <CardItem style = {{borderWidth : 0, backgroundColor:'#333'}}>
-            <Left>
-              <Thumbnail
-                style={{ borderRadius: 0.125*WIDTH, width:0.25 * WIDTH , height : 0.25 * WIDTH }}
-                source={{
-                  uri: 'http://tawsah.com/uploads/2aeefea22dd585016711ecc1c381b9cd.jpg',
-                }}
-              />
-              <Body>
-                <Text style={styles.menuHead}> Mohamed Khaled </Text>
-                <Text style={styles.country}> Egypt </Text>
-              </Body>
-            </Left>
-            <Right>
-              <TouchableOpacity onPress={this.handleWalletClicked}>
-                <View style={styles.walletBtn}>
-                  <Thumbnail source={imgPathes.wallet} style={{ borderRadius: 10 }} />
-                </View>
-              </TouchableOpacity>
-            </Right>
-          </CardItem >
-          </Content>
-    <ScrollView>
-      <DrawerItems {...props} />
-    </ScrollView>
-  </SafeAreaView>
 
-)
+class CustomDrawerComponent extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <MyContext.Consumer>
+        {(context) =>
+
+          <SafeAreaView style={{ flex: 1 }}>
+            <Header style={{ backgroundColor: '#333' }} />
+            <Content style={{ flexDirection: 'row', borderWidth: 0 }}>
+              <CardItem style={{ borderWidth: 0, backgroundColor: '#333' }}>
+                <Left>
+                  <Thumbnail
+                    style={{ borderRadius: 0.125 * WIDTH, width: 0.25 * WIDTH, height: 0.25 * WIDTH }}
+                    source={{
+                      uri: context.state.userImageURL,
+                    }}
+                  />
+                  <Body>
+                    <Text style={styles.menuHead}> {context.state.userName} </Text>
+                    <Text style={styles.country}> {context.state.userCountry} </Text>
+                  </Body>
+                </Left>
+                <Right>
+                  <TouchableOpacity onPress={this.handleWalletClicked}>
+                    <View style={styles.walletBtn}>
+                      <Thumbnail source={imgPathes.wallet} style={{ borderRadius: 10 }} />
+                    </View>
+                  </TouchableOpacity>
+                </Right>
+              </CardItem >
+            </Content>
+            <ScrollView>
+              <DrawerItems {...this.props} />
+            </ScrollView>
+
+            <POSButton
+              title="LOGOUT"
+              style={{ marginVertical: 0.15 * WIDTH, width: 0.5 * WIDTH, marginHorizontal: 0.15 * WIDTH }}
+              height={0.15 * WIDTH}
+              pressed={() => alert('Soon')}
+            />
+          </SafeAreaView>
+        }
+      </MyContext.Consumer>
+    )
+  }
+}
+
+
 
 
 
@@ -369,8 +394,12 @@ const DrawerNavigatorExample = createDrawerNavigator({
     //Title
     screen: MainStack,
     navigationOptions: {
-      drawerLabel: 'User Profile',
-      drawerIcon: ({ tintColor }) => (<Icon name="home" style={{ fontSize: 24, color: tintColor }} />)
+      drawerLabel: ({ tintColor }) => (
+        <View style={{ flexDirection: 'row', borderTopWidth: 0.3, borderBottomWidth: 0.3, paddingVertical: 15, borderColor: '#eee', width: '100%' }}>
+          <Icon name="home" style={{ fontSize: 30, color: tintColor, marginHorizontal: 25 }} />
+          <Text style={[styles.menuHead, { color: tintColor, marginTop: 5, fontWeight: 'bold' }]}> Profile </Text>
+        </View>
+      )
     },
   },
 
@@ -468,12 +497,12 @@ export default createAppContainer(DrawerNavigatorExample);
 const styles = StyleSheet.create({
   sensesLogo: { width: 30, height: 30, marginHorizontal: 20 },
   menuHead: {
-    color:'#eee' , 
-    fontWeight : 'bold' , 
-    fontSize : 16
-  } , 
+    color: '#eee',
+    fontWeight: 'bold',
+    fontSize: 16
+  },
   country: {
-    color : '#aedffe' , 
+    color: '#aedffe',
 
   }
 });

@@ -24,7 +24,7 @@ import RoundedBG from '../../components/RoundedBG';
 // Define Some Constants for default Values  
 const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
 const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg"
-
+const baseUrl = "https://bondnbeyond-apigateway.herokuapp.com";
 
 export default class SurveyIntro extends Component {
 
@@ -33,6 +33,7 @@ export default class SurveyIntro extends Component {
     clientID: this.props.navigation.getParam('clientID'),
     surveyID: this.props.navigation.getParam('surveyID'),
     clientName: this.props.navigation.getParam('clientName'),
+    clientImage: '',
     surveyReward: '',
     loading: true,
     userClientSurveys: [],
@@ -55,12 +56,17 @@ export default class SurveyIntro extends Component {
     })
   }
 
+  componentWillReceiveProps() {
+    this.scroll.scrollTo({ x: 0, y: 0, animated: true });
+  }
+
   fetchSurveyData = () => {
-    fetch(`https://demo9744643.mockable.io/endUser/5/client/1/surveys`)
+    fetch(`${baseUrl}/client/${this.state.clientID}/${this.state.clientName}/profile`)
       .then(res => res.json())
       .then(res =>
         this.setState({
-          userClientSurveys: res.data
+          userClientSurveys: res.data.surveys,
+          clientImage: res.data.imageURL
         })
       )
       .then(() => this.setState({
@@ -68,15 +74,21 @@ export default class SurveyIntro extends Component {
         showActivity: false
       }))
   }
+
   takeSurvey = () => {
+
     this.props.navigation.navigate('SurveyQuestion', { userID: this.state.userID, surveyID: this.state.surveyID, clientID: this.state.clientID, clientName: this.state.clientName, surveyReward: this.props.navigation.getParam('surveyReward') })
   }
-  goToSurvey = () => {
-    this.props.navigation.navigate('SurveyIntro');
+
+  goToSurvey = (surveyID, surveyTitle, clientName, brandLogo, clientID, surveyCover, surveyReward, surveyDuration, surveyDescription, userID, currencyData) => {
+    this.props.navigation.navigate('SurveyIntro', { surveyID, surveyTitle, clientName, surveyCover, surveyReward, surveyDuration, brandLogo, clientID, surveyDescription, userID, currencyData });
+    // this.scroll.scrollTo({ x: 0, y: 0, animated: true });
+
   }
-  goToCompanyProfile = (clientID , clientName) => {
-    console.log('clientID : '+clientID)
-    this.props.navigation.navigate('CompanyProfile', { clientID , clientName })
+
+  goToCompanyProfile = (clientID, clientName) => {
+    console.log('clientID : ' + clientID)
+    this.props.navigation.navigate('CompanyProfile', { clientID, clientName })
   }
 
   // takeSurveyClicked = () => {
@@ -85,17 +97,18 @@ export default class SurveyIntro extends Component {
   render() {
     return (
       <Container>
-        <ScrollView>
+        <ScrollView
+          ref={(c) => { this.scroll = c }}>
           <RoundedBG />
           <SideLogoCard
             surveyTitle={this.props.navigation.getParam('surveyTitle')}
             brandName={this.props.navigation.getParam('clientName')}
             surveyCover={this.props.navigation.getParam('surveyCover')}
             brandLogo={this.props.navigation.getParam('brandLogo')}
-            brandLogoPressed={() => this.goToCompanyProfile(this.props.navigation.getParam('clientID') , this.props.navigation.getParam('clientName'))}
+            brandLogoPressed={() => this.goToCompanyProfile(this.props.navigation.getParam('clientID'), this.props.navigation.getParam('clientName'))}
             points={this.props.navigation.getParam('surveyReward')}
             duration={this.props.navigation.getParam('surveyDuration')}
-            currencyData = {this.props.navigation.getParam('currencyData')}
+            currencyData={this.props.navigation.getParam('currencyData')}
           />
 
           <View style={styles.aboutSection}>
@@ -116,13 +129,13 @@ export default class SurveyIntro extends Component {
                 <SurveySlideItem
                   userID={this.state.userID}
                   surveyID={survey.surveyID}
-                  clientID={survey.surveyCreatorID}
+                  clientID={this.state.clientID}
                   cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
-                  clientName={survey.surveyCreatorName}
+                  clientName={this.state.clientName}
                   title={survey.title}
                   time={survey.duration}
                   points={survey.amountPerSurvey}
-                  brandLogo={survey.surveyCreatorImageURL || clientAvatar}
+                  brandLogo={this.state.clientImage || clientAvatar}
                   pressed={this.goToSurvey}
                   key={survey.surveyID}
                   description={survey.description}

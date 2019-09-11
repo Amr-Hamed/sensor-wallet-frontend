@@ -1,41 +1,31 @@
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
-import { AppLoading , Platform } from 'expo';
+import { AppLoading, Platform } from 'expo';
 
 
-// You can import from local files
-import UserLogin from './src/screens/UserLogin/UserLogin';
+// Import Context Provider
 
-import ProfileNav from './src/routing/ProfileNav';
-import TabBottomNav from './src/routing/TabBottomNav';
+import Provider from './src/myContext/Provider';
+import Consumer from './src/myContext/MyConsumer';
+
+
+import StartApp from './src/routes/Main';
 
 
 // or any pure javascript modules available inhttps://snack.expo.io/@khaledamr/pos-routing   
 
 // stack navigator with login and all application 
 
-const MainNavigator = createStackNavigator(
-  {
-    Login: { screen: UserLogin },
-    Drawer: { screen: TabBottomNav },
-  },
-  {
-    headerMode: 'none',
-  }
-);
-
-const StartApp = createAppContainer(MainNavigator);
 
 export default class App extends React.Component {
 
   state = {
     loadingComplete: false
   }
- 
+
 
   loadResourcesAsync = async () => {
     await Promise.all([
@@ -47,8 +37,8 @@ export default class App extends React.Component {
         'Roboto_medium': require('./assets/fonts/Roboto-Medium.ttf'),
         'Rubik-Regular': require('./assets/fonts/Rubik-Regular.ttf'),
         Ionicons: require('./assets/fonts/ionicons.ttf'),
-        LexendDeca : require('./assets/fonts/LexendDeca.ttf'),
-        'Indie Flower' : require('./assets/fonts/IndieFlower-Regular.ttf')
+        LexendDeca: require('./assets/fonts/LexendDeca.ttf'),
+        'Indie Flower': require('./assets/fonts/IndieFlower-Regular.ttf')
       })
 
     ])
@@ -70,12 +60,15 @@ export default class App extends React.Component {
 
 
     if (this.state.loadingComplete)
-      return <StartApp />;
+      return (
+        <Provider>
+          <Consumer />
+        </Provider>);
     else {
       return (
         <AppLoading
           startAsync={this.loadResourcesAsync}
-          onError={()=>console.log("loading Resources Error")}
+          onError={() => console.log("loading Resources Error")}
           onFinish={this.handleFinishLoading}
         />
       )
