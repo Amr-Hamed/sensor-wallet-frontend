@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 9066,
-  "expoServerNgrokUrl": "https://av-x6y.anonymous.sensor-wallet-frontend.exp.direct",
-  "packagerNgrokUrl": "https://packager.av-x6y.anonymous.sensor-wallet-frontend.exp.direct",
-  "ngrokPid": 9092,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }

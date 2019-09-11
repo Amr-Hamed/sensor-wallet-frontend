@@ -14,10 +14,6 @@ import Modal from "react-native-modal";
 
 import { Icon } from "native-base";
 
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faBars, faBell } from "@fortawesome/free-solid-svg-icons";
-
-import POSHeader from "../../components/POSHeader";
 import SurveyQuestionContainer from "../../components/SurveyQuestionContainer/SurveyQuestionContainer";
 import QuestionAnswer from "../../components/QuestionAnswer/QuestionAnswer";
 
@@ -25,23 +21,23 @@ export default class SurveyQuestion extends React.Component {
   state = {
     isModalVisible: false,
     questions: [
-      // {
-      //   questionID: 1,
-      //   surveyID: 1,
-      //   questionTypeID: 1,
-      //   body: 'Which browser are you using?',
-      //   creationDate: '2019-09-01T20:55:13.000Z',
-      //   answers: {
-      //     code: 200,
-      //     msg: 'successfully retreiving answers for question id 1',
-      //     data: [
-      //       { answerID: 1, body: 'Chrome' },
-      //       { answerID: 2, body: 'Safari' },
-      //       { answerID: 3, body: 'Firefox' },
-      //       { answerID: 4, body: 'Explorer' },
-      //     ],
-      //   },
-      // },
+      {
+        questionID: 1,
+        surveyID: 1,
+        questionTypeID: 1,
+        body: '?',
+        creationDate: '2019-09-01T20:55:13.000Z',
+        answers: {
+          code: 200,
+          msg: 'successfully retreiving answers for question id 1',
+          data: [
+            { answerID: 1, body: '1' },
+            { answerID: 2, body: '2' },
+            { answerID: 3, body: '3' },
+            { answerID: 4, body: '4' },
+          ],
+        },
+      },
     ],
     currentQuestion: 1,
     nextQuestionButtonText: "NEXT",
@@ -54,12 +50,6 @@ export default class SurveyQuestion extends React.Component {
     surveyReward: this.props.navigation.getParam("surveyReward"),
     clientName: this.props.navigation.getParam("clientName")
   };
-
-  // constructor(props){
-  //   super(props);
-  // alert('clientID : ' +this.state.clientID + 'userID : '+ this.state.userID  + 'surveyID : ' + this.state.surveyID)
-
-  // }
 
   constructor(props) {
     super(props);
@@ -179,10 +169,10 @@ export default class SurveyQuestion extends React.Component {
         await this.setState({
           questionAnswers,
         });
-        let day = new Date().getDate(); //Current Date
-        let month = new Date().getMonth(); //Current Month
-        let year = new Date().getFullYear(); //Current Year
-        let today = `${year}-${month}-${day}`;
+        // let day = new Date().getDate(); //Current Date
+        // let month = new Date().getMonth(); //Current Month
+        // let year = new Date().getFullYear(); //Current Year
+        // let today = `${year}-${month}-${day}`;
         fetch('https://bondnbeyond-apigateway.herokuapp.com/submitSurvey', {
           method: 'POST',
           headers: {
@@ -195,7 +185,7 @@ export default class SurveyQuestion extends React.Component {
               surveyID: this.state.surveyID + "",
               clientID: this.state.clientID + "",
               endUserID: this.state.userID + "",
-              questions: this.state.questionAnswers
+              questions: this.state.questionAnswers,
             }
           })
         })
