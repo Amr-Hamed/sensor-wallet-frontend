@@ -17,6 +17,7 @@ import GestureRecognizer, {
 
 import WalletCurrencies from "../../components/WalletCurrencies/WalletCurrencies";
 import UserTransactions from "../../components/UserTransactions/UserTransactions";
+import UserRewards from '../../components/UserRewards/UserRewards';
 
 export default class UserWallet extends React.Component {
   state = {
@@ -39,7 +40,8 @@ export default class UserWallet extends React.Component {
 
   componentDidMount = () => {
     let currencies = [],
-      transactions = [];
+      transactions = [],
+      rewards = [];
     fetch(
       `https://bondnbeyond-apigateway.herokuapp.com/enduser/${this.state.userID}/balance`
     )
@@ -61,6 +63,16 @@ export default class UserWallet extends React.Component {
           transactions
         });
       });
+      fetch(
+        `https://bondnbeyond-apigateway.herokuapp.com/enduser/wallet/${this.state.walletID}/rewards`
+      )
+        .then(res => res.json())
+        .then(resJson => {
+          rewards = resJson.data;
+          this.setState({
+            rewards,
+          });
+        });
   };
 
   selectTab = selectedTab => {
@@ -202,17 +214,7 @@ export default class UserWallet extends React.Component {
           )}
           {this.state.selectedTab === "rewards" && (
             <GestureRecognizer onSwipe={direction => this.onSwipe(direction)}>
-              <Text
-                style={{
-                  height: 100,
-                  width: width,
-                  textAlign: "center",
-                  backgroundColor: "#eee",
-                  padding: 20
-                }}
-              >
-                Feature Coming Soon
-              </Text>
+              <UserRewards rewards={this.state.rewards} userName={this.state.userName}/>
             </GestureRecognizer>
           )}
         </View>
