@@ -17,7 +17,7 @@ import SocialMediaLogin from "../../components/SocialMediaLogin/SocialMediaLogin
 import DatePicker from "react-native-datepicker";
 import { RadioButton } from "react-native-paper";
 
-import {MyContext} from '../../myContext/Provider';
+import { MyContext } from "../../myContext/Provider";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -51,7 +51,7 @@ export default class AssetExample extends React.Component {
   }
 
   commingSoon = () => {
-    alert('This feature will be available soon!');
+    alert("This feature will be available soon!");
   };
 
   selectTab = selectedTab => {
@@ -66,8 +66,7 @@ export default class AssetExample extends React.Component {
     });
   };
 
-  signInPressed = (context) => {
-    
+  signInPressed = context => {
     if (this.state.email) {
       if (this.state.password) {
         this.setState({
@@ -86,11 +85,11 @@ export default class AssetExample extends React.Component {
         })
           .then(response => response.json())
           .then(responseJson => {
-            if (responseJson.code === 200 ) {
+            if (responseJson.code === 200) {
               this.setState({
                 showActivity: false
               });
-              context.action.changeUserID(responseJson.data.userID)
+              context.action.changeUserID(responseJson.data.userID);
               this.props.navigation.navigate("Profile", {
                 userID: responseJson.data.userID
               });
@@ -127,16 +126,16 @@ export default class AssetExample extends React.Component {
   };
 
   validatePhone = phone => {
-    if(isNaN(phone)){
+    if (isNaN(phone)) {
       return false;
     }
-    let reg = /^[01]?[0125]\d{9}$/
-    if(reg.test(phone)){
+    let reg = /^[01]?[0125]\d{9}$/;
+    if (reg.test(phone)) {
       return true;
-    }else{
+    } else {
       return false;
     }
-  }
+  };
 
   singUpClicked = () => {
     let userDetails = {
@@ -177,42 +176,42 @@ export default class AssetExample extends React.Component {
                             body: JSON.stringify(userDetails)
                           }
                         )
-                            .then(response => response.json())
-                            .then(responseJson => {
-                              if (responseJson.code == 200) {
-                                // alert('User created successfully!');
-                                this.setState({
-                                  showActivity: false,
-                                });
-                                this.props.navigation.navigate('Profile', {
-                                  userID: responseJson.userID,
-                                });
-                              } else if (responseJson.code == 500) {
-                                alert(responseJson.msg);
-                              }
-                            })
-                            .catch(error => {
-                              console.error(`e: ${error}`);
-                            });
-                      } else {
-                          alert('Sorry, password confirmed wrongly!');
-                          this.setState({
-                            showActivity: false,
+                          .then(response => response.json())
+                          .then(responseJson => {
+                            if (responseJson.code == 200) {
+                              // alert('User created successfully!');
+                              this.setState({
+                                showActivity: false
+                              });
+                              this.props.navigation.navigate("Profile", {
+                                userID: responseJson.userID
+                              });
+                            } else if (responseJson.code == 500) {
+                              alert(responseJson.msg);
+                            }
+                          })
+                          .catch(error => {
+                            console.error(`e: ${error}`);
                           });
-                        }
-                  } else {
+                      } else {
+                        alert("Sorry, password confirmed wrongly!");
+                        this.setState({
+                          showActivity: false
+                        });
+                      }
+                    } else {
                       alert("Please confirm your password!");
                       this.setState({
                         showActivity: false
                       });
                     }
-                }else {
+                  } else {
                     alert("Password should be 6 characters or more!");
                     this.setState({
                       showActivity: false
                     });
                   }
-              } else {
+                } else {
                   alert("Please enter your password!");
                   this.setState({
                     showActivity: false
@@ -224,7 +223,7 @@ export default class AssetExample extends React.Component {
                   showActivity: false
                 });
               }
-          } else {
+            } else {
               alert("Please pick your birthdate!");
               this.setState({
                 showActivity: false
@@ -258,9 +257,6 @@ export default class AssetExample extends React.Component {
 
   render() {
     return (
-      <MyContext.Consumer>
-        {(context)=>
-        
       <ImageBackground
         source={require("../../../assets/images/loginBackground.png")}
         style={styles.container}
@@ -348,7 +344,7 @@ export default class AssetExample extends React.Component {
                   <View style={styles.submitButtonContainer}>
                     <TouchableOpacity
                       style={styles.submitButton}
-                      onPress={()=>this.signInPressed(context)}
+                      onPress={() => this.signInPressed(context)}
                     >
                       <Text style={styles.submitButtonText}>SIGN IN</Text>
                     </TouchableOpacity>
@@ -424,25 +420,29 @@ export default class AssetExample extends React.Component {
                     />
                   </View>
                   <View style={styles.inputContainer}>
-                    View style={styles.inputIconContainer}>
-                    <FontAwesomeIcon
-                      icon={faUserCircle}
-                      color={"#8c8c8c"}
-                      size={25}
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faUserCircle}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
+                    <TextInput
+                      placeholder="Username"
+                      style={styles.userInput}
+                      placeholderTextColor="#8c8c8c"
+                      onChangeText={userName => this.setState({ userName })}
+                      value={this.state.userName}
                     />
                   </View>
-                  <TextInput
-                    placeholder="Username"
-                    style={styles.userInput}
-                    placeholderTextColor="#8c8c8c"
-                    onChangeText={userName => this.setState({ userName })}
-                    value={this.state.userName}
-                  />
-                </View>
-
                   <View style={styles.inputContainer}>
-                    <FontAwesomeIcon icon={faPhone} color={"#8c8c8c"}
-                    size={25} />
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faPhone}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
                     <TextInput
                       keyboardType="numeric"
                       placeholder="Mobile"
@@ -452,129 +452,112 @@ export default class AssetExample extends React.Component {
                       value={this.state.phone}
                     />
                   </View>
-                  <TextInput
-                    placeholder="Mobile"
-                    style={styles.userInput}
-                    placeholderTextColor="#8c8c8c"
-                    onChangeText={phone => this.setState({ phone })}
-                    value={this.state.phone}
-                  />
-                <View style={styles.inputContainer}>
-                  <View style={styles.inputIconContainer}>
-                    <FontAwesomeIcon
-                      icon={faCalendarWeek}
-                      color={"#8c8c8c"}
-                      size={25}
+                  <View style={styles.inputContainer}>
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faCalendarWeek}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
+                    <DatePicker
+                      placeholder="Birthdate"
+                      placeholderTextColor="#8c8c8c"
+                      style={[
+                        styles.userInput,
+                        { justifyContent: "center", alignItems: "center" }
+                      ]}
+                      date={this.state.birthDate}
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      minDate="1950-01-01"
+                      maxDate={this.state.birthDate}
+                      onDateChange={birthDate => this.setDate(birthDate)}
                     />
                   </View>
-                  <DatePicker
-                    placeholder="Birthdate"
-                    placeholderTextColor="#8c8c8c"
-                    style={[
-                      styles.userInput,
-                      { justifyContent: "center", alignItems: "center" }
-                    ]}
-                    date={this.state.birthDate}
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    minDate="1950-01-01"
-                    maxDate={this.state.birthDate}
-                    onDateChange={birthDate => this.setDate(birthDate)}
-                  />
-                </View>
-                <View style={styles.inputContainer}>
-                  <View style={styles.inputIconContainer}>
-                    <FontAwesomeIcon
-                      icon={faVenusMars}
-                      color={"#8c8c8c"}
-                      size={25}
+                  <View style={styles.inputContainer}>
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faVenusMars}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
+                    <View style={styles.genderContainer}>
+                      <TouchableOpacity
+                        style={styles.genderOption}
+                        onPress={() => this.setState({ gender: "male" })}
+                      >
+                        <View style={styles.genderRadio}>
+                          {this.state.gender === "male" && (
+                            <View style={styles.genderRadionChecked} />
+                          )}
+                        </View>
+                        <Text style={styles.genderLabel}> Male </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.genderOption}
+                        onPress={() => this.setState({ gender: "female" })}
+                      >
+                        <View style={styles.genderRadio}>
+                          {this.state.gender === "female" && (
+                            <View style={styles.genderRadionChecked} />
+                          )}
+                        </View>
+                        <Text style={styles.genderLabel}> Female </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faLock}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
+                    <TextInput
+                      placeholder="Password"
+                      style={styles.userInput}
+                      placeholderTextColor="#8c8c8c"
+                      secureTextEntry={true}
+                      onChangeText={password => this.setState({ password })}
+                      value={this.state.password}
                     />
                   </View>
-                  <View style={styles.genderContainer}>
+                  <View style={styles.inputContainer}>
+                    <View style={styles.inputIconContainer}>
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        color={"#8c8c8c"}
+                        size={25}
+                      />
+                    </View>
+                    <TextInput
+                      placeholder="Confirm Password"
+                      style={styles.userInput}
+                      placeholderTextColor="#8c8c8c"
+                      secureTextEntry={true}
+                      onChangeText={confirmPassword =>
+                        this.setState({ confirmPassword })
+                      }
+                      value={this.state.confirmPassword}
+                    />
+                  </View>
+                  <View style={styles.submitButtonContainer}>
                     <TouchableOpacity
-                      style={styles.genderOption}
-                      onPress={() => this.setState({ gender: "male" })}
+                      style={styles.submitButton}
+                      onPress={this.singUpClicked}
                     >
-                      <View style={styles.genderRadio}>
-                        {this.state.gender === "male" && (
-                          <View style={styles.genderRadionChecked} />
-                        )}
-                      </View>
-                      <Text style={styles.genderLabel}> Male </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.genderOption}
-                      onPress={() => this.setState({ gender: "female" })}
-                    >
-                      <View style={styles.genderRadio}>
-                        {this.state.gender === "female" && (
-                          <View style={styles.genderRadionChecked} />
-                        )}
-                      </View>
-                      <Text style={styles.genderLabel}> Female </Text>
+                      <Text style={styles.submitButtonText}>SIGN UP</Text>
                     </TouchableOpacity>
                   </View>
-                </View>
-                <View style={styles.inputContainer}>
-                  <View style={styles.inputIconContainer}>
-                    <FontAwesomeIcon
-                      icon={faLock}
-                      color={"#8c8c8c"}
-                      size={25}
-                    />
-                  </View>
-                  <TextInput
-                    placeholder="Password"
-                    style={styles.userInput}
-                    placeholderTextColor="#8c8c8c"
-                    secureTextEntry={true}
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                  />
-                </View>
-                <View style={styles.inputContainer}>
-                  <View style={styles.inputIconContainer}>
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      color={"#8c8c8c"}
-                      size={25}
-                    />
-                  </View>
-                  <TextInput
-                    placeholder="Confirm Password"
-                    style={styles.userInput}
-                    placeholderTextColor="#8c8c8c"
-                    secureTextEntry={true}
-                    onChangeText={confirmPassword =>
-                      this.setState({ confirmPassword })
-                    }
-                    value={this.state.confirmPassword}
-                  />
-                </View>
-                <View style={styles.submitButtonContainer}>
-                  <TouchableOpacity
-                    style={styles.submitButton}
-                    onPress={this.singUpClicked}
-                  >
-                    <Text style={styles.submitButtonText}>SIGN UP</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={[styles.container, styles.horizontal]}>
-                  <Spinner
-                    size="large"
-                    color="#45b3b5"
-                    style={{
-                      display: this.state.showActivity ? "flex" : "none"
-                    }}
-                  />
                 </View>
               </View>
             )}
           </ScrollView>
         </KeyboardAvoidingView>
       </ImageBackground>
-        }
-      </MyContext.Consumer>
     );
   }
 }
@@ -739,7 +722,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-end",
-    alignItems: "center",
+    alignItems: "center"
   },
   submitButton: {
     backgroundColor: "#25babc",
