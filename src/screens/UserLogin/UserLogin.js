@@ -86,6 +86,7 @@ export default class AssetExample extends React.Component {
           .then(response => response.json())
           .then(responseJson => {
             if (responseJson.code === 200) {
+              alert('logged in successfully!');
               this.setState({
                 showActivity: false
               });
@@ -257,307 +258,311 @@ export default class AssetExample extends React.Component {
 
   render() {
     return (
-      <ImageBackground
-        source={require("../../../assets/images/loginBackground.png")}
-        style={styles.container}
-      >
-        <KeyboardAvoidingView behavior="padding">
-          <ScrollView style={styles.mainContainer}>
-            <Image
-              source={require("../../../assets/images/sensesLogo.png")}
-              style={styles.logo}
-            />
-            <Text style={styles.loginText1}>Welcome to</Text>
-            <View style={styles.textContainer}>
-              <Text style={styles.loginText2}>Sensor</Text>
-              <Text style={styles.loginText3}>P.O.S</Text>
-            </View>
-            <View style={styles.socialMediaLoginContainer}>
-              <View style={styles.socialMediaLogin}>
-                <TouchableOpacity onPress={this.commingSoon}>
-                  <Icon name="logo-google" style={styles.googleIcon} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.commingSoon}>
-                  <Icon name="logo-facebook" style={styles.facebookIcon} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.commingSoon}>
-                  <Icon name="logo-twitter" style={styles.twitterIcon} />
-                </TouchableOpacity>
-              </View>
-            </View>
-            {this.state.choosnTab === "signIn" && (
-              <View style={styles.main}>
-                <View style={styles.tabsContainer}>
-                  <TouchableOpacity>
-                    <Text
-                      style={styles.signInSelectedTab}
-                      onPress={() => this.selectTab("signIn")}
-                    >
-                      SIGN IN
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Text
-                      style={styles.signUpTab}
-                      onPress={() => this.selectTab("signUp")}
-                    >
-                      SIGN UP
-                    </Text>
-                  </TouchableOpacity>
+      <MyContext.Consumer>
+        {context => (
+          <ImageBackground
+            source={require("../../../assets/images/loginBackground.png")}
+            style={styles.container}
+          >
+            <KeyboardAvoidingView behavior="padding">
+              <ScrollView style={styles.mainContainer}>
+                <Image
+                  source={require("../../../assets/images/sensesLogo.png")}
+                  style={styles.logo}
+                />
+                <Text style={styles.loginText1}>Welcome to</Text>
+                <View style={styles.textContainer}>
+                  <Text style={styles.loginText2}>Sensor</Text>
+                  <Text style={styles.loginText3}>P.O.S</Text>
                 </View>
-                <View style={styles.loginTextInputContainer}>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        style={styles.tabIcon}
-                        icon={faEnvelope}
-                        size={25}
-                        color={"#8c8c8c"}
-                      />
-                    </View>
-                    <TextInput
-                      placeholder="Email"
-                      style={styles.userInput}
-                      placeholderTextColor="#8c8c8c"
-                      onChangeText={email => this.setState({ email })}
-                      value={this.state.email}
-                    />
+                <View style={styles.socialMediaLoginContainer}>
+                  <View style={styles.socialMediaLogin}>
+                    <TouchableOpacity onPress={this.commingSoon}>
+                      <Icon name="logo-google" style={styles.googleIcon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.commingSoon}>
+                      <Icon name="logo-facebook" style={styles.facebookIcon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.commingSoon}>
+                      <Icon name="logo-twitter" style={styles.twitterIcon} />
+                    </TouchableOpacity>
                   </View>
+                </View>
+                {this.state.choosnTab === "signIn" && (
+                  <View style={styles.main}>
+                    <View style={styles.tabsContainer}>
+                      <TouchableOpacity>
+                        <Text
+                          style={styles.signInSelectedTab}
+                          onPress={() => this.selectTab("signIn")}
+                        >
+                          SIGN IN
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity>
+                        <Text
+                          style={styles.signUpTab}
+                          onPress={() => this.selectTab("signUp")}
+                        >
+                          SIGN UP
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.loginTextInputContainer}>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            style={styles.tabIcon}
+                            icon={faEnvelope}
+                            size={25}
+                            color={"#8c8c8c"}
+                          />
+                        </View>
+                        <TextInput
+                          placeholder="Email"
+                          style={styles.userInput}
+                          placeholderTextColor="#8c8c8c"
+                          onChangeText={email => this.setState({ email })}
+                          value={this.state.email}
+                        />
+                      </View>
 
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faLock}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
-                    </View>
-                    <TextInput
-                      placeholder="Password"
-                      style={styles.userInput}
-                      placeholderTextColor="#8c8c8c"
-                      secureTextEntry={true}
-                      onChangeText={password => this.setState({ password })}
-                      value={this.state.password}
-                    />
-                  </View>
-                  <View style={styles.submitButtonContainer}>
-                    <TouchableOpacity
-                      style={styles.submitButton}
-                      onPress={() => this.signInPressed(context)}
-                    >
-                      <Text style={styles.submitButtonText}>SIGN IN</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.forgotPasswordContainer}>
-                    <Text style={styles.forgotPasswordText}>
-                      FORGOT PASSWORD?
-                    </Text>
-                  </View>
-                  <View style={[styles.container, styles.horizontal]}>
-                    <Spinner
-                      size="large"
-                      color="#45b3b5"
-                      style={{
-                        display: this.state.showActivity ? "flex" : "none"
-                      }}
-                    />
-                  </View>
-                </View>
-              </View>
-            )}
-            {this.state.choosnTab === "signUp" && (
-              <View style={styles.main}>
-                <View style={styles.tabsContainer}>
-                  <TouchableOpacity>
-                    <Text
-                      style={styles.signInTab}
-                      onPress={() => this.selectTab("signIn")}
-                    >
-                      SIGN IN
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Text
-                      style={styles.signUpSelectedTab}
-                      onPress={() => this.selectTab("signUp")}
-                    >
-                      SIGN UP
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.loginTextInputContainer}>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faEnvelope}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
-                    </View>
-                    <TextInput
-                      placeholder="Email"
-                      style={styles.userInput}
-                      placeholderTextColor="#8c8c8c"
-                      onChangeText={email => this.setState({ email })}
-                      value={this.state.email}
-                    />
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faUser}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
-                    </View>
-                    <TextInput
-                      placeholder="Full Name"
-                      style={styles.userInput}
-                      placeholderTextColor="#8c8c8c"
-                      onChangeText={fullName => this.setState({ fullName })}
-                      value={this.state.fullName}
-                    />
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faUserCircle}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
-                    </View>
-                    <TextInput
-                      placeholder="Username"
-                      style={styles.userInput}
-                      placeholderTextColor="#8c8c8c"
-                      onChangeText={userName => this.setState({ userName })}
-                      value={this.state.userName}
-                    />
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faPhone}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
-                    </View>
-                    <TextInput
-                      keyboardType="numeric"
-                      placeholder="Mobile"
-                      style={styles.userInput}
-                      placeholderTextColor="#8c8c8c"
-                      onChangeText={phone => this.setState({ phone })}
-                      value={this.state.phone}
-                    />
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faCalendarWeek}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
-                    </View>
-                    <DatePicker
-                      placeholder="Birthdate"
-                      placeholderTextColor="#8c8c8c"
-                      style={[
-                        styles.userInput,
-                        { justifyContent: "center", alignItems: "center" }
-                      ]}
-                      date={this.state.birthDate}
-                      confirmBtnText="Confirm"
-                      cancelBtnText="Cancel"
-                      minDate="1950-01-01"
-                      maxDate={this.state.birthDate}
-                      onDateChange={birthDate => this.setDate(birthDate)}
-                    />
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faVenusMars}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
-                    </View>
-                    <View style={styles.genderContainer}>
-                      <TouchableOpacity
-                        style={styles.genderOption}
-                        onPress={() => this.setState({ gender: "male" })}
-                      >
-                        <View style={styles.genderRadio}>
-                          {this.state.gender === "male" && (
-                            <View style={styles.genderRadionChecked} />
-                          )}
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faLock}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
                         </View>
-                        <Text style={styles.genderLabel}> Male </Text>
+                        <TextInput
+                          placeholder="Password"
+                          style={styles.userInput}
+                          placeholderTextColor="#8c8c8c"
+                          secureTextEntry={true}
+                          onChangeText={password => this.setState({ password })}
+                          value={this.state.password}
+                        />
+                      </View>
+                      <View style={styles.submitButtonContainer}>
+                        <TouchableOpacity
+                          style={styles.submitButton}
+                          onPress={() => this.signInPressed(context)}
+                        >
+                          <Text style={styles.submitButtonText}>SIGN IN</Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styles.forgotPasswordContainer}>
+                        <Text style={styles.forgotPasswordText}>
+                          FORGOT PASSWORD?
+                        </Text>
+                      </View>
+                      <View style={[styles.container, styles.horizontal]}>
+                        <Spinner
+                          size="large"
+                          color="#45b3b5"
+                          style={{
+                            display: this.state.showActivity ? "flex" : "none"
+                          }}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                )}
+                {this.state.choosnTab === "signUp" && (
+                  <View style={styles.main}>
+                    <View style={styles.tabsContainer}>
+                      <TouchableOpacity>
+                        <Text
+                          style={styles.signInTab}
+                          onPress={() => this.selectTab("signIn")}
+                        >
+                          SIGN IN
+                        </Text>
                       </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.genderOption}
-                        onPress={() => this.setState({ gender: "female" })}
-                      >
-                        <View style={styles.genderRadio}>
-                          {this.state.gender === "female" && (
-                            <View style={styles.genderRadionChecked} />
-                          )}
-                        </View>
-                        <Text style={styles.genderLabel}> Female </Text>
+                      <TouchableOpacity>
+                        <Text
+                          style={styles.signUpSelectedTab}
+                          onPress={() => this.selectTab("signUp")}
+                        >
+                          SIGN UP
+                        </Text>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faLock}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
+                    <View style={styles.loginTextInputContainer}>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faEnvelope}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
+                        </View>
+                        <TextInput
+                          placeholder="Email"
+                          style={styles.userInput}
+                          placeholderTextColor="#8c8c8c"
+                          onChangeText={email => this.setState({ email })}
+                          value={this.state.email}
+                        />
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faUser}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
+                        </View>
+                        <TextInput
+                          placeholder="Full Name"
+                          style={styles.userInput}
+                          placeholderTextColor="#8c8c8c"
+                          onChangeText={fullName => this.setState({ fullName })}
+                          value={this.state.fullName}
+                        />
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faUserCircle}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
+                        </View>
+                        <TextInput
+                          placeholder="Username"
+                          style={styles.userInput}
+                          placeholderTextColor="#8c8c8c"
+                          onChangeText={userName => this.setState({ userName })}
+                          value={this.state.userName}
+                        />
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faPhone}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
+                        </View>
+                        <TextInput
+                          keyboardType="numeric"
+                          placeholder="Mobile"
+                          style={styles.userInput}
+                          placeholderTextColor="#8c8c8c"
+                          onChangeText={phone => this.setState({ phone })}
+                          value={this.state.phone}
+                        />
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faCalendarWeek}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
+                        </View>
+                        <DatePicker
+                          placeholder="Birthdate"
+                          placeholderTextColor="#8c8c8c"
+                          style={[
+                            styles.userInput,
+                            { justifyContent: "center", alignItems: "center" }
+                          ]}
+                          date={this.state.birthDate}
+                          confirmBtnText="Confirm"
+                          cancelBtnText="Cancel"
+                          minDate="1950-01-01"
+                          maxDate={this.state.birthDate}
+                          onDateChange={birthDate => this.setDate(birthDate)}
+                        />
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faVenusMars}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
+                        </View>
+                        <View style={styles.genderContainer}>
+                          <TouchableOpacity
+                            style={styles.genderOption}
+                            onPress={() => this.setState({ gender: "male" })}
+                          >
+                            <View style={styles.genderRadio}>
+                              {this.state.gender === "male" && (
+                                <View style={styles.genderRadionChecked} />
+                              )}
+                            </View>
+                            <Text style={styles.genderLabel}> Male </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.genderOption}
+                            onPress={() => this.setState({ gender: "female" })}
+                          >
+                            <View style={styles.genderRadio}>
+                              {this.state.gender === "female" && (
+                                <View style={styles.genderRadionChecked} />
+                              )}
+                            </View>
+                            <Text style={styles.genderLabel}> Female </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faLock}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
+                        </View>
+                        <TextInput
+                          placeholder="Password"
+                          style={styles.userInput}
+                          placeholderTextColor="#8c8c8c"
+                          secureTextEntry={true}
+                          onChangeText={password => this.setState({ password })}
+                          value={this.state.password}
+                        />
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.inputIconContainer}>
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            color={"#8c8c8c"}
+                            size={25}
+                          />
+                        </View>
+                        <TextInput
+                          placeholder="Confirm Password"
+                          style={styles.userInput}
+                          placeholderTextColor="#8c8c8c"
+                          secureTextEntry={true}
+                          onChangeText={confirmPassword =>
+                            this.setState({ confirmPassword })
+                          }
+                          value={this.state.confirmPassword}
+                        />
+                      </View>
+                      <View style={styles.submitButtonContainer}>
+                        <TouchableOpacity
+                          style={styles.submitButton}
+                          onPress={this.singUpClicked}
+                        >
+                          <Text style={styles.submitButtonText}>SIGN UP</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <TextInput
-                      placeholder="Password"
-                      style={styles.userInput}
-                      placeholderTextColor="#8c8c8c"
-                      secureTextEntry={true}
-                      onChangeText={password => this.setState({ password })}
-                      value={this.state.password}
-                    />
                   </View>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconContainer}>
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        color={"#8c8c8c"}
-                        size={25}
-                      />
-                    </View>
-                    <TextInput
-                      placeholder="Confirm Password"
-                      style={styles.userInput}
-                      placeholderTextColor="#8c8c8c"
-                      secureTextEntry={true}
-                      onChangeText={confirmPassword =>
-                        this.setState({ confirmPassword })
-                      }
-                      value={this.state.confirmPassword}
-                    />
-                  </View>
-                  <View style={styles.submitButtonContainer}>
-                    <TouchableOpacity
-                      style={styles.submitButton}
-                      onPress={this.singUpClicked}
-                    >
-                      <Text style={styles.submitButtonText}>SIGN UP</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            )}
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </ImageBackground>
+                )}
+              </ScrollView>
+            </KeyboardAvoidingView>
+          </ImageBackground>
+        )}
+      </MyContext.Consumer>
     );
   }
 }
