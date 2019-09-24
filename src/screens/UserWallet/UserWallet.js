@@ -43,7 +43,7 @@ export default class UserWallet extends React.Component {
       transactions = [],
       rewards = [];
     fetch(
-      `https://bondnbeyond-apigateway.herokuapp.com/enduser/${this.state.userID}/balance`
+      `http://192.168.1.39:4000/enduser/${this.state.userID}/balance`
     )
       .then(res => res.json())
       .then(resJson => {
@@ -54,7 +54,7 @@ export default class UserWallet extends React.Component {
         });
       });
     fetch(
-      `https://bondnbeyond-apigateway.herokuapp.com/enduser/wallet/${this.state.walletID}/transactions`
+      `http://192.168.1.39:4000/enduser/wallet/${this.state.walletID}/transactions`
     )
       .then(res => res.json())
       .then(resJson => {
@@ -64,7 +64,7 @@ export default class UserWallet extends React.Component {
         });
       });
       fetch(
-        `https://bondnbeyond-apigateway.herokuapp.com/enduser/wallet/${this.state.walletID}/rewards`
+        `http://192.168.1.39:4000/enduser/wallet/${this.state.walletID}/rewards`
       )
         .then(res => res.json())
         .then(resJson => {
@@ -285,7 +285,7 @@ let styles = StyleSheet.create({
   userAvatar: {
     height: width * 0.23,
     width: width * 0.23,
-    borderRadius: width * 0.115
+    borderRadius: width * 0.39
   },
   walletLastIncomeContainer: {
     width: width * 0.8,

@@ -54,7 +54,7 @@ export default class SurveyQuestion extends React.Component {
   constructor(props) {
     super(props);
     fetch(
-      `https://bondnbeyond-apigateway.herokuapp.com/clients/${this.state.clientID}/surveys/${this.state.surveyID}`
+      `http://192.168.1.39:4000/clients/${this.state.clientID}/surveys/${this.state.surveyID}`
     )
       .then(res => res.json())
       .then(resJson => {
@@ -173,7 +173,7 @@ export default class SurveyQuestion extends React.Component {
         // let month = new Date().getMonth(); //Current Month
         // let year = new Date().getFullYear(); //Current Year
         // let today = `${year}-${month}-${day}`;
-        fetch('https://bondnbeyond-apigateway.herokuapp.com/submitSurvey', {
+        fetch('http://192.168.1.39:4000/submitSurvey', {
           method: 'POST',
           headers: {
             Accept: "application/json",

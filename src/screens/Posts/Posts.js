@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Text, View , StyleSheet } from 'react-native' ; 
 
-import SurveyItem from '../../components/SurveyItem';
+import ResourceItem from '../../components/ResourceItem';
 
-const baseUrl = 'https://bondnbeyond-apigateway.herokuapp.com/'; 
+const baseUrl = 'http://192.168.1.39:4000/'; 
 
 export default class Posts extends Component {
 
@@ -15,7 +15,6 @@ export default class Posts extends Component {
     }
 
     componentDidMount = async()=> {
-        await fetch(`$`)
     }
 
     
@@ -24,6 +23,7 @@ export default class Posts extends Component {
         return (
             <View style = {styles.container}>
                 <Text> textInComponent </Text>
+              
             </View>
         )
     }

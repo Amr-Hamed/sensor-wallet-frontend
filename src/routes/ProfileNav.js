@@ -53,6 +53,10 @@ import UserWallet from '../screens/UserWallet/UserWallet';
 import ScanFriendQR from '../screens/ScanFriendQR/ScanFriendQR';
 import TransactionConfirm from '../screens/TransactionConfirm/TransactionConfirm';
 import Loading from '../screens/Loading/Loading';
+import WebContent from '../screens/WebContetnView/WebContetntView.js';
+import VideoPlayer from '../screens/VideoPlayer/VideoPlayer';
+
+
 
 import { MyContext } from '../myContext/Provider';
 
@@ -193,6 +197,30 @@ const MainStack = createStackNavigator({
     screen: Loading,
     navigationOptions: ({ navigation }) => ({
       header: null
+    }),
+
+  },
+  WebContent: {
+    screen: WebContent,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Demo Screen 1',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#212121',
+      },
+      headerTintColor: '#fff',
+    }),
+
+  },
+  VideoPlayer: {
+    screen: VideoPlayer,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Demo Screen 1',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#212121',
+      },
+      headerTintColor: '#fff',
     }),
 
   },

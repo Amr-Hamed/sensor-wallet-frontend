@@ -1,10 +1,10 @@
 {
-  "expoServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "expoServerNgrokUrl": "https://g7-mra.mk14.sensor-wallet-frontend.exp.direct",
+  "packagerNgrokUrl": "https://packager.g7-mra.mk14.sensor-wallet-frontend.exp.direct",
+  "ngrokPid": 25659,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null,
+  "packagerPort": 19001,
+  "packagerPid": 23585,
   "webpackServerPort": null
 }

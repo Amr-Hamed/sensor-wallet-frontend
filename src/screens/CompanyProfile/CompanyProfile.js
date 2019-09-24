@@ -33,7 +33,7 @@ import RoundedBG from '../../components/RoundedBG';
 import SurveySlideItem from '../../components/SurveySlideItem';
 
 // const coreApi = "http://demo9744643.mockable.io/" ; 
-const coreApi = "https://bondnbeyond-apigateway.herokuapp.com" ; 
+const coreApi = "http://192.168.1.39:4000" ; 
 const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
 const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg" ;
 

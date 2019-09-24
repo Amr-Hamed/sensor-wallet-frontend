@@ -24,7 +24,7 @@ import { AsyncStorage } from 'react-native';
 
 
 // const coreURL = "https://hookb.in/8PMgyqQ9PNhXgXYxO6mP" ; 
-const coreURL = "https://bondnbeyond-apigateway.herokuapp.com/transaction";
+const coreURL = "http://192.168.1.39:4000/transaction";
 
 
 export default class TransactionConfirm extends Component {

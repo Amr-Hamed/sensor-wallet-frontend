@@ -23,6 +23,7 @@ import POSButton from '../../components/POSButton';
 import UserProfileCard from '../../components/UserProfileCard';
 import SurveySlideItem from '../../components/SurveySlideItem';
 import SurveyItem from '../../components/SurveyItem';
+import ResourceItem from '../../components/ResourceItem';
 import RectBG from '../../components/RectBG';
 import Loading from '../Loading/Loading';
 import Posts from '../Posts/Posts';
@@ -37,13 +38,13 @@ const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
 // Define Some Constants for default Values  
 // const baseUrl = "http://demo9744643.mockable.io/";
-const baseUrl = "https://bondnbeyond-apigateway.herokuapp.com/";
+const baseUrl = "http://192.168.1.39:4000";
 
 
 
-const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
-const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg";
+
 const userAvatar = "http://avatars.design/wp-content/uploads/2016/09/avatar1b.jpg";
+const loadingImgURL = 'https://www.fogratravel.pl/events/images/loader.gif';
 
 
 export default class UserProfile extends Component {
@@ -65,6 +66,8 @@ export default class UserProfile extends Component {
       senses: '',
       latestSurveys: [],
       recommendedSurveys: [],
+      posts: [],
+      videos: [],
       afterScanLoad: false,
       showSuccessTrans: false,
       token: '',
@@ -113,8 +116,8 @@ export default class UserProfile extends Component {
 
 
   // fetching user profile data  
-  fetchData = async (context = {}) => {
-    await fetch(baseUrl + `enduser/${this.state.userID}/profile`)
+  fetchData = async () => {
+    await fetch(baseUrl + `/enduser/${this.state.userID}/profile`)
       .then(res => res.json())
       .then(async (res) => {
 
@@ -126,8 +129,8 @@ export default class UserProfile extends Component {
           durationOfTakenSurveys: res.data.durationOfTakenSurveys,
           walletID: res.data.walletID,
           senses: res.data.senses,
-          latestSurveys: res.data.latestSurveys,
-          recommendedSurveys: res.data.recommendedSurveys,
+          // latestSurveys: res.data.latestSurveys,
+          // recommendedSurveys: res.data.recommendedSurveys,
         });
 
       })
@@ -142,6 +145,91 @@ export default class UserProfile extends Component {
 
         this.setState({ loading: false })
       })
+      .then(async () => {
+        // get videos
+        await fetch(baseUrl + `/enduser/resources`, {
+          method: 'POST',
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            Details: {
+              userID: this.state.userID,
+              filterWithInterestsFlag: false,
+              resourceTypeID: "1"
+            }
+          })
+        }).then(res => res.json())
+          .then(res => {
+            if (res.code == "200") {
+
+              this.setState({ videos: res.data })
+              console.log("state Videos : ", this.state.videos)
+            }
+            else {
+              console.log(res.msg)
+            }
+
+          })
+      })
+      .then(async () => {
+        // get posts
+        await fetch(baseUrl + `/enduser/resources`, {
+          method: 'POST',
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            Details: {
+              userID: this.state.userID,
+              filterWithInterestsFlag: false,
+              resourceTypeID: "3"
+            }
+          })
+        }).then(res => res.json())
+          .then(res => {
+            if (res.code == "200") {
+
+              this.setState({ posts: res.data })
+              // console.log("state Posts : ", this.state.posts)
+            }
+            else {
+              console.log(res.msg)
+            }
+
+          })
+      })
+      .then(async () => {
+        // get surveys
+        await fetch(baseUrl + `/enduser/resources`, {
+          method: 'POST',
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            Details: {
+              userID: this.state.userID,
+              filterWithInterestsFlag: false,
+              resourceTypeID: "2"
+            }
+          })
+        }).then(res => res.json())
+          .then(res => {
+            if (res.code == "200") {
+
+              this.setState({recommendedSurveys : res.data })
+              console.log("state Surveys : ", this.state.recommendedSurveys)
+            }
+            else {
+              console.log(res.msg)
+            }
+
+          })
+      })
+      
       .catch(error => {
         console.error(`e: ${error}`);
         this.setState({ loading: false })
@@ -156,12 +244,10 @@ export default class UserProfile extends Component {
     });
   }
 
-
-
-  goToSurvey = (surveyID, surveyTitle, clientName, brandLogo, clientID, surveyCover, surveyReward, surveyDuration, surveyDescription, userID, currencyData) => {
-    this.props.navigation.navigate('SurveyIntro', { surveyID, surveyTitle, clientName, surveyCover, surveyReward, surveyDuration, brandLogo, clientID, surveyDescription, userID, currencyData });
+  //go To Resource Introduction Screen 
+  goToResourceIntro = (resourceDetails) => {
+    this.props.navigation.navigate('SurveyIntro', {resourceDetails});
   }
-
   goToQRCode = () => {
     this.props.navigation.navigate('UserQRCode', { userID: this.state.userID, userName: this.state.userName, walletID: this.state.walletID, token: this.state.token });
   }
@@ -182,7 +268,7 @@ export default class UserProfile extends Component {
   }
 
   changeMenuData = (context) => {
-    if (!this.state.menuUpdate){
+    if (!this.state.menuUpdate) {
       context.action.changeUserName(this.state.userName);
       context.action.changeUserImageURL(this.state.profileAvatar);
       this.setState({ menuUpdate: true })
@@ -217,7 +303,7 @@ export default class UserProfile extends Component {
                 } >
                 {/* Show Basic user Profile Data */}
                 <RectBG />
-                <View style={{ marginTop: 0.1 * Hieght }}>
+                <View style={{ marginTop: 0.1 * Hieght , flex:1 }}>
 
                   <UserProfileCard
                     id={context.state.userID}
@@ -251,35 +337,33 @@ export default class UserProfile extends Component {
                 </Content>
 
                 <Content padder>
-                  <Text style={styles.sideTitle}> Top Surveys For You ({this.state.latestSurveys.length}) </Text>
+                  <Text style={styles.sideTitle}> Top Videos For You ({this.state.videos.length}) </Text>
                   {/* Show Latest Recommended survays ... max 5 */}
 
-                  {this.state.latestSurveys.length !== 0 ?
+                  {this.state.videos.length !== 0 ?
                     <ScrollView horizontal={true}>
 
-                      {this.state.latestSurveys.map((survey) =>
+                      {this.state.videos.map((video,index) =>
                         <SurveySlideItem
-                          userID={this.state.userID}
-                          surveyID={survey.surveyID}
-                          clientID={survey.surveyCreatorID}
-                          cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
-                          clientName={survey.surveyCreatorName}
-                          title={survey.title}
-                          time={survey.duration}
-                          points={survey.amountPerSurvey}
-                          brandLogo={survey.surveyCreatorImageURL || clientAvatar}
-                          pressed={this.goToSurvey}
-                          key={survey.surveyID}
-                          description={survey.description}
-                          currencyData={survey.rewardCurrency}
+                          resource = {video}
+                          key = {index}
+                          pressed= {this.goToResourceIntro}
                         />
                       )}
 
                     </ScrollView>
                     :
-                    <View>
-                      <Text style={{ alignSelf: 'center' }}> Sorry but There is no Surveys For you </Text>
-                    </View>
+                    <Content padder style={{alignSelf:'center'}}>
+                      <Image 
+                      source={{
+                        uri:loadingImgURL
+                      }}
+                      style={{
+                        width:0.75*WIDTH,
+                        height :0.5*Hieght
+                      }} 
+                      />
+                    </Content>
                   }
                 </Content>
 
@@ -295,24 +379,10 @@ export default class UserProfile extends Component {
                     textStyle={{ color: '#333' }}
                   >
                     {/* View All Recommended Surveys */}
-                    {this.state.latestSurveys.length !== 0 ?
-                      this.state.recommendedSurveys.map((survey) =>
+                    {this.state.recommendedSurveys.length !== 0 ?
+                      this.state.recommendedSurveys.map((survey , index) =>
 
-                        <SurveyItem
-                          userID={this.state.userID}
-                          surveyID={survey.surveyID}
-                          clientID={survey.surveyCreatorID}
-                          cover={survey.imageURL || survey.surveyCreatorImageURL || surveyCover}
-                          clientName={survey.surveyCreatorName}
-                          title={survey.title}
-                          time={survey.duration}
-                          points={survey.amountPerSurvey}
-                          brandLogo={survey.surveyCreatorImageURL || clientAvatar}
-                          pressed={this.goToSurvey}
-                          key={survey.surveyID}
-                          description={survey.description}
-                          currencyData={survey.rewardCurrency}
-                        />
+                      <ResourceItem key={index} resource={survey} pressed={this.goToResourceIntro}  />
                       )
                       :
                       <View>
@@ -326,7 +396,35 @@ export default class UserProfile extends Component {
                     activeTextStyle={{ color: '#333', fontWeight: 'bold' }}
                     textStyle={{ color: '#333' }}
                   >
-                    <Posts />
+                        {/* View All Recommended Posts */}
+                        {this.state.posts.length !== 0 ?
+                      this.state.posts.map((post , index) =>{
+
+                        // console.log("POST : ",post)
+                       return <ResourceItem key={index} resource={post} pressed={this.goToResourceIntro} />
+                      }
+                      )
+                      :
+                      <View>
+                        <Text style={{ alignSelf: 'center' }}> Sorry but There is no Posts For you </Text>
+                      </View>
+                    }
+                  </Tab>
+
+                  <Tab heading="Videos"
+                    tabStyle={{ backgroundColor: '#eee' }}
+                    activeTabStyle={{ backgroundColor: '#eee' }}
+                    activeTextStyle={{ color: '#333', fontWeight: 'bold' }}
+                    textStyle={{ color: '#333' }}
+                  >
+                    {/* View All Recommended Surveys */}
+                    {this.state.videos.length !== 0 ?
+                      this.state.videos.map((video,index) => <ResourceItem key={index} resource={video} pressed={this.goToResourceIntro} />)
+                      :
+                      <View>
+                        <Text style={{ alignSelf: 'center' }}> Sorry but There is no Videos For you </Text>
+                      </View>
+                    }
                   </Tab>
                 </Tabs>
               </ScrollView>

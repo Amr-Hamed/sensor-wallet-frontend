@@ -33,6 +33,7 @@ import {
 
 
 import UserSurveyHomePage from '../screens/UserSurveyHomePage/UserSurveyHomePage';
+import Home from '../screens/Home/Home';
 import WebContent from '../screens/WebContetnView/WebContetntView' ; 
 
 class NavigationDrawerStructure extends Component {
@@ -73,6 +74,18 @@ class NavigationDrawerStructure extends Component {
 
 
 const FirstActivity_StackNavigator = createStackNavigator({
+
+  Home: {
+    screen: Home,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Demo Screen 1',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#212121',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
   UserSurveyHomePage: {
     screen: UserSurveyHomePage,
     navigationOptions: ({ navigation }) => ({

@@ -29,9 +29,10 @@ export default class UserProfileCard extends Component {
     this.props.walletClcked();
   }
 
+  
   render() {
     return (
-      <Content style={{ borderRaduis: 10 }} padder>
+      <Content style={{ borderRaduis: 10 , flex:1}} padder>
         <Card style={styles.cardContainer}>
           <CardItem style = {{borderTopRightRadius : 8  , borderTopLeftRadius: 8 }}>
             <Left>

@@ -46,7 +46,10 @@ export default class AssetExample extends React.Component {
       today,
       birthDate: today,
       gender: "male",
-      showActivity: false
+      showActivity: false , 
+      // add for testing 
+      email : 'khaled@mail.com',
+      password : 'khaled123'
     };
   }
 
@@ -73,7 +76,7 @@ export default class AssetExample extends React.Component {
         this.setState({
           showActivity: true
         });
-        fetch("https://bondnbeyond-apigateway.herokuapp.com/enduser/login", {
+        fetch("http://192.168.1.39:4000/enduser/login", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -167,7 +170,7 @@ export default class AssetExample extends React.Component {
                           showActivity: true
                         });
                         fetch(
-                          "https://bondnbeyond-apigateway.herokuapp.com/enduser/signup",
+                          "http://192.168.1.39:4000/enduser/signup",
                           {
                             method: "POST",
                             headers: {

@@ -24,25 +24,27 @@ import RoundedBG from '../../components/RoundedBG';
 // Define Some Constants for default Values  
 const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
 const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg"
-const baseUrl = "https://bondnbeyond-apigateway.herokuapp.com";
+const baseUrl = "http://192.168.1.39:4000";
 
 export default class SurveyIntro extends Component {
 
   state = {
-    userID: this.props.navigation.getParam('userID'),
-    clientID: this.props.navigation.getParam('clientID'),
-    surveyID: this.props.navigation.getParam('surveyID'),
-    clientName: this.props.navigation.getParam('clientName'),
-    clientImage: '',
-    surveyReward: '',
-    loading: true,
-    userClientSurveys: [],
-    showActivity: true
+    // userID: this.props.navigation.getParam('userID'),
+    // clientID: this.props.navigation.getParam('clientID'),
+    // surveyID: this.props.navigation.getParam('surveyID'),
+    // clientName: this.props.navigation.getParam('clientName'),
+    // clientImage: '',
+    // surveyReward: '',
+    // loading: true,
+    // userClientSurveys: [],
+    // showActivity: true
+    resourceDetails : this.props.navigation.getParam('resourceDetails')
   }
 
   constructor(props) {
     super(props);
-    this.fetchSurveyData();
+    console.log("Intro : ", this.state.resourceDetails)
+    // this.fetchSurveyData();
     // alert()
 
   }
@@ -80,6 +82,15 @@ export default class SurveyIntro extends Component {
     this.props.navigation.navigate('SurveyQuestion', { userID: this.state.userID, surveyID: this.state.surveyID, clientID: this.state.clientID, clientName: this.state.clientName, surveyReward: this.props.navigation.getParam('surveyReward') })
   }
 
+  viewPost = () => {
+    this.props.navigation.navigate('WebContent', {
+      URL : this.state.resourceDetails.resourceData.URL  })
+  }
+  viewVideo = () => {
+    this.props.navigation.navigate('VideoPlayer', {
+      URL : this.state.resourceDetails.resourceData.URL ,
+      duration :this.state.resourceDetails.resourceData.duration})
+  }
   goToSurvey = (surveyID, surveyTitle, clientName, brandLogo, clientID, surveyCover, surveyReward, surveyDuration, surveyDescription, userID, currencyData) => {
     this.props.navigation.navigate('SurveyIntro', { surveyID, surveyTitle, clientName, surveyCover, surveyReward, surveyDuration, brandLogo, clientID, surveyDescription, userID, currencyData });
     // this.scroll.scrollTo({ x: 0, y: 0, animated: true });
@@ -101,30 +112,44 @@ export default class SurveyIntro extends Component {
           ref={(c) => { this.scroll = c }}>
           <RoundedBG />
           <SideLogoCard
-            surveyTitle={this.props.navigation.getParam('surveyTitle')}
-            brandName={this.props.navigation.getParam('clientName')}
-            surveyCover={this.props.navigation.getParam('surveyCover')}
-            brandLogo={this.props.navigation.getParam('brandLogo')}
-            brandLogoPressed={() => this.goToCompanyProfile(this.props.navigation.getParam('clientID'), this.props.navigation.getParam('clientName'))}
-            points={this.props.navigation.getParam('surveyReward')}
-            duration={this.props.navigation.getParam('surveyDuration')}
-            currencyData={this.props.navigation.getParam('currencyData')}
+            surveyTitle={this.state.resourceDetails.resourceData.title}
+            brandName={this.state.resourceDetails.clientData.userName}
+            surveyCover={this.state.resourceDetails.resourceData.imageURL}
+            brandLogo={this.state.resourceDetails.clientData.imageURL}
+            brandLogoPressed={() => this.goToCompanyProfile(this.state.resourceDetails.clientData.clientID, this.state.resourceDetails.clientData.userName)}
+            points={this.state.resourceDetails.otherDetails.amountPerResource}
+            duration={this.state.resourceDetails.resourceData.duration}
+            currencyData={this.state.resourceDetails.currencyData}
           />
 
           <View style={styles.aboutSection}>
-            <Text style={styles.sideTitle}> Survey Description  </Text>
+            <Text style={styles.sideTitle}> 
+            {this.state.resourceDetails.otherDetails.resourceTypeID == 1 ? 
+            
+            "Video Description"
+            : this.state.resourceDetails.otherDetails.resourceTypeID == 2 ?
+            "Survey Description"
+            : "Post Description"
+          }
+            </Text>
             <Text style={styles.aboutBody}>
-              {this.props.navigation.getParam('surveyDescription')}
+              {this.state.resourceDetails.resourceData.description}
             </Text>
           </View>
-
-          <POSButton title="Take This Survey Now" style={styles.btnLogin} pressed={this.takeSurvey} />
+          {this.state.resourceDetails.otherDetails.resourceTypeID == 1 ? 
+            
+            <POSButton title="Watch Video Now" style={styles.btnLogin} pressed={this.viewVideo} />
+            : this.state.resourceDetails.otherDetails.resourceTypeID == 2 ?
+            <POSButton title="Take This Survey Now" style={styles.btnLogin} pressed={this.takeSurvey} />
+            :  <POSButton title="Proceed to Post Now" style={styles.btnLogin} pressed={this.viewPost} />
+          }
+         
           <Content padder>
-            <Text style={styles.sideTitle}>Top Surveys For You </Text>
+            {/* <Text style={styles.sideTitle}>Top Surveys For You </Text> */}
             <View style={[styles.container, styles.horizontal]}>
               <Spinner size="large" color="#45b3b5" style={{ display: this.state.showActivity ? 'flex' : 'none' }} />
             </View>
-            <ScrollView horizontal={true}>
+            {/* <ScrollView horizontal={true}>
               {this.state.userClientSurveys.map((survey) =>
                 <SurveySlideItem
                   userID={this.state.userID}
@@ -142,7 +167,7 @@ export default class SurveyIntro extends Component {
                   currencyData={survey.rewardCurrency}
                 />
               )}
-            </ScrollView>
+            </ScrollView> */}
           </Content>
         </ScrollView>
       </Container>

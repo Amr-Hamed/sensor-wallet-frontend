@@ -32,6 +32,7 @@ export default class POSButton extends Component {
             alignItems: 'center',
             justifyContent: 'center',
           }}
+          disabled = {this.props.disable || false}
           onPress={this.handleClick}>
           <Text style={styles.text}>{this.props.title}</Text>
         </TouchableOpacity>
