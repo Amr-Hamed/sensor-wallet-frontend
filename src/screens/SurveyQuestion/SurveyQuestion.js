@@ -54,7 +54,7 @@ export default class SurveyQuestion extends React.Component {
   constructor(props) {
     super(props);
     fetch(
-      `http://192.168.1.39:4000/clients/${this.state.clientID}/surveys/${this.state.resourceID}`
+      `http://192.168.1.39:4000/clients/${this.state.clientID}/resource/${this.state.resourceID}`
     )
       .then(res => res.json())
       .then(resJson => {
