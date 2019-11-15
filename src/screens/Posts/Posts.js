@@ -3,7 +3,7 @@ import { Text, View , StyleSheet } from 'react-native' ;
 
 import ResourceItem from '../../components/ResourceItem';
 
-const baseUrl = 'http://192.168.1.39:4000/'; 
+const baseUrl = 'http://134.209.181.231:4000/'; 
 
 export default class Posts extends Component {
 

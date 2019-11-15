@@ -38,7 +38,8 @@ const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 
 // Define Some Constants for default Values  
 // const baseUrl = "http://demo9744643.mockable.io/";
-const baseUrl = "http://192.168.1.39:4000";
+// const baseUrl = "http://192.168.1.39:4000";
+const baseUrl = "http://134.209.181.231:4000";
 
 
 

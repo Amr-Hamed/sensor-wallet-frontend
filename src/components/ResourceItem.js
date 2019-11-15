@@ -9,7 +9,9 @@ const imgPathes = {
 };
 
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
-const baseUrl = "http://192.168.1.39:4000";
+// // const baseUrl = "http://192.168.1.39:4000";
+const baseUrl = "http://134.209.181.231:4000";
+
 const loadingImg = "https://www.fogratravel.pl/events/images/loader.gif";
 export default class ResourceItem extends Component {
 

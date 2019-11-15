@@ -46,7 +46,7 @@ export default class SurveyQuestion extends React.Component {
     questionAnswers: [],
     userID: this.props.navigation.getParam("userID"),
     clientID: this.props.navigation.getParam("clientID"),
-    surveyID: this.props.navigation.getParam("surveyID"),
+    resourceID: this.props.navigation.getParam("resourceID"),
     surveyReward: this.props.navigation.getParam("surveyReward"),
     clientName: this.props.navigation.getParam("clientName")
   };
@@ -54,7 +54,7 @@ export default class SurveyQuestion extends React.Component {
   constructor(props) {
     super(props);
     fetch(
-      `http://192.168.1.39:4000/clients/${this.state.clientID}/surveys/${this.state.surveyID}`
+      `http://192.168.1.39:4000/clients/${this.state.clientID}/surveys/${this.state.resourceID}`
     )
       .then(res => res.json())
       .then(resJson => {
@@ -173,7 +173,7 @@ export default class SurveyQuestion extends React.Component {
         // let month = new Date().getMonth(); //Current Month
         // let year = new Date().getFullYear(); //Current Year
         // let today = `${year}-${month}-${day}`;
-        fetch('http://192.168.1.39:4000/submitSurvey', {
+        fetch('http://134.209.181.231:4000/submitSurvey', {
           method: 'POST',
           headers: {
             Accept: "application/json",
@@ -182,7 +182,7 @@ export default class SurveyQuestion extends React.Component {
           body: JSON.stringify({
             submitSurvey: {
               clientName: this.state.clientName + "",
-              surveyID: this.state.surveyID + "",
+              surveyID: this.state.resourceID + "",
               clientID: this.state.clientID + "",
               endUserID: this.state.userID + "",
               questions: this.state.questionAnswers,

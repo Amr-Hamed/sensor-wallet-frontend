@@ -43,7 +43,7 @@ export default class UserWallet extends React.Component {
       transactions = [],
       rewards = [];
     fetch(
-      `http://192.168.1.39:4000/enduser/${this.state.userID}/balance`
+      `http://134.209.181.231:4000/enduser/${this.state.userID}/balance`
     )
       .then(res => res.json())
       .then(resJson => {
@@ -54,7 +54,7 @@ export default class UserWallet extends React.Component {
         });
       });
     fetch(
-      `http://192.168.1.39:4000/enduser/wallet/${this.state.walletID}/transactions`
+      `http://134.209.181.231:4000/enduser/wallet/${this.state.walletID}/transactions`
     )
       .then(res => res.json())
       .then(resJson => {
@@ -64,7 +64,7 @@ export default class UserWallet extends React.Component {
         });
       });
       fetch(
-        `http://192.168.1.39:4000/enduser/wallet/${this.state.walletID}/rewards`
+        `http://134.209.181.231:4000/enduser/wallet/${this.state.walletID}/rewards`
       )
         .then(res => res.json())
         .then(resJson => {

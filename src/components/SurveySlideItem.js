@@ -14,7 +14,8 @@ import {
 const defaultSenses = "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1280px-Flag_of_the_United_States.svg.png" ; 
 const { width: WIDTH, height: Hieght } = Dimensions.get('window');
 const loadingImgURL = 'https://www.fogratravel.pl/events/images/loader.gif';
-const baseUrl = "http://192.168.1.39:4000";
+// const baseUrl = "http://192.168.1.39:4000";
+const baseUrl = "http://134.209.181.231:4000";
 
 
 export default class SurveySlideItem extends Component {

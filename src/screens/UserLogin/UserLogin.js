@@ -48,8 +48,8 @@ export default class AssetExample extends React.Component {
       gender: "male",
       showActivity: false , 
       // add for testing 
-      email : 'khaled@mail.com',
-      password : 'khaled123'
+      email : '',
+      password : ''
     };
   }
 
@@ -75,7 +75,7 @@ export default class AssetExample extends React.Component {
         this.setState({
           showActivity: true
         });
-        fetch("http://192.168.1.39:4000/enduser/login", {
+        fetch("http://134.209.181.231:4000/enduser/login", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -170,7 +170,7 @@ export default class AssetExample extends React.Component {
                           showActivity: true
                         });
                         fetch(
-                          "http://192.168.1.39:4000/enduser/signup",
+                          "http://134.209.181.231:4000/enduser/signup",
                           {
                             method: "POST",
                             headers: {

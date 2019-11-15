@@ -24,7 +24,8 @@ import RoundedBG from '../../components/RoundedBG';
 // Define Some Constants for default Values  
 const surveyCover = "https://www.helpscout.com/images/blog/2018/feb/customer-survey.png";
 const clientAvatar = "https://sherkatdaran.com/wp-content/uploads/2018/04/teamwork-and-brainstorming-concept_1325-637.jpg"
-const baseUrl = "http://192.168.1.39:4000";
+// const baseUrl = "http://192.168.1.39:4000";
+const baseUrl = "http://134.209.181.231:4000";
 
 export default class SurveyIntro extends Component {
 
@@ -79,7 +80,8 @@ export default class SurveyIntro extends Component {
 
   takeSurvey = () => {
 
-    this.props.navigation.navigate('SurveyQuestion', { userID: this.state.userID, surveyID: this.state.surveyID, clientID: this.state.clientID, clientName: this.state.clientName, surveyReward: this.props.navigation.getParam('surveyReward') })
+    this.props.navigation.navigate('SurveyQuestion', { userID: this.state.userID,
+      resourceID:this.state.resourceDetails.resourceID, clientID: this.state.clientID, clientName: this.state.clientName, surveyReward: this.props.navigation.getParam('surveyReward') })
   }
 
   viewPost = () => {

@@ -24,7 +24,7 @@ import { AsyncStorage } from 'react-native';
 
 
 // const coreURL = "https://hookb.in/8PMgyqQ9PNhXgXYxO6mP" ; 
-const coreURL = "http://192.168.1.39:4000/transaction";
+const coreURL = "http://134.209.181.231:4000/transaction";
 
 
 export default class TransactionConfirm extends Component {
