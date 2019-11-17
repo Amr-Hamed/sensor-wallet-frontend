@@ -66,7 +66,7 @@ export default class CompanyProfile extends Component {
         clientName : res.data.userName , 
         clientImage : res.data.imageURL , 
         cover : res.data.cover , 
-        surveys : res.data.surveys , 
+        // surveys : res.data.surveys , 
         bio : res.data.bio
       })
     }) 
@@ -97,16 +97,16 @@ export default class CompanyProfile extends Component {
             <Text style={styles.title}>BIO</Text>
             <Text>{this.state.bio}</Text>
             <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-              <POSButton style={styles.btn} title="Contact" height= {0.1 * WIDTH}  />
-              <POSButton style={styles.btn} title="More" height= {0.1 * WIDTH}  />
+              <POSButton style={styles.btn} title="Contact" height= {0.1 * WIDTH} pressed={()=>{}} />
+              <POSButton style={styles.btn} title="More" height= {0.1 * WIDTH}  pressed={()=>{}} />
             </View>
 
             <VoucherBtn points="30" value="25" style={{ marginVertical: 10 }} />
 
             <Content padder>
-            <Text style={styles.sideTitle}>Company Surveys For You : </Text>
+            {/* <Text style={styles.sideTitle}>Company Surveys For You : </Text> */}
 
-
+{/* 
             <ScrollView horizontal={true}>
             {this.state.surveys.length !== 0 ?
                 <ScrollView horizontal={true}>
@@ -135,7 +135,7 @@ export default class CompanyProfile extends Component {
                   <Text style={{ alignSelf: 'center' }}> Sorry but There is no Surveys For you </Text>
                 </View>
               }
-            </ScrollView>
+            </ScrollView> */}
           </Content>
 
             <View style={styles.services}>
