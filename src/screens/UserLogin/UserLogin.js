@@ -89,7 +89,7 @@ export default class AssetExample extends React.Component {
           .then(response => response.json())
           .then(responseJson => {
             if (responseJson.code === 200) {
-              alert('logged in successfully!');
+              // alert('logged in successfully!');
               this.setState({
                 showActivity: false
               });

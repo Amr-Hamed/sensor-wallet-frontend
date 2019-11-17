@@ -81,7 +81,7 @@ export default class SurveyIntro extends Component {
   takeSurvey = () => {
 
     this.props.navigation.navigate('SurveyQuestion', { userID: this.state.userID,
-      resourceID:this.state.resourceDetails.resourceID, clientID: this.state.clientID, clientName: this.state.clientName, surveyReward: this.props.navigation.getParam('surveyReward') })
+      resourceID:this.state.resourceDetails.resourceID, clientID: this.state.resourceDetails.clientData.clientID, clientName: this.state.resourceDetails.clientData.userName, surveyReward: this.props.navigation.getParam('surveyReward') })
   }
 
   viewPost = () => {

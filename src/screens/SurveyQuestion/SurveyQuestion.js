@@ -7,7 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
-  StyleSheet
+  StyleSheet,
+  ActivityIndicator
 } from "react-native";
 
 import Modal from "react-native-modal";
@@ -25,19 +26,16 @@ export default class SurveyQuestion extends React.Component {
         questionID: 1,
         surveyID: 1,
         questionTypeID: 1,
-        body: '?',
+        body: "Loading...",
         creationDate: '2019-09-01T20:55:13.000Z',
         answers: {
           code: 200,
           msg: 'successfully retreiving answers for question id 1',
           data: [
-            { answerID: 1, body: '1' },
-            { answerID: 2, body: '2' },
-            { answerID: 3, body: '3' },
-            { answerID: 4, body: '4' },
+            { answerID: 1, body: 'Loading...' }
           ],
         },
-      },
+      }
     ],
     currentQuestion: 1,
     nextQuestionButtonText: "NEXT",
@@ -53,15 +51,18 @@ export default class SurveyQuestion extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log("Client ID : "+this.state.clientID);
+    console.log("REsource ID : "+this.state.resourceID);
+
     fetch(
-      `http://192.168.1.39:4000/clients/${this.state.clientID}/resource/${this.state.resourceID}`
+      `http://134.209.181.231:4000/clients/${this.state.clientID}/resource/${this.state.resourceID}/questions`
     )
       .then(res => res.json())
       .then(resJson => {
         this.setState({
           questions: resJson.questions
         });
-      });
+      }).catch(err => alert(err))
   }
 
   toggleModal = () => {
@@ -173,19 +174,26 @@ export default class SurveyQuestion extends React.Component {
         // let month = new Date().getMonth(); //Current Month
         // let year = new Date().getFullYear(); //Current Year
         // let today = `${year}-${month}-${day}`;
-        fetch('http://134.209.181.231:4000/submitSurvey', {
+        console.log("cName : ",this.state.clientName);
+        console.log("surveyID : ",this.state.resourceID);
+        console.log("cID : ",this.state.clientID);
+        console.log("endUserID : ",this.state.userID);
+        console.log("questions : ",this.state.questionAnswers);
+
+        fetch('http://134.209.181.231:4000/submitResource', {
           method: 'POST',
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            submitSurvey: {
+            submitResource: {
               clientName: this.state.clientName + "",
               surveyID: this.state.resourceID + "",
               clientID: this.state.clientID + "",
               endUserID: this.state.userID + "",
               questions: this.state.questionAnswers,
+              resourceTypeID:"2"
             }
           })
         })
@@ -212,7 +220,7 @@ export default class SurveyQuestion extends React.Component {
     if(this.state.questions.length > 0 ){
     let answers = this.state.questions[
       this.state.currentQuestion - 1
-    ].answers.map((answer, i) => {
+    ].answers.data.map((answer, i) => {
       let answerColor = "#DCDCDC",
         answerTextColor = "black";
       if (answer.answerID === this.state.selectedAnswer) {
