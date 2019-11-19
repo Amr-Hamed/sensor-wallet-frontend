@@ -189,7 +189,7 @@ export default class SurveyQuestion extends React.Component {
           body: JSON.stringify({
             submitResource: {
               clientName: this.state.clientName + "",
-              surveyID: this.state.resourceID + "",
+              resourceID: this.state.resourceID + "",
               clientID: this.state.clientID + "",
               endUserID: this.state.userID + "",
               questions: this.state.questionAnswers,
